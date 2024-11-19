@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>2GIS Map API</title>
+        <meta name="description" content="Quickstart with 2GIS Map API" />
+        <style>
+            html,
+            body,
+            #container {
+                margin: 0;
+                width: 100%;
+                height: 100%;
+                overflow: hidden;
+            }
+        </style>
+    </head>
+    <body>
+        <header id="header">
+            <h1 align="center">Test</h1>
+        </header>
+        <main id="container"></main>
+        <script src="https://mapgl.2gis.com/api/js/v1"></script>
+        <script src="https://unpkg.com/@2gis/mapgl-clusterer@^2/dist/clustering.js"></script>
+        <script>
+            const map = new mapgl.Map('container', {
+                center: [37.6156, 55.7522],
+                zoom: 10,
+                key: '{{ .Conf.GisApi}}',
+                style: 'c080bb6a-8134-4993-93a1-5b4d8c36a59b'
+            });
+            // markers = [];
+            // {{range .Points}}
+            // marker = new mapgl.Marker(map, {
+            //     coordinates: [{{ .Long}}, {{ .Lat}}],
+            // });
+            // markers.push(marker)
+            // {{end}}
+
+            markers = [
+                {{range .Points}}
+                { coordinates: [{{ .Long}}, {{ .Lat}}] },
+                {{end}}
+            ]
+
+            const clusterer = new mapgl.Clusterer(map, {
+                redius: 120,
+            });
+            clusterer.load(markers);
+        </script>
+    </body>
+</html>
