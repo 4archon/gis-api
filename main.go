@@ -33,7 +33,7 @@ func getCoordinates(csvString string) point.Point {
 	
 	re := regexp.MustCompile(`\d+\.\d+`)
 	res := re.FindAllString(csvString, -1)
-	p.Init(res[1], res[0])
+	p.Init(1, res[1], res[0])
 	return p
 }
 
