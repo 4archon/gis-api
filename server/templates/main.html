@@ -3,37 +3,37 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>2GIS Map API</title>
-        <meta name="description" content="Quickstart with 2GIS Map API" />
-        <style>
-            html,
-            body,
-            #container {
-                margin: 0;
-                width: 100%;
-                height: 100%;
-                overflow: hidden;
-            }
-            .flex-container {
-                display: flex;
-                height: 100%;
-            }
-            .flex-item {
-                color: red;
-            }
-        </style>
+        <title>Service</title>
+        <meta name="description" content="Test 2GIS Map API" />
+        <link rel="stylesheet" href="main_style.css">
     </head>
     <body>
         <header id="header">
             <h1 align="center">Test</h1>
         </header>
-        <!-- <div id="container"></div> -->
         <div class="flex-container">
-            <div id="container" style="border:2px solid black;"></div>
-            <div class="flex-item" style="width: 30%; margin-left: 10px;">sad</div>
+            <div class="flex-item" id="container"></div>
+            <div class="flex-item" id="flex1">
+                <div class="flex-container2">
+                    <div class="flex-item2">1</div>
+                    <div class="flex-item2">2</div>
+                    <div class="flex-item2">3</div>
+                    <!-- <div class="flex-item2">4</div>
+                    <div class="flex-item2">5</div>
+                    <div class="flex-item2">6</div>
+                    <div class="flex-item2">1</div>
+                    <div class="flex-item2">2</div>
+                    <div class="flex-item2">3</div>
+                    <div class="flex-item2">4</div>
+                    <div class="flex-item2">5</div>
+                    <div class="flex-item2">6</div> -->
+                </div>
+            </div>
         </div>
-        <script src="https://mapgl.2gis.com/api/js/v1"></script>
-        <script src="https://unpkg.com/@2gis/mapgl-clusterer@^2/dist/clustering.js"></script>
+        <script src="map.js"></script>
+        <script src="clus.js"></script>
+        <!-- <script src="https://mapgl.2gis.com/api/js/v1"></script>
+        <script src="https://unpkg.com/@2gis/mapgl-clusterer@^2/dist/clustering.js"></script> -->
         <script>
             const map = new mapgl.Map('container', {
                 center: [37.6156, 55.7522],
@@ -41,6 +41,7 @@
                 key: '{{ .Conf.GisApi}}',
                 style: 'c080bb6a-8134-4993-93a1-5b4d8c36a59b'
             });
+
             markers = [
                 {{range .Points}}
                 {
@@ -49,24 +50,7 @@
                 },
                 {{end}}
             ]
-
-            const clusterer = new mapgl.Clusterer(map, {
-                redius: 120,
-            });
-            clusterer.load(markers);
-
-            clusterer.on('click', (event) => {
-                if (event.target.type == "cluster") {
-                    var mes = "";
-                    event.target.data.forEach(element => {
-                        mes += element.ID;
-                    });
-                    alert(mes)
-                }
-                if (event.target.type == "marker") {
-                    alert(event.target.data.ID);
-                }
-            });
         </script>
+        <script src="main_logic.js"></script>
     </body>
 </html>

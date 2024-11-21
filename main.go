@@ -8,6 +8,7 @@ import (
 	"map/config"
 	"map/point"
 	"regexp"
+	"strconv"
 )
 
 func readCSV(fileName string) [][]string {
@@ -28,12 +29,16 @@ func readCSV(fileName string) [][]string {
 	return records
 }
 
-func getCoordinates(csvString string) point.Point {
+func getPoint(ID string, csvString string) point.Point {
 	var p point.Point
 	
 	re := regexp.MustCompile(`\d+\.\d+`)
 	res := re.FindAllString(csvString, -1)
-	p.Init(1, res[1], res[0])
+	id, err := strconv.Atoi(ID)
+	if err != nil {
+		fmt.Println("not int conv")
+	}
+	p.Init(id, res[1], res[0])
 	return p
 }
 
@@ -42,13 +47,13 @@ func main() {
 	conf.Init()
 	fmt.Println(conf.GisApi)
 
-	fileName := "map_dug.csv"
+	fileName := "baza.csv"
 	res := readCSV(fileName)
 	res = res[1:]
 
 	var points []point.Point = make([]point.Point, 0)
 	for _, i := range res {
-		points = append(points, getCoordinates(i[1]))
+		points = append(points, getPoint(i[0], i[2]))
 	}
 
 	var serv server.Server;

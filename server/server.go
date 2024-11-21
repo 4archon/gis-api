@@ -28,8 +28,10 @@ func (s Server) mainPage(response http.ResponseWriter, req *http.Request) {
 }
 
 func (s Server) Run() {
+	fs := http.FileServer(http.Dir("server/static"))
+	http.Handle("/", fs)
 	http.HandleFunc("/test", s.test)
-	http.HandleFunc("/", s.mainPage)
+	http.HandleFunc("/main", s.mainPage)
 
 	fmt.Println("Server is running")
 	http.ListenAndServe(s.Host + ":" + s.Port, nil)
