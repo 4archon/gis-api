@@ -81,6 +81,8 @@ clusterer.on('click', (event) => {
     }
     clear_elements();
     getPoints(array_points);
+    document.getElementById("flex1").style.width = "100%";
+    document.getElementById("container").style.display = "none";
     document.getElementById("flex1").style.display = "flex";
 });
 
@@ -90,6 +92,7 @@ map.on('click', (event) => {
 
 function click_close() {
     document.getElementById("flex1").style.display = "none";
+    document.getElementById("container").style.display = "flex";
 }
 
 document.getElementById("close").onclick = click_close;

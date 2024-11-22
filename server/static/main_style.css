@@ -35,5 +35,11 @@ body {
 .flex-item2 {
     min-height: 20%;
     max-height: 20%;
+    border: 1px solid black;
     background-color: whitesmoke;
+}
+
+#close {
+    border: 2px solid black;
+    background-color: bisque;
 }
