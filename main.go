@@ -1,27 +1,36 @@
 package main
 
 import (
-	"fmt"
 	"map/server"
 	"map/config"
 	"map/database"
+	"map/authentication"
 )
 
 
 func main() {
 	var conf config.Config
 	conf.Init()
-	fmt.Println(conf.GisApi)
+
+	var pdb database.PostgresDB
+	pdb.Init(conf)
+	defer pdb.Close()
 
 	fileName := "baza.csv"
-	var db database.DB = &database.CsvDB{}
-	db.Init(fileName)
+	var csvDB database.CsvDB
+	csvDB.Init(fileName)
+	var db database.DB = &csvDB
+
+	var jwt authentication.JwtToken
+	jwt.Init(conf.JwtSecretKey)
+	var auth authentication.Auth = &jwt
 
 	var serv server.Server;
 	serv.Host = "127.0.0.1"
 	serv.Port = "56001"
-	serv.Conf = conf
+	serv.GisApi = conf.GisApi
 	serv.DB = db
+	serv.Auth = auth
 
 	serv.Run()
 

@@ -1,22 +1,30 @@
 package config
 
 import (
+	"encoding/json"
+	"log"
 	"os"
 )
 
 type Config struct {
-	GisApi string
-}
-
-func (c *Config) initGis() {
-	file, err := os.ReadFile("config/config")
-	if err != nil {
-		return
-	}
-	s := string(file)
-	c.GisApi = s
+	GisApi					string	`json:"GisApiKey"`
+	PostgresUser			string	`json:"postgresUser"`
+	PostgresPassword		string	`json:"postgresPassword"`
+	PostgresDbName			string	`json:"postgresDbName"`
+	PostgresSSL				string	`json:"postgresSSL"`
+	PostgresIsolationLevel	string	`json:"postgresIsolationLevel"`
+	JwtSecretKey			[]byte	`json:"jwtSecretKey"`
 }
 
 func (c *Config) Init() {
-	c.initGis()
+	file, err := os.ReadFile("config/config.json")
+	if err != nil {
+		log.Println(err.Error())
+		return
+	}
+	err = json.Unmarshal(file, c)
+	if err != nil {
+		log.Println(err.Error())
+		return
+	}
 }

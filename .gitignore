@@ -1,3 +1,5 @@
 txt
-config/config
+config/config.json
 map
+zametki.txt
+server/static/bootstrap
