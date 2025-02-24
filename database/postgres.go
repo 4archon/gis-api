@@ -1,16 +1,26 @@
 package database
 
 import (
-	"log"
-	"fmt"
-	"map/config"
 	"database/sql"
-	_ "github.com/lib/pq"
+	"fmt"
+	"log"
+	"map/config"
+	// "map/point"
+	// "time"
+	
+	// "github.com/lib/pq"
 )
 
 type PostgresDB struct {
 	conf config.Config
 	db *sql.DB
+}
+
+func (p *PostgresDB) UsedConn() (int, int, int) {
+	idle := p.db.Stats().Idle
+	use := p.db.Stats().InUse
+	open := p.db.Stats().OpenConnections
+	return use, open, idle
 }
 
 func (p *PostgresDB) Init(conf config.Config) {
@@ -23,9 +33,18 @@ func (p *PostgresDB) Init(conf config.Config) {
 		return
 	}
 	p.db = db
+	// go func() {
+	// 	for {
+	// 		time.Sleep(100 * time.Millisecond)
+	// 		use, open, idle := p.UsedConn()
+	// 		fmt.Println(use, open, idle)
+	// 	}
+	// }()
 }
 
 func (p *PostgresDB) Close() {
 	p.db.Close()
 }
+
+
 

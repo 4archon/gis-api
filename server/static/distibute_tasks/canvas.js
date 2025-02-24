@@ -1,7 +1,7 @@
-document.getElementById("button1").onclick = click_canvas;
+document.getElementById("draw_button").onclick = click_canvas;
 
 var canvasOptions = {
-    strokeStyle: '#0000ff',
+    strokeStyle: '#33b859',
     lineWidth: 4,
     opacity: 0.7
 };
@@ -91,7 +91,6 @@ function click_canvas() {
 
         clear_elements();
         getPoints(id_in);
-        document.getElementById("flex1").style.display = "flex";
     }
 }
 

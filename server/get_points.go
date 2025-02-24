@@ -1,27 +1,39 @@
 package server
 
-import(
-	"net/http"
-	"log"
+import (
 	"encoding/json"
 	"io"
+	"log"
+	"net/http"
+	"strconv"
 )
 
-func parseBody(body string) []string {
-	res := []string{}
+func parseBody(body string) []int {
+	res := []int{}
 	last := 0
 	for index, i := range body {
 		if i == ',' {
-			res = append(res, body[last:index])
+			id, err := strconv.Atoi(body[last:index])
+			if err == nil {
+				res = append(res, id)
+			}
 			last = index + 1
 		}
 	}
 	l := len(body)
-	res = append(res, body[last:l])
+	id, err := strconv.Atoi(body[last:l])
+	if err == nil {
+		res = append(res, id)
+	}
 	return res
 }
 
 func (s Server) getPoints(response http.ResponseWriter, req *http.Request) {
+	_, _, err := s.checkUser(response, req)
+	if err != nil {
+		return
+	}
+
 	body, err := io.ReadAll(req.Body)
 	if err != nil {
 		log.Println(err.Error())

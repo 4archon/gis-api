@@ -6,5 +6,10 @@ import (
 
 type DB interface {
 	GetPoints() []point.Point
-	GetPointsDesc([]string) []point.PointDesc
+	GetPointsDesc([]int) []point.PointDesc
+	GetAuth(string, string) (int, string, error)
+	CheckActiveAuth(int, string) bool
+	GetUserLogin(int) string
+	GetUsersInfo() []point.User
+	GetUserInfo(int) (point.User, error)
 }

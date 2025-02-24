@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ru">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Service</title>
+        <meta name="description" content="Test 2GIS Map API" />
+        <link href="bootstrap/css/bootstrap.css" rel="stylesheet">
+        <link href="" rel="stylesheet">
+    </head>
+    <body>
+        <script src="static/header/render_header.js"></script>
+        <a href="/new_employee" class="d-flex justify-content-end float-end mt-4 mx-5">
+            <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" class="bi bi-plus-circle" viewBox="0 0 16 16">
+                <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
+                <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"/>
+            </svg>
+        </a>
+        {{range .}}
+        <div class="container col-md-6 mt-2">
+            <div class="card">
+                <div class="card-header">
+                    <div class="row">
+                        <div class="col-10">
+                            Логин: {{.Login}}
+                        </div>
+                        <a href="/edit_employee/{{.ID}}" class="btn btn-primary col-2">Редактировать</a>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">ФИО: {{.Surname}} {{.Name}} {{.Patronymic}}</h5>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">Роль: {{.Role}}</li>
+                        <li class="list-group-item">Статус: {{.Active}}</li>
+                        <li class="list-group-item">Telegram id: {{.TgID}}</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        {{end}}
+    </body>
+</html>

@@ -1,0 +1,9 @@
+{
+    "GisApiKey": "",
+    "postgresUser": "",
+    "postgresPassword": "a1",
+    "postgresDbName": "maps",
+    "postgresSSL": "disable",
+    "postgresIsolationLevel": "serializable",
+    "jwtSecretKey": ""
+}

@@ -15,11 +15,7 @@ func main() {
 	var pdb database.PostgresDB
 	pdb.Init(conf)
 	defer pdb.Close()
-
-	fileName := "baza.csv"
-	var csvDB database.CsvDB
-	csvDB.Init(fileName)
-	var db database.DB = &csvDB
+	var db database.DB = &pdb
 
 	var jwt authentication.JwtToken
 	jwt.Init(conf.JwtSecretKey)
