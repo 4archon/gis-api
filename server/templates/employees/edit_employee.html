@@ -20,47 +20,48 @@
                     </div>
                 </div>
                 <div class="card-body">
-                    <form class="row g-3">
+                    <form class="row g-3" method="post" action="/edit_employee/{{.ID}}">
                         <label class="form-label"><h4>Данные аккаунта</h3></label>
                         <div class="col-md-6">
                             <label for="inputEmail" class="form-label">Логин</label>
-                            <input type="email" class="form-control" id="inputEmail" placeholder="Прошлый логин: {{.Login}}">
+                            <input name="inputEmail" type="email" class="form-control" id="inputEmail" value="{{.Login}}" placeholder="Введите логин">
                         </div>
                         <div class="col-md-6">
                             <label for="inputPassword" class="form-label">Пароль</label>
-                            <input type="password" class="form-control" id="inputPassword">
+                            <input name="inputPassword" type="password" class="form-control" id="inputPassword" placeholder="Если оставить пустым, пароль останется прежним">
                         </div>
                         <div class="col-6">
                             <label for="inputRole" class="form-label">Роль</label>
-                            <select id="inputRole" class="form-select">
-                                <option selected>{{.Role}}</option>
-                                <option value="1">worker</option>
-                                <option value="2">admin</option>
+                            <select name="inputRole" id="inputRole" class="form-select" required>
+                                <option value="current" selected>Текущая роль - {{.Role}}</option>
+                                <option value="worker">worker</option>
+                                <option value="admin">admin</option>
                             </select>
                         </div>
                         <div class="col-6">
                             <label for="inputActive" class="form-label">Активировать</label>
-                            <select id="inputActive" class="form-select">
-                                <option selected>Да</option>
-                                <option value="1">Нет</option>
+                            <select name="inputActive" id="inputActive" class="form-select" required>
+                                <option value="current" selected>Текущий статус - {{.Active}}</option>
+                                <option value="true">Да</option>
+                                <option value="false">Нет</option>
                             </select>
                         </div>
                         <label class="form-label mt-5"><h4>Личные данные</h3></label>
                         <div class="col-md-6">
                             <label for="inputName" class="form-label">Имя</label>
-                            <input type="text" class="form-control" id="inputName" placeholder="{{.Name}}">
+                            <input name="inputName" type="text" class="form-control" id="inputName" value="{{.Name}}" placeholder="Введите имя">
                         </div>
                         <div class="col-md-6">
                             <label for="inputSurname" class="form-label">Фамилия</label>
-                            <input type="text" class="form-control" id="inputSurname" placeholder="{{.Surname}}">
+                            <input name="inputSurname" type="text" class="form-control" id="inputSurname" value="{{.Surname}}" placeholder="Введите фамилию">
                         </div>
                         <div class="col-md-6">
                             <label for="inputPatronymic" class="form-label">Отчество</label>
-                            <input type="text" class="form-control" id="inputPatronymic" placeholder="{{.Patronymic}}">
+                            <input name="inputPatronymic" type="text" class="form-control" id="inputPatronymic" value="{{.Patronymic}}" placeholder="Введите отчество">
                         </div>
                         <div class="col-md-6">
                             <label for="inputTgID" class="form-label">Telegram ID</label>
-                            <input type="text" class="form-control" id="inputTgID" placeholder="{{.TgID}}">
+                            <input name="inputTgID" type="text" class="form-control" id="inputTgID" value="{{.TgID}}" placeholder="Введите телеграм ID">
                         </div>
                         <div class="col-12 mt-3">
                           <button type="submit" class="btn btn-primary float-end mx-3">Изменить</button>
