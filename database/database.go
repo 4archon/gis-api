@@ -18,5 +18,7 @@ type DB interface {
 	ChangeUserPassword(id int, password string) error
 	NewUser(user point.NewUser) error
 	ChangeUserAllInfo(id int, user point.NewUser) error
-
+	
+	AssignTasks(data point.TasksRequest) error
+	GetTasksInfo() ([]point.Task, error)
 }

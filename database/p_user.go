@@ -20,7 +20,7 @@ func (p *PostgresDB) GetUserLogin(id int) string {
 
 func (p *PostgresDB) GetUsersInfo() []point.User {
 	rows, err := p.db.Query(`select id, login, role, active, name, surname, patronymic,
-	tg_id from users;`)
+	tg_id from users order by login;`)
 	if err != nil {
 		log.Println(err)
 		return nil

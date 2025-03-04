@@ -73,6 +73,7 @@ func (s Server) Run() {
 	router.HandleFunc("/analytics", s.analytics)
 
 	router.HandleFunc("/distribute_tasks", s.distribute)
+	router.HandleFunc("/assign_tasks", s.assignTasks)
 
 	router.HandleFunc("/tasks", s.tasks)
 	

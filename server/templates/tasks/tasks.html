@@ -12,40 +12,41 @@
         <script src="bootstrap/js/bootstrap.js"></script>
         <script src="static/header/render_header.js"></script>
         <div class="container col-md-6 mt-2">
+            {{range .}}
             <div class="card">
                 <div class="card-header">
                     <div class="row">
                         <div class="col-10">
-                            ID задачи: 20048
+                            ID задачи: {{.TaskID}}
                         </div>
                     </div>
                 </div>
                 <div class="card-body">
-                    <h5 class="card-title">Адрес: Остановка НГПТ "МЦД Левобережная"</h5>
+                    <h5 class="card-title">Адрес: {{.Address}} ID: {{.PointID}}</h5>
                     <ul class="list-group list-group-flush">
-                        <li class="list-group-item">Назначено сотрудникам:</li>
-                        <li class="list-group-item">Дата последнего отчета:</li>
-                        <li class="list-group-item mx-3">Информация о точке</li>
+                        <li class="list-group-item">Назначено сотрудникам: {{.UsersStr}}</li>
+                        <!-- <li class="list-group-item">Дата последнего отчета:</li> -->
+                        <!-- <li class="list-group-item mx-3">Информация о точке</li> -->
                         <li class="list-group-item">
                             <table class="table">
                                 <tbody>
                                     <tr>
                                         <th scope="row">Широта</th>
-                                        <td>55</td>
+                                        <td>{{.Lat}}</td>
                                         <th scope="row">Долгота</th>
-                                        <td>37</td>
+                                        <td>{{.Long}}</td>
                                     </tr>
                                     <tr>
                                         <th scope="row">Округ</th>
-                                        <td>ЮЗАО</td>
+                                        <td>{{.District}}</td>
                                         <th scope="row">Количество дуг</td>
-                                        <td>3</td>
+                                        <td>{{.NumberArc}}</td>
                                     </tr>
                                     <tr>
                                         <th scope="row">Тип дуги</th>
-                                        <td>Металическая</td>
+                                        <td>{{.TypeArc}}</td>
                                         <th scope="row">Покрытие</th>
-                                        <td>Плитка</td>
+                                        <td>{{.Carpet}}</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -61,6 +62,7 @@
                     </div>
                 </div>
             </div>
+            {{end}}
         </div>
     </body>
 </html>

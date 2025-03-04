@@ -10,25 +10,6 @@ const clusterer = new mapgl.Clusterer(map, {
 });
 clusterer.load(markers);
 
-clusterer.on('click', (event) => {
-    array_points = [];
-    if (event.target.type == "cluster") {
-        event.target.data.forEach(element => {
-            array_points.push(element.ID);
-        });
-    }
-    if (event.target.type == "marker") {
-        array_points.push(event.target.data.ID);
-    }
-    clear_elements();
-    getPoints(array_points);
-});
-
-function clear_elements() {
-    elements = document.getElementsByClassName("card mb-3");
-    while (elements.length > 0) elements[0].remove();
-}
-
 async function getPoints(array_points) {
     url = "/points"
     response = await fetch(url, {
@@ -41,20 +22,55 @@ async function getPoints(array_points) {
         body: array_points
     })
     res = await response.json();
-    handler_json(res);
+    return res
 }
 
-function handler_json(data_json) {
-    parent = document.getElementsByClassName('offcanvas-body')[0]
+clusterer.on('click', (event) => {
+    array_points = [];
+    if (event.target.type == "cluster") {
+        event.target.data.forEach(element => {
+            array_points.push(element.ID);
+        });
+    }
+    if (event.target.type == "marker") {
+        array_points.push(event.target.data.ID);
+    }
+    clear_elements();
+    to_side_bar(array_points);
+});
+
+function clear_elements() {
+    elements = document.getElementsByClassName("card mb-3");
+    while (elements.length > 0) elements[0].remove();
+}
+
+async function to_side_bar() {
+    data_json = await getPoints(array_points)
+    parent = document.getElementById("left_side_offcanvas_body")
     data_json.forEach(element => {
         create_card(element, parent);
     });
+
+    el = document.getElementById("offcanvasPoints");
+    off_canvas = new bootstrap.Offcanvas(el);
+    off_canvas.show();
 }
 
 function create_card(row_json, parent) {
     new_card = document.createElement("div");
     new_card.className = "card mb-3";
     new_card.style.maxWidth = "540px";
+    new_card.draggable = true;
+
+    new_card.addEventListener("dragstart", (event) => {
+        data = {
+            type_drop: "point",
+            id: row_json.id
+        }
+        json_str = JSON.stringify(data);
+        event.dataTransfer.setData("application/json", json_str);
+    });
+
     parent.appendChild(new_card);
 
     new_row = document.createElement("div");
@@ -101,14 +117,6 @@ function create_card(row_json, parent) {
     tx = document.createTextNode("Количество дуг: " + row_json.amount);
     new_arc_num.appendChild(tx);
     new_body.appendChild(new_arc_num);
-
-    el = document.getElementById("offcanvasPoints");
-    off_canvas = new bootstrap.Offcanvas(el);
-    off_canvas.show();
-
-    el2 = document.getElementById("offcanvasTasks");
-    off_canvas_tasks = new bootstrap.Offcanvas(el2);
-    off_canvas_tasks.show();
 }
 
 map.on('click', (event) => {

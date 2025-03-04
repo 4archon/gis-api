@@ -17,6 +17,8 @@ function simple(coordinates) {
     return coordinates;
 }
 
+polygons_list = [];
+
 function click_canvas() {
     var canvas = document.querySelector('#draw-canvas');
     var ctx2d = canvas.getContext('2d');
@@ -79,6 +81,8 @@ function click_canvas() {
             strokeColor: '#00AB00',
         });
 
+        polygons_list.push(polygon)
+
         markers_in = markers.filter((x) => {
             if (inside(x.coordinates, coordinates)) {
                 return x;
@@ -87,10 +91,8 @@ function click_canvas() {
         id_in = markers_in.map((x) => {
             return x.ID;
         })
-        console.log(id_in);
 
-        clear_elements();
-        getPoints(id_in);
+        to_work_side_bar(id_in);
     }
 }
 
@@ -110,3 +112,44 @@ function inside(point, vs) {
     return inside;
 };
 
+work_list = [];
+
+async function to_work_side_bar(id_in) {
+    data_json = await getPoints(id_in);
+    parent = document.getElementById("list-work")
+    data_json.forEach(element => {
+        create_work(element, parent);
+    });
+
+    show_work_side();
+    console.log(work_list);
+}
+
+function create_work(row_json, parent) {
+    new_li = document.createElement('li');
+    new_li.className = "list-group-item";
+    new_li.draggable = true;
+    tx = document.createTextNode("ID точки: " + row_json.id);
+    new_li.appendChild(tx);
+    parent.appendChild(new_li);
+    work_list.push(row_json.id)
+}
+
+document.getElementById("clear-list-work").onclick = clear_work;
+
+function clear_work() {
+    parent = document.getElementById("list-work");
+    parent.innerHTML = '';
+    work_list = [];
+    polygons_list.forEach((pol) => {
+        pol.destroy()
+    })
+}
+
+document.getElementById("show_work_side").onclick = show_work_side;
+
+function show_work_side() {
+    el = document.getElementById("offcanvasTasks");
+    off_canvas_tasks = new bootstrap.Offcanvas(el);
+    off_canvas_tasks.show();
+}
