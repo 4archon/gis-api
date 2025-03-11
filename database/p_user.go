@@ -164,16 +164,19 @@ func (p *PostgresDB) NewUser(user point.NewUser) error {
 		log.Println(err)
 		return err
 	}
+	if user.TgID == "" {
+		user.TgID = "-1"
+	}
 	_, err = tx.Exec(`insert into users values(default, $1, $2, $3, $4, $5, $6, $7, $8)`,
 	user.Login, user.Password, user.Role, user.Active,
 	user.Name, user.Surname, user.Patronymic, user.TgID)
 	if err != nil {
-		err = tx.Rollback()
-		if err != nil {
-			log.Println(err)
+		log.Println(err)
+		err2 := tx.Rollback()
+		if err2 != nil {
+			log.Println(err2)
 			return err
 		}
-		log.Println(err)
 		return err
 	}
 	err = tx.Commit()

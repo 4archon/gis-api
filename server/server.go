@@ -56,6 +56,9 @@ func (s Server) Run() {
 	fsBootstrap := http.FileServer(http.Dir("server/static/bootstrap"))
 	router.PathPrefix("/bootstrap/").Handler(http.StripPrefix("/bootstrap", fsBootstrap))
 
+	fsMedia := http.FileServer(http.Dir("server/static/media"))
+	router.PathPrefix("/media/").Handler(http.StripPrefix("/media", fsMedia))
+
 	fs := http.FileServer(http.Dir("server/static/"))
 	router.PathPrefix("/static/").Handler(http.StripPrefix("/static", s.blockFileServer(fs)))
 
@@ -76,6 +79,7 @@ func (s Server) Run() {
 	router.HandleFunc("/assign_tasks", s.assignTasks)
 
 	router.HandleFunc("/tasks", s.tasks)
+	router.HandleFunc("/inspection/{reportID}/{id}", s.inspection)
 	
 	router.HandleFunc("/points", s.getPoints)
 	router.HandleFunc("/account/login", s.getAccountLogin)

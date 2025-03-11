@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="ru">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Service</title>
+        <meta name="description" content="Test 2GIS Map API" />
+        <link rel="stylesheet" href="">
+        <link href="/bootstrap/css/bootstrap.css" rel="stylesheet">
+    </head>
+    <body>
+        <script src="/bootstrap/js/bootstrap.js"></script>
+        <script src="/static/header/render_header.js"></script>
+        <div class="container col-md-6 mt-2">
+            <div class="card">
+                <div class="card-header">
+                    <div class="row">
+                        <div class="col-10">
+                            Создать новый отчет инспекции
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <form class="row g-3" method="post" enctype="multipart/form-data" action="/inspection/{{.}}/new">
+                        <label class="form-label mt-sm-5 mt-3"><h4>Заполните отчёт</h3></label>
+                        <div class="col-sm-6 col-12">
+                            <label for="inputCheckup" class="form-label">Статус точки</label>
+                            <select name="inputCheckup" id="inputCheckup" class="form-select" required>
+                                <option value="Точка требует ремонта" selected>Точка требует ремонта</option>
+                                <option value="Точка не требует ремонта">Точка не требует ремонта</option>
+                            </select>
+                        </div>
+                        <div class="col-sm-6 col-12">
+                            <label for="inputRepairType" class="form-label">Тип ремонта</label>
+                            <select name="inputRepairType" id="inputRepairType" class="form-select" required>
+                                <option value="Временный демонтаж" selected>Временный демонтаж</option>
+                                <option value="Демонтаж-монтаж">Демонтаж-монтаж</option>
+                                <option value="Демонтаж-монтаж + Покраска">Демонтаж-монтаж + Покраска</option>
+                                <option value="Забрать дуги срочно">Забрать дуги срочно</option>
+                                <option value="Замена на алюминиевую дугу">Замена на алюминиевую дугу</option>
+                                <option value="Монтаж старой точки">Монтаж старой точки</option>
+                                <option value="Покраска">Покраска</option>
+                            </select>
+                        </div>
+                        <div class="col-sm-6 col-12">
+                            <label for="photo_left" class="form-label">Фото слева</label>
+                            <input name="photo_left" class="form-control" type="file" id="photo_left" required>
+                        </div>
+                        <div class="col-sm-6 col-12">
+                            <label for="photo_right" class="form-label">Фото справа</label>
+                            <input name="photo_right" class="form-control" type="file" id="photo_right" required>
+                        </div>
+                        <div class="col-sm-6 col-12">
+                            <label for="photo_front" class="form-label">Фото спереди</label>
+                            <input name="photo_front" class="form-control" type="file" id="photo_front" required>
+                        </div>
+                        <div class="col-sm-6 col-12">
+                            <label for="video" class="form-label">Видео</label>
+                            <input name="video" class="form-control" type="file" id="video" required>
+                        </div>
+                        <div class="col-12">
+                            <label for="inputComment" class="form-label">Комментарий</label>
+                            <textarea name="inputComment" class="form-control" id="inputComment" rows="3" required></textarea>
+                        </div>
+                        <div class="col-12 mt-3">
+                            <button type="submit" class="btn btn-primary float-end mx-sm-3 mx-0">Сохранить</button>
+                            <a href="/tasks" class="btn btn-light float-end mx-sm-0 mx-2">Отмена</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <script src="/static/tasks/inspection.js"></script>
+    </body>
+</html>

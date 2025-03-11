@@ -45,7 +45,7 @@ async function getPoints(array_points) {
 }
 
 function handler_json(data_json) {
-    parent = document.getElementsByClassName('offcanvas-body')[0]
+    parent = document.getElementById("right_side_offcanvas_body")
     data_json.forEach(element => {
         create_card(element, parent);
     });

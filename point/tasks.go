@@ -10,6 +10,7 @@ type Task struct {
 	Users			[]int
 	UsersStr		string
 	ChangeID		int
+	ActiveID		int
 	ServiceID		int
 	InspectionID	int
 	PointID			int
@@ -20,4 +21,15 @@ type Task struct {
 	NumberArc		int
 	TypeArc			string
 	Carpet			string
+}
+
+type InspectionReport struct {
+	ID				int
+	Checkup			string
+	RepairType		string
+	PhotoLeft		string
+	PhotoRight		string
+	PhotoFront		string
+	Video			string
+	Comment			string
 }

@@ -11,9 +11,9 @@
     <body>
         <script src="bootstrap/js/bootstrap.js"></script>
         <script src="static/header/render_header.js"></script>
-        <div class="container col-md-6 mt-2">
+        <div class="container col-md-6 mt-1">
             {{range .}}
-            <div class="card">
+            <div class="card mt-sm-0 mt-2">
                 <div class="card-header">
                     <div class="row">
                         <div class="col-10">
@@ -22,43 +22,94 @@
                     </div>
                 </div>
                 <div class="card-body">
-                    <h5 class="card-title">Адрес: {{.Address}} ID: {{.PointID}}</h5>
-                    <ul class="list-group list-group-flush">
-                        <li class="list-group-item">Назначено сотрудникам: {{.UsersStr}}</li>
-                        <!-- <li class="list-group-item">Дата последнего отчета:</li> -->
-                        <!-- <li class="list-group-item mx-3">Информация о точке</li> -->
-                        <li class="list-group-item">
+                    <h5 class="card-title">Адрес: {{.Address}}</h5>
+                    <h5 class="card-title">ID точки: {{.PointID}}</h5>
+                    <h6>Информация о точке:</h6>
+                    <table class="table">
+                        <tbody>
+                            <tr class="row">
+                                <th class="col-sm-3 col-6">Широта</th>
+                                <td class="col-sm-3 col-6">{{.Lat}}</td>
+                                <th class="col-sm-3 col-6">Долгота:</th>
+                                <td class="col-sm-3 col-6">{{.Long}}</td>
+                            </tr>
+                            <tr class="row">
+                                <th class="col-sm-3 col-6">Округ</th>
+                                <td class="col-sm-3 col-6">{{.District}}</td>
+                                <th class="col-sm-3 col-6">Количество дуг</th>
+                                <td class="col-sm-3 col-6">{{.NumberArc}}</td>
+                            </tr>
+                            <tr class="row">
+                                <th class="col-sm-3 col-6">Тип дуги</th>
+                                <td class="col-sm-3 col-6">{{.TypeArc}}</td>
+                                <th class="col-sm-3 col-6">Покрытие</th>
+                                <td class="col-sm-3 col-6">{{.Carpet}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="row">
+                        <div class="col-sm-6 col-12">
                             <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th class="col-12">
+                                            Заполните необходимые отчеты:
+                                        </th>
+                                    </tr>
+                                </thead>
                                 <tbody>
-                                    <tr>
-                                        <th scope="row">Широта</th>
-                                        <td>{{.Lat}}</td>
-                                        <th scope="row">Долгота</th>
-                                        <td>{{.Long}}</td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">Округ</th>
-                                        <td>{{.District}}</td>
-                                        <th scope="row">Количество дуг</td>
-                                        <td>{{.NumberArc}}</td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">Тип дуги</th>
-                                        <td>{{.TypeArc}}</td>
-                                        <th scope="row">Покрытие</th>
-                                        <td>{{.Carpet}}</td>
+                                    <tr class="row">
+                                        <td class="col-6 text-center">
+                                            {{if .InspectionID}}
+                                            <a href="/inspection/{{.TaskID}}/{{.InspectionID}}" class="btn btn-outline-secondary">Инспекция</a>
+                                            {{else}}
+                                            <a href="/inspection/{{.TaskID}}/new" class="btn btn-outline-secondary">Инспекция</a>
+                                            {{end}}
+                                        </td>
+                                        <td class="col-6 text-center">
+                                            {{if .ServiceID}}
+                                            <a href="/service/{{.TaskID}}/{{.ServiceID}}" class="btn btn-outline-primary">Обслуживание</a>
+                                            {{else}}
+                                            <a href="/service/{{.TaskID}}/new" class="btn btn-outline-primary">Обслуживание</a>
+                                            {{end}}
+                                        </td>
                                     </tr>
                                 </tbody>
                             </table>
-                        </li>
-                    </ul>
-                    <div class="col-12">
-                        <a href="/send_report" class="btn btn-success float-end">Отправить</a>
-                        <a href="" class="btn btn-secondary float-end mx-1">Инспекция</a>
-                        <a href="" class="btn btn-primary float-end">Обслуживание</a>
-                        <a href="" class="btn btn-warning float-end mx-1">Изменить данные точки</a>
-                        <a href="" class="btn btn-info float-end">Очистить отчет</a>
-                        <a href="" class="btn btn-danger float-start">Удалить точку</a>
+                        </div>
+                        <div class="col-sm-6 col-12">
+                            <table class="table">
+                                <thead>
+                                    <tr class="row">
+                                        <th class="col-12">
+                                            Заполнить если необходимо изменить данные о точке:
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="row">
+                                        <td class="col-6 text-center">
+                                            {{if .ChangeID}}
+                                            <a href="/change_point/{{.TaskID}}/{{.ChangeID}}" class="btn btn-warning">Изменить данные</a>
+                                            {{else}}
+                                            <a href="/change_point/{{.TaskID}}/new" class="btn btn-warning">Изменить данные</a>
+                                            {{end}}
+                                        </td>
+                                        <td class="col-6 text-center">
+                                            {{if .ActiveID}}
+                                            <a href="/deactivation/{{.TaskID}}/{{.ActiveID}}" class="btn btn-danger">Деактивировать</a>
+                                            {{else}}
+                                            <a href="/deactivation/{{.TaskID}}/new" class="btn btn-danger">Деактивировать</a>
+                                            {{end}}
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="row d-flex flex-wrap justify-content-end">
+                        <a href="/clear_report/{{.TaskID}}" class="col-sm-2 col-12 btn btn-outline-danger my-sm-0 mx-sm-2 my-1 mx-0">Очистить отчеты</a>
+                        <a href="/send_report/{{.TaskID}}" class="col-sm-2 col-12 btn btn-success">Отправить</a>
                     </div>
                 </div>
             </div>

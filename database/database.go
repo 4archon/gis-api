@@ -21,4 +21,9 @@ type DB interface {
 	
 	AssignTasks(data point.TasksRequest) error
 	GetTasksInfo() ([]point.Task, error)
+
+	GetPointIDFromReport(id int) (int, error)
+	CreateInspection(reportID int, checkup string, repairType string, comment string) (int, error)
+	GetInspection(inspectionID int) (point.InspectionReport, error)
+	DeleteInspection(reportID int) error
 }

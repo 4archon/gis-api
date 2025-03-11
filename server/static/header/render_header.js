@@ -47,12 +47,22 @@ async function fetchHeader() {
         login = await getLogin();
         document.body.prepend(el);
         document.getElementById("profile").innerHTML = login;
+        document.getElementById("profile_sidebar").innerHTML = login;
         activePage()
+        nav_but = document.getElementById("nav-bar-open");
+        nav_but.onclick = show_nav;
     }
     catch(err) {
         console.log(err)
     }
 }
+
+function show_nav() {
+    navCanvas = document.getElementById("offcanvasNav");
+    off_canvas_nav = new bootstrap.Offcanvas(navCanvas);
+    off_canvas_nav.show();
+}
+
 
 fetchHeader()
 

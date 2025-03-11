@@ -3,3 +3,4 @@ config/config.json
 map
 zametki.txt
 server/static/bootstrap
+server/static/media
