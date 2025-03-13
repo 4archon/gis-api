@@ -160,3 +160,58 @@ func (s Server) inspection(response http.ResponseWriter, req *http.Request) {
 		return
 	}
 }
+
+
+func (s Server) service(response http.ResponseWriter, req *http.Request) {
+	_, _, err := s.checkUser(response, req)
+	if err != nil {
+		return
+	}
+
+	vars := mux.Vars(req)
+	reportIDStr := vars["reportID"]
+	reportID, err := strconv.Atoi(reportIDStr)
+	if err != nil {
+		log.Println(err)
+		return
+	}
+	serviceIDStr := vars["id"]
+
+	if req.Method == "GET" {
+		if serviceIDStr == "new" {
+			tmpl, _ := template.ParseFiles("server/templates/tasks/service_new.html")
+			tmpl.Execute(response, reportIDStr)
+		} else {
+			inspectionID, err := strconv.Atoi(serviceIDStr)
+			if err != nil {
+				log.Println(err)
+				return
+			}
+			inspectionInfo, err := s.DB.GetInspection(inspectionID)
+			if err != nil {
+				return
+			}
+			var insSaved inspectionSaved
+			insSaved.ReportID = reportID
+			insSaved.InspectionInfo = inspectionInfo
+			tmpl, _ := template.ParseFiles("server/templates/tasks/inspection.html")
+			tmpl.Execute(response, insSaved)
+		}
+	} else if req.Method == "POST" {
+		if serviceIDStr == "new" {
+			val := req.FormValue("serviceCounter")
+			println(val)
+			http.Redirect(response, req, "/tasks", http.StatusFound)
+		} else {
+			_, err := strconv.Atoi(serviceIDStr)
+			if err != nil {
+				log.Println(err)
+				return
+			}
+
+			http.Redirect(response, req, "/tasks", http.StatusFound)
+		}
+	} else {
+		return
+	}
+}

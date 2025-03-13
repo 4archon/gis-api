@@ -98,6 +98,7 @@ create table report (
     inspection_log_id   integer     references inspection_log(id),
     appointment_date    timestamp,    
     submission_date     timestamp,
+    deadline            timestamp,
     sent_worker         boolean,
     verified            boolean,
     active              boolean
