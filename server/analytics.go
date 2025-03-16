@@ -7,9 +7,13 @@ import (
 
 
 func (s Server) analytics(response http.ResponseWriter, req *http.Request) {
-	_, _, err := s.checkUser(response, req)
+	_, role, err := s.checkUser(response, req)
 	if err != nil {
 		return
+	}
+
+	if role != "admin" {
+		http.Redirect(response, req, "/main", http.StatusFound)
 	}
 
 	var data dataMain

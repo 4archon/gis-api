@@ -38,13 +38,12 @@ create table change_points_log (
     long            float8,
     lat             float8,
     point_address   varchar(150),
-    district        varchar(10),
+    district        varchar(100),
     number_arc      integer,
     arc_type        varchar(30),
     carpet          varchar(30),
     change_date     timestamp,
-    comment         varchar(500),
-    active          boolean
+    comment         varchar(500)
 );
 
 create table service_log (

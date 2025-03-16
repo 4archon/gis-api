@@ -1,5 +1,9 @@
 package point
 
+import (
+	"time"
+)
+
 type TasksRequest struct {
 	Points		[]int	`json:"tasks"`
 	Employees	[]int	`json:"workers"`
@@ -32,4 +36,31 @@ type InspectionReport struct {
 	PhotoFront		string
 	Video			string
 	Comment			string
+}
+
+type ServiceReport struct {
+	ID				int
+	ServiceType		string
+	Subtype			string
+	ActionArc		int
+	PhotoBefore		string
+	PhotoLeft		string
+	PhotoRight		string
+	PhotoFront		string
+	PhotoExtra		string
+	Video			string
+	Comment			string
+	Index			int
+}
+
+type ChangeReport struct {
+	Long            string
+    Lat             string
+    PointAddress	string
+    District        string
+    NumberArc		int
+    ArcType			string
+    Carpet          string
+    ChangeDate		time.Time
+    Comment         string
 }

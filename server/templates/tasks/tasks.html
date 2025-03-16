@@ -97,9 +97,9 @@
                                         </td>
                                         <td class="col-6 text-center">
                                             {{if .ActiveID}}
-                                            <a href="/deactivation/{{.TaskID}}/{{.ActiveID}}" class="btn btn-danger">Деактивировать</a>
+                                            <a href="/deactivate/{{.TaskID}}/{{.ActiveID}}" class="btn btn-danger">Деактивировать</a>
                                             {{else}}
-                                            <a href="/deactivation/{{.TaskID}}/new" class="btn btn-danger">Деактивировать</a>
+                                            <a href="/deactivate/{{.TaskID}}/new" class="btn btn-danger">Деактивировать</a>
                                             {{end}}
                                         </td>
                                     </tr>

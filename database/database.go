@@ -26,4 +26,17 @@ type DB interface {
 	CreateInspection(reportID int, checkup string, repairType string, comment string) (int, error)
 	GetInspection(inspectionID int) (point.InspectionReport, error)
 	DeleteInspection(reportID int) error
+
+	CreateService(reportID int) (int, error)
+	CreateServiceLogData(serviceLogID int, serviceType string,
+		subtype string, comment string) (int, error)
+	ApproveServiceReport(reportID int, serviceLogID int,
+		serviceLogDataID int, extra bool) error
+	GetService(serviceID int) ([]point.ServiceReport, error)
+	DeleteService(reportID int) error
+
+	GetPointInfo(idLog int) (point.ChangeReport, error)
+	GetPointFromReport(reportID int) (point.ChangeReport, error)
+	NewChangePoint(reportID int, change point.ChangeReport) error
+	DeleteChangePoint(reportID int) error
 }

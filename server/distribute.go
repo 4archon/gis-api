@@ -18,9 +18,13 @@ type dataDistribute struct {
 
 
 func (s Server) distribute(response http.ResponseWriter, req *http.Request) {
-	_, _, err := s.checkUser(response, req)
+	_, role, err := s.checkUser(response, req)
 	if err != nil {
 		return
+	}
+
+	if role != "admin" {
+		http.Redirect(response, req, "/main", http.StatusFound)
 	}
 
 	var data dataDistribute
@@ -32,9 +36,13 @@ func (s Server) distribute(response http.ResponseWriter, req *http.Request) {
 }
 
 func (s Server) assignTasks(response http.ResponseWriter, req *http.Request) {
-	_, _, err := s.checkUser(response, req)
+	_, role, err := s.checkUser(response, req)
 	if err != nil {
 		return
+	}
+
+	if role != "admin" {
+		http.Redirect(response, req, "/main", http.StatusFound)
 	}
 
 	body, err := io.ReadAll(req.Body)

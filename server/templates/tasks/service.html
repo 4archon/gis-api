@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="ru">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Service</title>
+        <meta name="description" content="Test 2GIS Map API" />
+        <link rel="stylesheet" href="">
+        <link href="/bootstrap/css/bootstrap.css" rel="stylesheet">
+    </head>
+    <body>
+        <script src="/bootstrap/js/bootstrap.js"></script>
+        <script src="/static/header/render_header.js"></script>
+        <div class="container col-md-6 mt-2">
+            <div class="card">
+                <div class="card-header">
+                    <div class="row">
+                        <div class="col-10">
+                            Отчет id: {{.ServiceID}}
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <form class="row g-3" method="post" enctype="multipart/form-data" action="/service/{{.ReportID}}/{{.ServiceID}}">
+                        <label class="form-label mt-sm-5 mt-3"><h4>Отчёт заполнен</h3></label>
+                        {{range .ServiceInfo}}
+                        <div class="col-sm-6 col-12">
+                            <label for="inputServiceType" class="form-label">Тип услуги</label>
+                            <select name="inputServiceType" id="inputServiceType" class="form-select" required disabled>
+                                <option value="{{.ServiceType}}" selected>{{.ServiceType}}</option>
+                            </select>
+                        </div>
+                        <div class="col-sm-6 col-12">
+                            <label for="inputSubtype" class="form-label">Тип ремонта</label>
+                            <select name="inputSubtype" id="inputSubtype1" class="form-select" required disabled>
+                                <option value="{{.Subtype}}" selected>{{.Subtype}}</option>
+                            </select>
+                        </div>
+                        <div class="col-12">
+                            <label for="inputComment" class="form-label">Комментарий</label>
+                            <textarea name="inputComment" class="form-control" id="inputComment1" rows="3" required disabled>{{.Comment}}</textarea>
+                        </div>
+                        <div id="carousel{{.Index}}" class="carousel slide">
+                            <div class="carousel-indicators">
+                                <button type="button" data-bs-target="#carousel{{.Index}}" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+                                <button type="button" data-bs-target="#carousel{{.Index}}" data-bs-slide-to="1" aria-label="Slide 2"></button>
+                                <button type="button" data-bs-target="#carousel{{.Index}}" data-bs-slide-to="2" aria-label="Slide 3"></button>
+                                <button type="button" data-bs-target="#carousel{{.Index}}" data-bs-slide-to="3" aria-label="Slide 4"></button>
+                                <button type="button" data-bs-target="#carousel{{.Index}}" data-bs-slide-to="4" aria-label="Slide 5"></button>
+                                {{if .PhotoExtra}}
+                                <button type="button" data-bs-target="#carousel{{.Index}}" data-bs-slide-to="5" aria-label="Slide 6"></button>
+                                {{end}}
+                            </div>
+                            <div class="carousel-inner">
+                                <div class="carousel-item active text-center">
+                                    <img src="{{.PhotoBefore}}" class="d-block w-100" alt="Загрузка">
+                                    <div class="carousel-caption">
+                                        <h5>Фото до</h5>
+                                    </div>
+                                </div>
+                                <div class="carousel-item text-center">
+                                    <img src="{{.PhotoLeft}}" class="d-block w-100" alt="Загрузка">
+                                    <div class="carousel-caption">
+                                        <h5>Фото слева</h5>
+                                    </div>
+                                </div>
+                                <div class="carousel-item text-center">
+                                    <img src="{{.PhotoRight}}" class="d-block w-100" alt="Загрузка">
+                                    <div class="carousel-caption">
+                                        <h5>Фото справа</h5>
+                                    </div>
+                                </div>
+                                <div class="carousel-item text-center">
+                                    <img src="{{.PhotoFront}}" class="d-block w-100" alt="Загрузка">
+                                    <div class="carousel-caption">
+                                        <h5>Фото спереди</h5>
+                                    </div>
+                                </div>
+                                <div class="carousel-item text-center">
+                                    <video class="img-fluid" autoplay loop muted>
+                                        <source src="{{.Video}}" type="video/mp4">
+                                    </video>
+                                    <div class="carousel-caption">
+                                        <h5>Видео</h5>
+                                    </div>
+                                </div>
+                                {{if .PhotoExtra}}
+                                <div class="carousel-item text-center">
+                                    <img src="{{.PhotoExtra}}" class="d-block w-100" alt="Загрузка">
+                                    <div class="carousel-caption">
+                                        <h5>Дополнительное фото</h5>
+                                    </div>
+                                </div>
+                                {{end}}
+                            </div>
+                            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
+                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Previous</span>
+                            </button>
+                            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="next">
+                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Next</span>
+                            </button>
+                        </div>
+                        {{end}}
+                        <div class="col-12 mt-3">
+                            <button type="submit" class="btn btn-danger float-end mx-sm-3 mx-0">Очистить отчёт</button>
+                            <a href="/tasks" class="btn btn-light float-end mx-sm-0 mx-2">Назад</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

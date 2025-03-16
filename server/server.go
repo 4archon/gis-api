@@ -81,6 +81,8 @@ func (s Server) Run() {
 	router.HandleFunc("/tasks", s.tasks)
 	router.HandleFunc("/inspection/{reportID}/{id}", s.inspection)
 	router.HandleFunc("/service/{reportID}/{id}", s.service)
+	router.HandleFunc("/change_point/{reportID}/{id}", s.changePoint)
+	router.HandleFunc("/deactivate/{reportID}/{id}", s.deactivate)
 
 	router.HandleFunc("/points", s.getPoints)
 	router.HandleFunc("/account/login", s.getAccountLogin)
