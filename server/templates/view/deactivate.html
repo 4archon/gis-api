@@ -21,15 +21,14 @@
                     </div>
                 </div>
                 <div class="card-body">
-                    <form class="row g-3" method="post" enctype="multipart/form-data" action="/deactivate/{{.ReportID}}/new">
+                    <form class="row g-3">
                         <label class="form-label mt-sm-5 mt-3">
-                            <h4>Заполните форму измениния статуса точки</h4>
-                            <small>Измените только при необходимости изменить статус активности точки</small>
+                            <h4>Заполнена форма измениния статуса точки</h4>
                         </label>
                         <div class="col-sm-6 col-12">
                             <label for="status" class="form-label">Статус точки</label>
-                            <select name="status" id="status" class="form-select" required>
-                                {{if .Active.Status}}
+                            <select name="status" id="status" class="form-select" required disabled>
+                                {{if .Status}}
                                 <option value="t" selected>Активирована</option>
                                 <option value="f">Деактивирована</option>
                                 {{else}}
@@ -40,11 +39,7 @@
                         </div>
                         <div class="col-12">
                             <label for="comment" class="form-label">Комментарий</label>
-                            <textarea name="comment" class="form-control" id="comment" rows="3" required></textarea>
-                        </div>
-                        <div class="col-12 mt-3">
-                            <button type="submit" class="btn btn-primary float-end mx-sm-3 mx-0">Сохранить</button>
-                            <a href="/tasks" class="btn btn-light float-end mx-sm-0 mx-2">Отмена</a>
+                            <textarea name="comment" class="form-control" id="comment" rows="3" required disabled>{{.Comment}}</textarea>
                         </div>
                     </form>
                 </div>

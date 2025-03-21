@@ -12,7 +12,7 @@ import (
 
 type dataDistribute struct {
 	GisApiKey	string
-	Points		[]point.Point
+	Points		[]point.FilterPoint
 	Employees	[]point.User
 }
 
@@ -29,8 +29,11 @@ func (s Server) distribute(response http.ResponseWriter, req *http.Request) {
 
 	var data dataDistribute
 	data.GisApiKey = s.GisApi
-	data.Points = s.DB.GetPoints()
-	data.Employees = s.DB.GetUsersInfo()
+	data.Points, err = s.DB.GetFiltredPoints()
+	if err != nil {
+		return
+	}
+	data.Employees = s.DB.GetWorkersInfo()
 	tmpl, _ := template.ParseFiles("server/templates/distribute_tasks/distribute.html")
 	tmpl.Execute(response, data)
 }

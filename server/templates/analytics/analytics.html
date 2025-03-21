@@ -5,16 +5,16 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Service</title>
         <meta name="description" content="Test 2GIS Map API" />
-        <link href="bootstrap/css/bootstrap.css" rel="stylesheet">
+        <link href="/bootstrap/css/bootstrap.css" rel="stylesheet">
         <link href="" rel="stylesheet">
     </head>
     <body>
-        <script src="bootstrap/js/bootstrap.js"></script>
-        <script src="static/header/render_header.js"></script>
+        <script src="/bootstrap/js/bootstrap.js"></script>
+        <script src="/static/header/render_header.js"></script>
         <div class="container-fluid mt-1">
           <div class="row">
             <div id="map" class="col-10 p-0" style="height: 750px; overflow: hidden;"></div>
-            <script src="static/analytics/set_map_size.js"></script>
+            <script src="/static/analytics/set_map_size.js"></script>
             <div class="col-2">
               <div class="row">
                 <div class="card p-0">
@@ -37,8 +37,8 @@
             </div>
           </div>
         </div>
-        <script src="static/gis/map.js"></script>
-        <script src="static/gis/clus.js"></script>
+        <script src="/static/gis/map.js"></script>
+        <script src="/static/gis/clus.js"></script>
         <script>
           gisKey = "{{ .GisApiKey}}"
           markers = [
@@ -50,7 +50,7 @@
                 {{end}}
             ]
         </script>
-        <script src="static/analytics/analytics.js"></script>
+        <script src="/static/analytics/analytics.js"></script>
 
         <div class="offcanvas offcanvas-start" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1" id="offcanvasScrolling" aria-labelledby="offcanvasScrollingLabel">
           <div class="offcanvas-header">

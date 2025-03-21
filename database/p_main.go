@@ -7,9 +7,56 @@ import (
 	"github.com/lib/pq"
 )
 
-func (p *PostgresDB) GetPoints() []point.Point {
+func (p *PostgresDB) GetAllPoints() []point.Point {
 	rows, err := p.db.Query(`select p.id, lat, long from points p inner join change_points_log l
 	on p.change_id = l.id;`)
+	if err != nil {
+		log.Println(err)
+		return nil
+	}
+	defer rows.Close()
+	var points []point.Point
+	for rows.Next() {
+		var point point.Point
+		err = rows.Scan(&point.ID, &point.Lat, &point.Long)
+		if err != nil {
+			log.Println(err)
+			return nil
+		}
+		points = append(points, point)
+	}
+	return points
+}
+
+func (p *PostgresDB) GetAllTaskPoints() []point.Point {
+	rows, err := p.db.Query(`select p.id, lat, long
+	from points p inner join change_points_log l
+	on p.change_id = l.id inner join report r on p.id = r.point_id
+	where r.verified is not true and r.active = 't';`)
+	if err != nil {
+		log.Println(err)
+		return nil
+	}
+	defer rows.Close()
+	var points []point.Point
+	for rows.Next() {
+		var point point.Point
+		err = rows.Scan(&point.ID, &point.Lat, &point.Long)
+		if err != nil {
+			log.Println(err)
+			return nil
+		}
+		points = append(points, point)
+	}
+	return points
+}
+
+func (p *PostgresDB) GetUserTaskPoints(userID int) []point.Point {
+	rows, err := p.db.Query(`select p.id, lat, long
+	from points p inner join change_points_log l
+	on p.change_id = l.id inner join report r on p.id = r.point_id
+	where r.verified is not true and r.active = 't'
+	and $1 = any(r.user_id);`, userID)
 	if err != nil {
 		log.Println(err)
 		return nil

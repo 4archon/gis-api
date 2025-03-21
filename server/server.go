@@ -29,15 +29,21 @@ func (s Server) rootPage(response http.ResponseWriter, req *http.Request) {
 }
 
 func (s Server) mainPage(response http.ResponseWriter, req *http.Request) {
-	_, _, err := s.checkUser(response, req)
+	id, role, err := s.checkUser(response, req)
 	if err != nil {
 		return
 	}
 	var data dataMain
 	data.GisApiKey = s.GisApi
-	data.Points = s.DB.GetPoints()
-	tmpl, _ := template.ParseFiles("server/templates/main/main.html")
-	tmpl.Execute(response, data)
+	if role == "admin" {
+		data.Points = s.DB.GetAllTaskPoints()
+		tmpl, _ := template.ParseFiles("server/templates/main/main.html")
+		tmpl.Execute(response, data)
+	} else {
+		data.Points = s.DB.GetUserTaskPoints(id)
+		tmpl, _ := template.ParseFiles("server/templates/main/main.html")
+		tmpl.Execute(response, data)
+	}
 }
 
 func (s Server) blockFileServer(next http.Handler) http.Handler {
@@ -83,6 +89,14 @@ func (s Server) Run() {
 	router.HandleFunc("/service/{reportID}/{id}", s.service)
 	router.HandleFunc("/change_point/{reportID}/{id}", s.changePoint)
 	router.HandleFunc("/deactivate/{reportID}/{id}", s.deactivate)
+	router.HandleFunc("/clear_report/{reportID}", s.deleteAllReport)
+	router.HandleFunc("/send_report/{reportID}", s.sendReport)
+	router.HandleFunc("/decline/{reportID}", s.declineReport)
+	router.HandleFunc("/verify/{reportID}", s.verifyReport)
+
+	router.HandleFunc("/view/{type}/{id}", s.getViewReport)
+	router.HandleFunc("/point_profile/{id}", s.pointProfile)
+	router.HandleFunc("/point_story/{id}", s.pointStory)
 
 	router.HandleFunc("/points", s.getPoints)
 	router.HandleFunc("/account/login", s.getAccountLogin)

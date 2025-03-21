@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="ru">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Service</title>
+        <meta name="description" content="Test 2GIS Map API" />
+        <link rel="stylesheet" href="">
+        <link href="/bootstrap/css/bootstrap.css" rel="stylesheet">
+    </head>
+    <body>
+        <script src="/bootstrap/js/bootstrap.js"></script>
+        <script src="/static/header/render_header.js"></script>
+        <div class="container col-md-6 mt-1">
+            {{range .}}
+            <div class="card mt-sm-0 mt-2">
+                <div class="card-header">
+                    <div class="row">
+                        <div class="col-10">
+                            {{if .SentWorker}}
+                                {{if eq .Verified 1}}
+                                Задача выполнена и проверена
+                                {{else}}
+                                Задача отправлена на проверку
+                                {{end}}
+                            {{else}}
+                            Задача в работе
+                            {{end}}
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <h6>Исполнители:
+                        {{range .UsersApplied}}
+                        <span class="badge text-bg-primary">{{.ID}}</span>
+                        {{.Login}}
+                        {{end}}
+                    </h6>
+                    <table class="table">
+                        <tbody>
+                            <tr class="row">
+                                <th class="col-sm-3 col-6">Дата выдачи</th>
+                                <td class="col-sm-3 col-6">{{.Appointment}}</td>
+                                <th class="col-sm-3 col-6">Дата исполнения</th>
+                                <td class="col-sm-3 col-6">{{.Submission}}</td>
+                            </tr>
+                            <tr class="row">
+                                <th class="col-sm-3 col-6">Срок исполнения до</th>
+                                <td class="col-sm-3 col-6">{{.Deadline}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th class="col-12 text-center">
+                                    Представленные отчёты:
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="row">
+                                <td class="col-sm-3 col-6 text-center">
+                                    {{if .InspectionID}}
+                                    <a href="/view/inspection/{{.InspectionID}}" class="btn btn-outline-secondary">Инспекция</a>
+                                    {{else}}
+                                    Отчет инспекции не заполнен
+                                    {{end}}
+                                </th>
+                                <td class="col-sm-3 col-6 text-center">
+                                    {{if .ServiceID}}
+                                    <a href="/view/service/{{.ServiceID}}" class="btn btn-outline-primary">Обслуживание</a>
+                                    {{else}}
+                                    Отчет обслуживания не заполнен
+                                    {{end}}
+                                </td>
+                                <td class="col-sm-3 col-6 text-center">
+                                    {{if .ChangeID}}
+                                    <a href="/view/change_point/{{.ChangeID}}" class="btn btn-warning">Изменить данные</a>
+                                    {{else}}
+                                    Отчёт изменения не заполнен
+                                    {{end}}
+                                </td>
+                                <td class="col-sm-3 col-6 text-center">
+                                    {{if .ActiveID}}
+                                    <a href="/view/deactivate/{{.ActiveID}}" class="btn btn-danger">Деактивировать</a>
+                                    {{else}}
+                                    Изменение статуса отсутсвует
+                                    {{end}}
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            {{end}}
+        </div>
+    </body>
+</html>

@@ -17,20 +17,34 @@
                 <div class="card-header">
                     <div class="row">
                         <div class="col-10">
-                            ID задачи: {{.TaskID}}
+                            {{if .SentWorker}}
+                            Задача отправлена на проверку
+                            {{else}}
+                            Задача в работе
+                            {{end}}
                         </div>
                     </div>
                 </div>
                 <div class="card-body">
                     <h5 class="card-title">Адрес: {{.Address}}</h5>
-                    <h5 class="card-title">ID точки: {{.PointID}}</h5>
+                    <h5 class="card-title">
+                        <a href="/point_profile/{{.PointID}}">
+                            <span class="badge text-bg-primary">Точка ID: {{.PointID}}</span>
+                        </a>
+                    </h5>
+                    <h6>Исполнители:
+                        {{range .UsersApplied}}
+                        <span class="badge text-bg-primary">{{.ID}}</span>
+                        {{.Login}}
+                        {{end}}
+                    </h6>
                     <h6>Информация о точке:</h6>
                     <table class="table">
                         <tbody>
                             <tr class="row">
                                 <th class="col-sm-3 col-6">Широта</th>
                                 <td class="col-sm-3 col-6">{{.Lat}}</td>
-                                <th class="col-sm-3 col-6">Долгота:</th>
+                                <th class="col-sm-3 col-6">Долгота</th>
                                 <td class="col-sm-3 col-6">{{.Long}}</td>
                             </tr>
                             <tr class="row">
@@ -61,16 +75,16 @@
                                     <tr class="row">
                                         <td class="col-6 text-center">
                                             {{if .InspectionID}}
-                                            <a href="/inspection/{{.TaskID}}/{{.InspectionID}}" class="btn btn-outline-secondary">Инспекция</a>
+                                            <a href="/view/inspection/{{.InspectionID}}" class="btn btn-outline-secondary">Инспекция</a>
                                             {{else}}
-                                            <a href="/inspection/{{.TaskID}}/new" class="btn btn-outline-secondary">Инспекция</a>
+                                            Отчет инспекции не заполнен
                                             {{end}}
                                         </td>
                                         <td class="col-6 text-center">
                                             {{if .ServiceID}}
-                                            <a href="/service/{{.TaskID}}/{{.ServiceID}}" class="btn btn-outline-primary">Обслуживание</a>
+                                            <a href="/view/service/{{.ServiceID}}" class="btn btn-outline-primary">Обслуживание</a>
                                             {{else}}
-                                            <a href="/service/{{.TaskID}}/new" class="btn btn-outline-primary">Обслуживание</a>
+                                            Отчет обслуживания не заполнен
                                             {{end}}
                                         </td>
                                     </tr>
@@ -90,16 +104,16 @@
                                     <tr class="row">
                                         <td class="col-6 text-center">
                                             {{if .ChangeID}}
-                                            <a href="/change_point/{{.TaskID}}/{{.ChangeID}}" class="btn btn-warning">Изменить данные</a>
+                                            <a href="/view/change_point/{{.ChangeID}}" class="btn btn-warning">Изменить данные</a>
                                             {{else}}
-                                            <a href="/change_point/{{.TaskID}}/new" class="btn btn-warning">Изменить данные</a>
+                                            Отчёт изменения не заполнен
                                             {{end}}
                                         </td>
                                         <td class="col-6 text-center">
                                             {{if .ActiveID}}
-                                            <a href="/deactivate/{{.TaskID}}/{{.ActiveID}}" class="btn btn-danger">Деактивировать</a>
+                                            <a href="/view/deactivate/{{.ActiveID}}" class="btn btn-danger">Деактивировать</a>
                                             {{else}}
-                                            <a href="/deactivate/{{.TaskID}}/new" class="btn btn-danger">Деактивировать</a>
+                                            Изменение статуса отсутсвует
                                             {{end}}
                                         </td>
                                     </tr>
@@ -108,8 +122,10 @@
                         </div>
                     </div>
                     <div class="row d-flex flex-wrap justify-content-end">
-                        <a href="/clear_report/{{.TaskID}}" class="col-sm-2 col-12 btn btn-outline-danger my-sm-0 mx-sm-2 my-1 mx-0">Очистить отчеты</a>
-                        <a href="/send_report/{{.TaskID}}" class="col-sm-2 col-12 btn btn-success">Отправить</a>
+                        {{if .SentWorker}}
+                        <a href="/decline/{{.TaskID}}" class="col-sm-2 col-12 btn btn-outline-danger my-sm-0 mx-sm-2 my-1 mx-0">Отклонить</a>
+                        <a href="/verify/{{.TaskID}}" class="col-sm-2 col-12 btn btn-outline-success">Подтвердить</a>
+                        {{end}}
                     </div>
                 </div>
             </div>

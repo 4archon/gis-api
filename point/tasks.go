@@ -7,12 +7,18 @@ import (
 type TasksRequest struct {
 	Points		[]int	`json:"tasks"`
 	Employees	[]int	`json:"workers"`
+	Deadline	string	`json:"deadline"`
+}
+
+type AppliedUser struct {
+	ID		int
+	Login	string
 }
 
 type Task struct {
 	TaskID			int
 	Users			[]int
-	UsersStr		string
+	UsersApplied	[]AppliedUser
 	ChangeID		int
 	ActiveID		int
 	ServiceID		int
@@ -25,6 +31,9 @@ type Task struct {
 	NumberArc		int
 	TypeArc			string
 	Carpet			string
+	Deadline		time.Time
+	SentWorker		bool
+	Verified		int
 }
 
 type InspectionReport struct {
@@ -63,4 +72,10 @@ type ChangeReport struct {
     Carpet          string
     ChangeDate		time.Time
     Comment         string
+}
+
+type ActiveReport struct {
+	Status			bool
+	Comment			string
+	ChangeDate		time.Time
 }

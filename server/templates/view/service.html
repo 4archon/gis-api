@@ -21,9 +21,9 @@
                     </div>
                 </div>
                 <div class="card-body">
-                    <form class="row g-3" method="post" enctype="multipart/form-data" action="/service/{{.ReportID}}/{{.ServiceID}}">
-                        <label class="form-label mt-sm-5 mt-3"><h4>Отчёт заполнен</h3></label>
-                        {{range .ServiceInfo}}
+                    <form class="row g-3">
+                        <label class="form-label mt-sm-5 mt-3"><h4>Отчёт заполнен</h4></label>
+                        {{range .}}
                         <div class="col-sm-6 col-12">
                             <label for="inputServiceType" class="form-label">Тип услуги</label>
                             <select name="inputServiceType" id="inputServiceType" class="form-select" required disabled>
@@ -103,10 +103,6 @@
                             </button>
                         </div>
                         {{end}}
-                        <div class="col-12 mt-3">
-                            <button type="submit" class="btn btn-danger float-end mx-sm-3 mx-0">Очистить отчёт</button>
-                            <a href="/tasks" class="btn btn-light float-end mx-sm-0 mx-2">Назад</a>
-                        </div>
                     </form>
                 </div>
             </div>

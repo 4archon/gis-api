@@ -58,9 +58,11 @@ document.getElementById("assign_work").onclick = sendWork;
 
 async function sendWork() {
     if (work_list.length != 0 && workers_active.length != 0) {
+        deadline = document.getElementById("deadline");
         data = {
             tasks: work_list,
-            workers: workers_active
+            workers: workers_active,
+            deadline: deadline.value
         }
         json_str = JSON.stringify(data);
         url = "/assign_tasks"
@@ -73,5 +75,8 @@ async function sendWork() {
             },
             body: json_str
         })
+        clear_work();
+        clear_employees();
+        deadline.value = "";
     }
 }

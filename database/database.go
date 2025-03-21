@@ -5,14 +5,18 @@ import (
 )
 
 type DB interface {
-	GetPoints() []point.Point
+	GetAllPoints() []point.Point
 	GetPointsDesc([]int) []point.PointDesc
+	GetAllTaskPoints() []point.Point
+	GetUserTaskPoints(userID int) []point.Point
+	GetFiltredPoints() ([]point.FilterPoint, error)
 
 	GetAuth(string, string) (int, string, error)
 	CheckActiveAuth(int, string) bool
 
 	GetUserLogin(int) string
 	GetUsersInfo() []point.User
+	GetWorkersInfo() []point.User
 	GetUserInfo(int) (point.User, error)
 	ChangeUserInfo(id int, name string, surname string, patronymic string, tgID string) error
 	ChangeUserPassword(id int, password string) error
@@ -21,6 +25,7 @@ type DB interface {
 	
 	AssignTasks(data point.TasksRequest) error
 	GetTasksInfo() ([]point.Task, error)
+	GetUserTasksInfo(userID int) ([]point.Task, error)
 
 	GetPointIDFromReport(id int) (int, error)
 	CreateInspection(reportID int, checkup string, repairType string, comment string) (int, error)
@@ -39,4 +44,16 @@ type DB interface {
 	GetPointFromReport(reportID int) (point.ChangeReport, error)
 	NewChangePoint(reportID int, change point.ChangeReport) error
 	DeleteChangePoint(reportID int) error
+
+	GetActiveFromReport(reportID int) (point.ActiveReport, error)
+	GetActiveStatus(ActiveLogID int) (point.ActiveReport, error)
+	NewDeactivate(reportID int, status, comment string) error
+	DeleteDeactivation(reportID int) error
+
+	SendReport(reportID int) error
+	DeclineReport(reportID int) error
+	VerifyReport(reportID int) error
+
+	GetPointProfile(id int) (point.PointProfile, error)
+	GetPointStory(id int) ([]point.StoryPoint, error)
 }

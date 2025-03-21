@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="ru">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Service</title>
+        <meta name="description" content="Test 2GIS Map API" />
+        <link href="/bootstrap/css/bootstrap.css" rel="stylesheet">
+        <link href="" rel="stylesheet">
+    </head>
+    <body>
+        <script src="/bootstrap/js/bootstrap.js"></script>
+        <script src="/static/header/render_header.js"></script>
+        <div class="container col-md-6 mt-1">
+            <div class="card mb-3">
+                <div class="row g-0">
+                    <div class="col-sm-7 col-12">
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                {{.Address}}<br>
+                                <small class="text-body-secondary">ID точки: {{.ID}}</small>
+                                <a href="/point_story/{{.ID}}"><span class="badge text-bg-primary">История точки</span></a>
+                            </h5>
+                            <table class="table">
+                                <tbody>
+                                    <tr class="row">
+                                        <th class="col-sm-6 col-6">Статус</th>
+                                        <td class="col-sm-6 col-6">
+                                            {{if .Status}}
+                                            Активна
+                                            {{else}}
+                                            Деактивирована
+                                            {{end}}
+                                        </td>
+                                        <th class="col-sm-6 col-6">Дата изменения статуса:</th>
+                                        <td class="col-sm-6 col-6">{{printf "%.19s" .StatusLastChange}}</td>
+                                    </tr>
+                                    <tr class="row">
+                                        <th class="col-sm-3 col-6">Широта</th>
+                                        <td class="col-sm-3 col-6">{{.Lat}}</td>
+                                        <th class="col-sm-3 col-6">Долгота</th>
+                                        <td class="col-sm-3 col-6">{{.Long}}</td>
+                                    </tr>
+                                    <tr class="row">
+                                        <th class="col-sm-3 col-6">Округ</th>
+                                        <td class="col-sm-3 col-6">{{.District}}</td>
+                                        <th class="col-sm-4 col-6">Количество дуг</th>
+                                        <td class="col-sm-2 col-6">{{.NumberArc}}</td>
+                                    </tr>
+                                    <tr class="row">
+                                        <th class="col-sm-3 col-6">Тип дуги</th>
+                                        <td class="col-sm-3 col-6">{{.ArcType}}</td>
+                                        <th class="col-sm-3 col-6">Покрытие</th>
+                                        <td class="col-sm-3 col-6">{{.Carpet}}</td>
+                                    </tr>
+                                    <tr class="row">
+                                        <th class="col-sm-6 col-6">Дата изменения данных точки:</th>
+                                        <td class="col-sm-6 col-6">{{printf "%.19s" .PointLastChange}}</td>
+                                        <th class="col-sm-6 col-6">Дата последнего сервиса:</th>
+                                        <td class="col-sm-6 col-6">{{printf "%.19s" .ServiceLast}}</td>
+                                        <th class="col-sm-6 col-6">Дата последней инспекции:</th>
+                                        <td class="col-sm-6 col-6">{{printf "%.19s" .InspectionLast}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="col-sm-5 col-12">
+                        <div id="carousel" class="carousel slide">
+                            <div class="carousel-inner text-center">
+                                <div class="carousel-item active text-center">
+                                    <img src="{{.Inspection.PhotoLeft}}" class="img-fluid rounded d-block w-100" alt="Загрузка">
+                                    <div class="carousel-caption">
+                                        <h5>Фото слева</h5>
+                                    </div>
+                                </div>
+                                <div class="carousel-item text-center">
+                                    <img src="{{.Inspection.PhotoRight}}" class="img-fluid rounded d-block w-100" alt="Загрузка">
+                                    <div class="carousel-caption">
+                                        <h5>Фото справа</h5>
+                                    </div>
+                                </div>
+                                <div class="carousel-item text-center">
+                                    <img src="{{.Inspection.PhotoFront}}" class="img-fluid rounded d-block w-100" alt="Загрузка">
+                                    <div class="carousel-caption">
+                                        <h5>Фото спереди</h5>
+                                    </div>
+                                </div>
+                                <div class="carousel-item text-center">
+                                    <video class="img-fluid rounded" autoplay loop muted>
+                                        <source src="{{.Inspection.Video}}" type="video/mp4">
+                                    </video>
+                                    <div class="carousel-caption">
+                                        <h5>Видео</h5>
+                                    </div>
+                                </div>
+                                {{range .Service}}
+                                <div class="carousel-item text-center">
+                                    <img src="{{.PhotoBefore}}" class="d-block w-100 rounded" alt="Загрузка">
+                                    <div class="carousel-caption">
+                                        <h5>Фото до</h5>
+                                    </div>
+                                </div>
+                                <div class="carousel-item text-center">
+                                    <img src="{{.PhotoLeft}}" class="d-block w-100 rounded" alt="Загрузка">
+                                    <div class="carousel-caption">
+                                        <h5>Фото слева</h5>
+                                    </div>
+                                </div>
+                                <div class="carousel-item text-center">
+                                    <img src="{{.PhotoRight}}" class="d-block w-100 rounded" alt="Загрузка">
+                                    <div class="carousel-caption">
+                                        <h5>Фото справа</h5>
+                                    </div>
+                                </div>
+                                <div class="carousel-item text-center">
+                                    <img src="{{.PhotoFront}}" class="d-block w-100 rounded" alt="Загрузка">
+                                    <div class="carousel-caption">
+                                        <h5>Фото спереди</h5>
+                                    </div>
+                                </div>
+                                {{if .PhotoExtra}}
+                                <div class="carousel-item text-center">
+                                    <img src="{{.PhotoExtra}}" class="d-block w-100 rounded" alt="Загрузка">
+                                    <div class="carousel-caption">
+                                        <h5>Дополнительное фото</h5>
+                                    </div>
+                                </div>
+                                {{end}}
+                                <div class="carousel-item text-center">
+                                    <video class="img-fluid rounded" autoplay loop muted>
+                                        <source src="{{.Video}}" type="video/mp4">
+                                    </video>
+                                    <div class="carousel-caption">
+                                        <h5>Видео</h5>
+                                    </div>
+                                </div>
+                                {{end}}
+                            </div>
+                            <button class="carousel-control-prev" type="button" data-bs-target="#carousel" data-bs-slide="prev">
+                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Previous</span>
+                            </button>
+                            <button class="carousel-control-next" type="button" data-bs-target="#carousel" data-bs-slide="next">
+                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Next</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

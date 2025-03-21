@@ -408,3 +408,94 @@ func (p *PostgresDB) DeleteChangePoint(reportID int) error {
 	
 	return nil
 }
+
+
+func (p *PostgresDB) GetActiveStatus(ActiveLogID int) (point.ActiveReport, error) {
+	row := p.db.QueryRow(`select point_status, comment, change_date
+	from point_active_log where id = $1`, ActiveLogID)
+	var active point.ActiveReport
+	var sqlComment sql.NullString
+	var sqlChangeDate sql.NullTime
+	err := row.Scan(&active.Status, &sqlComment, &sqlChangeDate)
+	if err != nil {
+		log.Println(err)
+		return active, err
+	}
+
+	if sqlComment.Valid {active.Comment = sqlComment.String}
+	if sqlChangeDate.Valid {active.ChangeDate = sqlChangeDate.Time}
+
+	return active, nil
+}
+
+func (p *PostgresDB) GetPointActive(pointID int) (point.ActiveReport, error) {
+	row := p.db.QueryRow(`select active_id from points where id = $1`, pointID)
+	var activeID int
+	err := row.Scan(&activeID)
+	if err != nil {
+		log.Println(err)
+		return point.ActiveReport{}, err
+	}
+
+	active, err := p.GetActiveStatus(activeID)
+	if err != nil {
+		return active, err
+	}
+
+	return active, nil
+}
+
+
+func (p *PostgresDB) GetActiveFromReport(reportID int) (point.ActiveReport, error) {
+	pointID, err := p.GetPointIDFromReport(reportID)
+	if err != nil {
+		return point.ActiveReport{}, err
+	}
+	active, err := p.GetPointActive(pointID)
+	if err != nil {
+		return active, err
+	}
+
+	return active, nil
+}
+
+
+func (p *PostgresDB) NewDeactivate(reportID int, status, comment string) error {
+	pointID, err := p.GetPointIDFromReport(reportID)
+	if err != nil {
+		return err
+	}
+	tx, err := p.db.Begin()
+	if err != nil {
+		log.Println(err)
+		return err
+	}
+
+	row := tx.QueryRow(`insert into point_active_log(point_id, point_status, comment, change_date)
+	values($1, $2, $3, $4) returning id`, pointID, status, comment, time.Now())
+
+	var activeLogID int
+	err = row.Scan(&activeLogID)
+	if err != nil {
+		log.Println(err)
+		tx.Rollback()
+		return err
+	}
+
+	_, err = tx.Exec(`update report set point_active_id = $1 where id = $2`,
+	activeLogID, reportID)
+	if err != nil {
+		tx.Rollback()
+		log.Println(err)
+		return err
+	}
+
+	err = tx.Commit()
+	if err != nil {
+		tx.Rollback()
+		log.Println(err)
+		return err
+	}
+	
+	return nil
+}

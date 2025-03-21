@@ -13,18 +13,26 @@ import (
 
 
 func (s Server) tasks(response http.ResponseWriter, req *http.Request) {
-	_, _, err := s.checkUser(response, req)
+	id, role, err := s.checkUser(response, req)
 	if err != nil {
 		return
 	}
 
-	data, err := s.DB.GetTasksInfo()
-	if err != nil {
-		return
+	if role == "admin" {
+		data, err := s.DB.GetTasksInfo()
+		if err != nil {
+			return
+		}
+		tmpl, _ := template.ParseFiles("server/templates/tasks/tasks_admin.html")
+		tmpl.Execute(response, data)
+	} else {
+		data, err := s.DB.GetUserTasksInfo(id)
+		if err != nil {
+			return
+		}
+		tmpl, _ := template.ParseFiles("server/templates/tasks/tasks_worker.html")
+		tmpl.Execute(response, data)
 	}
-
-	tmpl, _ := template.ParseFiles("server/templates/tasks/tasks.html")
-	tmpl.Execute(response, data)
 }
 
 type inspectionSaved struct {
@@ -257,6 +265,11 @@ func (s Server) changePoint(response http.ResponseWriter, req *http.Request) {
 	}
 }
 
+type deactivationReport struct {
+	Active			point.ActiveReport
+	ReportID		int
+	DeactivateID	int
+}
 
 func (s Server) deactivate(response http.ResponseWriter, req *http.Request) {
 	_, _, err := s.checkUser(response, req)
@@ -275,8 +288,159 @@ func (s Server) deactivate(response http.ResponseWriter, req *http.Request) {
 
 	if req.Method == "GET" {
 		if deactivateIDStr == "new" {
+			active, err := s.DB.GetActiveFromReport(reportID)
+			if err != nil {
+				return
+			}
+			var activeReport deactivationReport
+			activeReport.Active = active
+			activeReport.ReportID = reportID
 			tmpl, _ := template.ParseFiles("server/templates/tasks/deactivate_new.html")
-			tmpl.Execute(response, reportID)
+			tmpl.Execute(response, activeReport)
+		} else {
+			deactivateID, err := strconv.Atoi(deactivateIDStr)
+			if err != nil {
+				log.Println(err)
+				return
+			}
+			active, err := s.DB.GetActiveStatus(deactivateID)
+			if err != nil {
+				return
+			}
+			var activeReport deactivationReport
+			activeReport.Active = active
+			activeReport.ReportID = reportID
+			tmpl, _ := template.ParseFiles("server/templates/tasks/deactivate.html")
+			tmpl.Execute(response, activeReport)
 		}
+	} else if req.Method == "POST" {
+		if deactivateIDStr == "new" {
+			status := req.FormValue("status")
+			comment := req.FormValue("comment")
+			err = s.DB.NewDeactivate(reportID, status, comment)
+			if err != nil {
+				return
+			}
+			http.Redirect(response, req, "/tasks", http.StatusFound)
+		} else {
+			_, err := strconv.Atoi(deactivateIDStr)
+			if err != nil {
+				log.Println(err)
+				return
+			}
+
+			err = s.DB.DeleteDeactivation(reportID)
+			if err != nil {
+				return
+			}
+			http.Redirect(response, req, "/tasks", http.StatusFound)
+		}
+	} else {
+		return
 	}
+}
+
+
+func (s Server) deleteAllReport(response http.ResponseWriter, req *http.Request) {
+	_, _, err := s.checkUser(response, req)
+	if err != nil {
+		return
+	}
+
+	vars := mux.Vars(req)
+	reportIDStr := vars["reportID"]
+	reportID, err := strconv.Atoi(reportIDStr)
+	if err != nil {
+		log.Println(err)
+		return
+	}
+
+	err = s.DB.DeleteService(reportID)
+	if err != nil {
+		return
+	}
+	err = s.DB.DeleteInspection(reportID)
+	if err != nil {
+		return
+	}
+	err = s.DB.DeleteChangePoint(reportID)
+	if err != nil {
+		return
+	}
+	err = s.DB.DeleteDeactivation(reportID)
+	if err != nil {
+		return
+	}
+	http.Redirect(response, req, "/tasks", http.StatusFound)
+}
+
+
+func (s Server) sendReport(response http.ResponseWriter, req *http.Request) {
+	_, _, err := s.checkUser(response, req)
+	if err != nil {
+		return
+	}
+
+	vars := mux.Vars(req)
+	reportIDStr := vars["reportID"]
+	reportID, err := strconv.Atoi(reportIDStr)
+	if err != nil {
+		log.Println(err)
+		return
+	}
+	err = s.DB.SendReport(reportID)
+	if err != nil {
+		return
+	}
+	http.Redirect(response, req, "/tasks", http.StatusFound)
+}
+
+func (s Server) declineReport(response http.ResponseWriter, req *http.Request) {
+	_, role, err := s.checkUser(response, req)
+	if err != nil {
+		return
+	}
+
+	if role != "admin" {
+		http.Redirect(response, req, "/tasks", http.StatusFound)
+		return
+	}
+
+	vars := mux.Vars(req)
+	reportIDStr := vars["reportID"]
+	reportID, err := strconv.Atoi(reportIDStr)
+	if err != nil {
+		log.Println(err)
+		return
+	}
+	err = s.DB.DeclineReport(reportID)
+	if err != nil {
+		return
+	}
+	http.Redirect(response, req, "/tasks", http.StatusFound)
+}
+
+func (s Server) verifyReport(response http.ResponseWriter, req *http.Request) {
+	_, role, err := s.checkUser(response, req)
+	if err != nil {
+		return
+	}
+
+	if role != "admin" {
+		http.Redirect(response, req, "/tasks", http.StatusFound)
+		return
+	}
+
+	vars := mux.Vars(req)
+	reportIDStr := vars["reportID"]
+	reportID, err := strconv.Atoi(reportIDStr)
+	if err != nil {
+		log.Println(err)
+		return
+	}
+	err = s.DB.VerifyReport(reportID)
+	if err != nil {
+		return
+	}
+	http.Redirect(response, req, "/tasks", http.StatusFound)
 }

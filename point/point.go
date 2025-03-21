@@ -11,3 +11,14 @@ func (p *Point) Init(id int, long string, lat string) {
 	p.Long = long
 	p.Lat = lat
 }
+
+
+type FilterPoint struct {
+	ID			int
+	Long		string
+	Lat			string
+	Active		bool
+	Repair		bool
+	Assigned	bool
+	LongTime	bool
+}
