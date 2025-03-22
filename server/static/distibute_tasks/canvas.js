@@ -122,7 +122,6 @@ async function to_work_side_bar(id_in) {
     });
 
     show_work_side();
-    console.log(work_list);
 }
 
 function create_work(row_json, parent) {

@@ -25,7 +25,10 @@
                         <div class="col-10">
                             Логин: {{.Login}}
                         </div>
+                        {{if lt .ID 10}}
+                        {{else}}
                         <a href="/edit_employee/{{.ID}}" class="btn btn-primary col-2">Редактировать</a>
+                        {{end}}
                     </div>
                 </div>
                 <div class="card-body">

@@ -69,6 +69,9 @@ func (s Server) editEmployee(response http.ResponseWriter, req *http.Request) {
 		if err != nil {
 			return
 		}
+		if id < 10 {
+			http.Redirect(response, req, "/", http.StatusFound)
+		}
 		user, err := s.DB.GetUserInfo(id)
 		if err != nil {
 			return

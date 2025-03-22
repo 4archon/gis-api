@@ -33,7 +33,12 @@
                                             {{end}}
                                         </td>
                                         <th class="col-sm-6 col-6">Дата изменения статуса:</th>
-                                        <td class="col-sm-6 col-6">{{printf "%.19s" .StatusLastChange}}</td>
+                                        <td class="col-sm-6 col-6">
+                                            {{if .StatusLastChange.IsZero}}
+                                            {{else}}
+                                            {{.StatusLastChange.Format "2006-01-02 15:04:05"}}
+                                            {{end}}
+                                        </td>
                                     </tr>
                                     <tr class="row">
                                         <th class="col-sm-3 col-6">Широта</th>
@@ -55,11 +60,26 @@
                                     </tr>
                                     <tr class="row">
                                         <th class="col-sm-6 col-6">Дата изменения данных точки:</th>
-                                        <td class="col-sm-6 col-6">{{printf "%.19s" .PointLastChange}}</td>
+                                        <td class="col-sm-6 col-6">
+                                            {{if .PointLastChange.IsZero}}
+                                            {{else}}
+                                            {{.PointLastChange.Format "2006-01-02 15:04:05"}}
+                                            {{end}}
+                                        </td>
                                         <th class="col-sm-6 col-6">Дата последнего сервиса:</th>
-                                        <td class="col-sm-6 col-6">{{printf "%.19s" .ServiceLast}}</td>
+                                        <td class="col-sm-6 col-6">
+                                            {{if .ServiceLast.IsZero}}
+                                            {{else}}
+                                            {{.ServiceLast.Format "2006-01-02 15:04:05"}}
+                                            {{end}}
+                                        </td>
                                         <th class="col-sm-6 col-6">Дата последней инспекции:</th>
-                                        <td class="col-sm-6 col-6">{{printf "%.19s" .InspectionLast}}</td>
+                                        <td class="col-sm-6 col-6">
+                                            {{if .InspectionLast.IsZero}}
+                                            {{else}}
+                                            {{.InspectionLast.Format "2006-01-02 15:04:05"}}
+                                            {{end}}
+                                        </td>
                                     </tr>
                                 </tbody>
                             </table>

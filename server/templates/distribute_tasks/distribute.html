@@ -26,17 +26,55 @@
                             <path fill-rule="evenodd" d="M12.5 15a.5.5 0 0 1-.5-.5v-13a.5.5 0 0 1 1 0v13a.5.5 0 0 1-.5.5M10 8a.5.5 0 0 1-.5.5H3.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L3.707 7.5H9.5a.5.5 0 0 1 .5.5"/>
                         </svg>
                     </button>
-                    <div class="form-check mt-3 mx-2">
-                        <input class="form-check-input" type="radio" name="filter-radio" id="flexRadioDefault1">
-                        <label class="form-check-label" for="flexRadioDefault1">
-                            Фильтр один
-                        </label>
-                    </div>
-                    <div class="form-check mt-3 mx-2">
-                        <input class="form-check-input" type="radio" name="filter-radio" id="flexRadioDefault2" checked>
-                        <label class="form-check-label" for="flexRadioDefault2">
-                            Фильтр два
-                        </label>
+                    <div class="col-9">
+                        <div class="form-check mt-3 mx-2 text-bg-secondary rounded">
+                            <input class="form-check-input" type="checkbox" id="active">
+                            <label class="form-check-label" for="active">
+                                Активные
+                            </label>
+                        </div>
+                        <div class="form-check mt-3 mx-2 text-bg-secondary rounded">
+                            <input class="form-check-input" type="checkbox" id="not-active">
+                            <label class="form-check-label" for="not-active">
+                                Деактивированные
+                            </label>
+                        </div>
+                        <div class="form-check mt-3 mx-2 text-bg-secondary rounded">
+                            <input class="form-check-input" type="checkbox" id="repair">
+                            <label class="form-check-label" for="repair">
+                                Требуется ремонт
+                            </label>
+                        </div>
+                        <div class="form-check mt-3 mx-2 text-bg-secondary rounded">
+                            <input class="form-check-input" type="checkbox" id="not-repair">
+                            <label class="form-check-label" for="not-repair">
+                                Ремонт не требуется
+                            </label>
+                        </div>
+                        <div class="form-check mt-3 mx-2 text-bg-secondary rounded">
+                            <input class="form-check-input" type="checkbox" id="assigned">
+                            <label class="form-check-label" for="assigned">
+                                В работе
+                            </label>
+                        </div>
+                        <div class="form-check mt-3 mx-2 text-bg-secondary rounded">
+                            <input class="form-check-input" type="checkbox" id="not-assigned">
+                            <label class="form-check-label" for="not-assigned">
+                                Задача не выдана
+                            </label>
+                        </div>
+                        <div class="form-check mt-3 mx-2 text-bg-secondary rounded">
+                            <input class="form-check-input" type="checkbox" id="not-longtime">
+                            <label class="form-check-label" for="not-longtime">
+                                Были в работе недавно
+                            </label>
+                        </div>
+                        <div class="form-check mt-3 mx-2 text-bg-secondary rounded">
+                            <input class="form-check-input" type="checkbox" id="longtime">
+                            <label class="form-check-label" for="longtime">
+                                Долго не были в работе
+                            </label>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -45,7 +83,7 @@
         <script src="static/gis/clus.js"></script>
         <script>
             gisKey = "{{ .GisApiKey}}"
-            markers = [
+            all_points = [
                 {{range .Points}}
                 {
                     coordinates: [{{ .Long}}, {{ .Lat}}],
@@ -58,6 +96,7 @@
                 {{end}}
             ]
         </script>
+        <script src="/static/distibute_tasks/filter.js"></script>
         <div class="offcanvas offcanvas-start" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1" id="offcanvasPoints" aria-labelledby="offcanvasScrollingLabel">
             <div class="offcanvas-header">
                 <h5 class="offcanvas-title" id="offcanvasScrollingLabel">Выбранные точки:</h5>
@@ -115,10 +154,10 @@
                 </div>
             </div>
         </div>
-        <script src="static/distibute_tasks/distribute.js"></script>
+        <script src="/static/distibute_tasks/distribute.js"></script>
         
         <canvas id="draw-canvas" style="position: absolute; left: 0; top: 0; display: none; z-index: 2;"></canvas>
-        <script src="static/distibute_tasks/canvas.js"></script>
-        <script src="static/distibute_tasks/drag_drop.js"></script>
+        <script src="/static/distibute_tasks/canvas.js"></script>
+        <script src="/static/distibute_tasks/drag_drop.js"></script>
     </body>
 </html>

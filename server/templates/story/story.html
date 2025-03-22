@@ -40,13 +40,31 @@
                         <tbody>
                             <tr class="row">
                                 <th class="col-sm-3 col-6">Дата выдачи</th>
-                                <td class="col-sm-3 col-6">{{.Appointment}}</td>
+                                <td class="col-sm-3 col-6">
+                                    {{if .Appointment.IsZero}}
+                                    Дата отсутсвует
+                                    {{else}}
+                                    {{.Appointment.Format "2006-01-02 15:04:05"}}
+                                    {{end}}
+                                </td>
                                 <th class="col-sm-3 col-6">Дата исполнения</th>
-                                <td class="col-sm-3 col-6">{{.Submission}}</td>
+                                <td class="col-sm-3 col-6">
+                                    {{if .Submission.IsZero}}
+                                    Дата отсутсвует
+                                    {{else}}
+                                    {{.Submission.Format "2006-01-02 15:04:05"}}
+                                    {{end}}
+                                </td>
                             </tr>
                             <tr class="row">
                                 <th class="col-sm-3 col-6">Срок исполнения до</th>
-                                <td class="col-sm-3 col-6">{{.Deadline}}</td>
+                                <td class="col-sm-3 col-6">
+                                    {{if .Deadline.IsZero}}
+                                    Без дедлайна
+                                    {{else}}
+                                    {{.Deadline.Format "2006-01-02 15:04:05"}}
+                                    {{end}}
+                                </td>
                             </tr>
                         </tbody>
                     </table>

@@ -16,11 +16,16 @@
             <div class="card mt-sm-0 mt-2">
                 <div class="card-header">
                     <div class="row">
-                        <div class="col-10">
+                        <div class="col-12">
                             {{if .SentWorker}}
                             Задача отправлена на проверку
                             {{else}}
                             Задача в работе
+                            {{end}}
+                            {{if .Deadline.IsZero}}
+                            <span class="badge text-bg-info">Без дедлайна</span>
+                            {{else}}
+                            <span class="badge text-bg-danger">Дедлайн до {{.Deadline.Format "2006-01-02"}}</span>
                             {{end}}
                         </div>
                     </div>

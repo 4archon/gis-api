@@ -75,8 +75,20 @@ async function sendWork() {
             },
             body: json_str
         })
+        changeAssigendWork();
         clear_work();
         clear_employees();
         deadline.value = "";
+        filter();
     }
+}
+
+function changeAssigendWork() {
+    work_list.forEach((work) => {
+        all_points.forEach((point) => {
+            if (point.ID == work) {
+                point.Assigned = true;
+            }
+        })
+    })
 }

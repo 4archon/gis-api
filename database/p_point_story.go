@@ -5,6 +5,7 @@ import (
 	"log"
 	"map/point"
 	"strconv"
+
 	"github.com/lib/pq"
 )
 
@@ -14,8 +15,8 @@ func (p *PostgresDB) GetPointStory(id int) ([]point.StoryPoint, error) {
 	deadline, appointment_date, submission_date,
 	sent_worker, verified
 	from report
-	where active = 't' and point_id = 1
-	order by submission_date desc, appointment_date desc`)
+	where active = 't' and point_id = $1
+	order by submission_date desc, appointment_date desc`, id)
 	var story []point.StoryPoint
 	if err != nil {
 		log.Println(err)
