@@ -4,7 +4,7 @@ import (
 	"database/sql"
 	"log"
 	"map/point"
-	"strconv"
+	// "strconv"
 )
 
 func (p *PostgresDB) GetUserLogin(id int) string {
@@ -18,47 +18,47 @@ func (p *PostgresDB) GetUserLogin(id int) string {
 	return email
 }
 
-func (p *PostgresDB) GetUsersInfo() []point.User {
-	rows, err := p.db.Query(`select id, login, role, active, name, surname, patronymic,
-	tg_id from users order by login;`)
-	if err != nil {
-		log.Println(err)
-		return nil
-	}
-	defer rows.Close()
-	var users []point.User
-	for rows.Next() {
-		var user point.User
-		var sqlLogin, sqlRole, sqlName, sqlSurname, sqlPatr sql.NullString
-		var sqlActive sql.NullBool
-		var sqlTgID	sql.NullInt64
-		err = rows.Scan(&user.ID, &sqlLogin, &sqlRole, &sqlActive, &sqlName,
-		&sqlSurname, &sqlPatr, &sqlTgID)
-		if err != nil {
-			log.Println(err)
-			return nil
-		}
-		if sqlActive.Valid {
-			if sqlActive.Bool {
-				user.Active = "Активный"
-			} else {user.Active = "Деактивирован"}
-		} else {
-			user.Active = "Деактивирован"
-		}
-		if sqlTgID.Valid {
-			user.TgID = sqlTgID.Int64
-		} else {
-			user.TgID = -1
-		}
-		if sqlLogin.Valid {user.Login = sqlLogin.String}
-		if sqlRole.Valid {user.Role = sqlRole.String}
-		if sqlName.Valid {user.Name = sqlName.String}
-		if sqlSurname.Valid {user.Surname = sqlSurname.String}
-		if sqlPatr.Valid {user.Patronymic = sqlPatr.String}
-		users = append(users, user)
-	}
-	return users
-}
+// func (p *PostgresDB) GetUsersInfo() []point.User {
+// 	rows, err := p.db.Query(`select id, login, role, active, name, surname, patronymic,
+// 	tg_id from users order by login;`)
+// 	if err != nil {
+// 		log.Println(err)
+// 		return nil
+// 	}
+// 	defer rows.Close()
+// 	var users []point.User
+// 	for rows.Next() {
+// 		var user point.User
+// 		var sqlLogin, sqlRole, sqlName, sqlSurname, sqlPatr sql.NullString
+// 		var sqlActive sql.NullBool
+// 		var sqlTgID	sql.NullInt64
+// 		err = rows.Scan(&user.ID, &sqlLogin, &sqlRole, &sqlActive, &sqlName,
+// 		&sqlSurname, &sqlPatr, &sqlTgID)
+// 		if err != nil {
+// 			log.Println(err)
+// 			return nil
+// 		}
+// 		if sqlActive.Valid {
+// 			if sqlActive.Bool {
+// 				user.Active = "Активный"
+// 			} else {user.Active = "Деактивирован"}
+// 		} else {
+// 			user.Active = "Деактивирован"
+// 		}
+// 		if sqlTgID.Valid {
+// 			user.TgID = sqlTgID.Int64
+// 		} else {
+// 			user.TgID = -1
+// 		}
+// 		if sqlLogin.Valid {user.Login = sqlLogin.String}
+// 		if sqlRole.Valid {user.Role = sqlRole.String}
+// 		if sqlName.Valid {user.Name = sqlName.String}
+// 		if sqlSurname.Valid {user.Surname = sqlSurname.String}
+// 		if sqlPatr.Valid {user.Patronymic = sqlPatr.String}
+// 		users = append(users, user)
+// 	}
+// 	return users
+// }
 
 func (p *PostgresDB) GetWorkersInfo() []point.User {
 	rows, err := p.db.Query(`select id, login, role, active, name, surname, patronymic,
@@ -102,78 +102,78 @@ func (p *PostgresDB) GetWorkersInfo() []point.User {
 	return users
 }
 
-func (p *PostgresDB) GetUserInfo(id int) (point.User, error) {
-	row := p.db.QueryRow(`select id, login, role, active, name, surname, patronymic,
-	tg_id from users where id = $1;`, id)
-	var user point.User
-	var sqlLogin, sqlRole, sqlName, sqlSurname, sqlPatr sql.NullString
-	var sqlActive sql.NullBool
-	var sqlTgID	sql.NullInt64
-	err := row.Scan(&user.ID, &sqlLogin, &sqlRole, &sqlActive, &sqlName,
-		&sqlSurname, &sqlPatr, &sqlTgID)
-	if err != nil {
-		log.Println(err)
-		return user, err
-	}
+// func (p *PostgresDB) GetUserInfo(id int) (point.User, error) {
+// 	row := p.db.QueryRow(`select id, login, role, active, name, surname, patronymic,
+// 	tg_id from users where id = $1;`, id)
+// 	var user point.User
+// 	var sqlLogin, sqlRole, sqlName, sqlSurname, sqlPatr sql.NullString
+// 	var sqlActive sql.NullBool
+// 	var sqlTgID	sql.NullInt64
+// 	err := row.Scan(&user.ID, &sqlLogin, &sqlRole, &sqlActive, &sqlName,
+// 		&sqlSurname, &sqlPatr, &sqlTgID)
+// 	if err != nil {
+// 		log.Println(err)
+// 		return user, err
+// 	}
 
-	if sqlActive.Valid {
-		if sqlActive.Bool {
-			user.Active = "Активный"
-		} else {user.Active = "Деактивирован"}
-	} else {
-		user.Active = "Деактивирован"
-	}
-	if sqlTgID.Valid {
-		user.TgID = sqlTgID.Int64
-	} else {
-		user.TgID = -1
-	}
-	if sqlLogin.Valid {user.Login = sqlLogin.String}
-	if sqlRole.Valid {user.Role = sqlRole.String}
-	if sqlName.Valid {user.Name = sqlName.String}
-	if sqlSurname.Valid {user.Surname = sqlSurname.String}
-	if sqlPatr.Valid {user.Patronymic = sqlPatr.String}
+// 	if sqlActive.Valid {
+// 		if sqlActive.Bool {
+// 			user.Active = "Активный"
+// 		} else {user.Active = "Деактивирован"}
+// 	} else {
+// 		user.Active = "Деактивирован"
+// 	}
+// 	if sqlTgID.Valid {
+// 		user.TgID = sqlTgID.Int64
+// 	} else {
+// 		user.TgID = -1
+// 	}
+// 	if sqlLogin.Valid {user.Login = sqlLogin.String}
+// 	if sqlRole.Valid {user.Role = sqlRole.String}
+// 	if sqlName.Valid {user.Name = sqlName.String}
+// 	if sqlSurname.Valid {user.Surname = sqlSurname.String}
+// 	if sqlPatr.Valid {user.Patronymic = sqlPatr.String}
 	
-	return user, nil
-}
+// 	return user, nil
+// }
 
 
-func (p *PostgresDB) ChangeUserInfo(id int, name string, surname string,
-	patronymic string, tgID string) error {
-	user, err := p.GetUserInfo(id)
-	if err != nil {
-		log.Println(err)
-		return err
-	}
+// func (p *PostgresDB) ChangeUserInfo(id int, name string, surname string,
+// 	patronymic string, tgID string) error {
+// 	user, err := p.GetUserInfo(id)
+// 	if err != nil {
+// 		log.Println(err)
+// 		return err
+// 	}
 
-	if name == "" {name = user.Name}
-	if surname == "" {surname = user.Surname}
-	if patronymic == "" {patronymic = user.Patronymic}
-	if tgID == "" {tgID = strconv.FormatInt(user.TgID, 10)}
+// 	if name == "" {name = user.Name}
+// 	if surname == "" {surname = user.Surname}
+// 	if patronymic == "" {patronymic = user.Patronymic}
+// 	if tgID == "" {tgID = strconv.FormatInt(user.TgID, 10)}
 
-	tx, err :=p.db.Begin()
-	if err != nil {
-		log.Println(err)
-		return err
-	}
-	_, err = tx.Exec(`update users set name = $1, surname = $2, patronymic = $3, tg_id = $4
-	where id = $5`, name, surname, patronymic, tgID, id)
-	if err != nil {
-		err = tx.Rollback()
-		if err != nil {
-			log.Println(err)
-			return err
-		}
-		log.Println(err)
-		return err
-	}
-	err = tx.Commit()
-	if err != nil {
-		log.Println(err)
-		return err
-	}
-	return nil
-}
+// 	tx, err :=p.db.Begin()
+// 	if err != nil {
+// 		log.Println(err)
+// 		return err
+// 	}
+// 	_, err = tx.Exec(`update users set name = $1, surname = $2, patronymic = $3, tg_id = $4
+// 	where id = $5`, name, surname, patronymic, tgID, id)
+// 	if err != nil {
+// 		err = tx.Rollback()
+// 		if err != nil {
+// 			log.Println(err)
+// 			return err
+// 		}
+// 		log.Println(err)
+// 		return err
+// 	}
+// 	err = tx.Commit()
+// 	if err != nil {
+// 		log.Println(err)
+// 		return err
+// 	}
+// 	return nil
+// }
 
 
 func (p *PostgresDB) ChangeUserPassword(id int, password string) error {

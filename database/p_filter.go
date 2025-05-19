@@ -57,7 +57,7 @@ func (p *PostgresDB) GetFiltredPoints() ([]point.FilterPoint, error) {
 			}
 		}
 
-		dur := time.Now().Sub(maxReportDate)
+		dur := time.Since(maxReportDate)
 		var month time.Duration = time.Minute * 60 * 24 * 30 * 2
 		if dur > month {
 			point.LongTime = true

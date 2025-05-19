@@ -2,6 +2,7 @@ package database
 
 import (
 	"map/point"
+	"map/business"
 )
 
 type DB interface {
@@ -15,10 +16,10 @@ type DB interface {
 	CheckActiveAuth(int, string) bool
 
 	GetUserLogin(int) string
-	GetUsersInfo() []point.User
+	// GetUsersInfo() []point.User
 	GetWorkersInfo() []point.User
-	GetUserInfo(int) (point.User, error)
-	ChangeUserInfo(id int, name string, surname string, patronymic string, tgID string) error
+	// GetUserInfo(int) (point.User, error)
+	// ChangeUserInfo(id int, name string, surname string, patronymic string, tgID string) error
 	ChangeUserPassword(id int, password string) error
 	NewUser(user point.NewUser) error
 	ChangeUserAllInfo(id int, user point.NewUser) error
@@ -56,4 +57,14 @@ type DB interface {
 
 	GetPointProfile(id int) (point.PointProfile, error)
 	GetPointStory(id int) ([]point.StoryPoint, error)
+
+
+
+
+	GetUsersInfo() (business.UsersInfo, error)
+	GetUserInfo(id int) (business.UserInfo, error)
+	
+	GetPointsForAnalytics() ([]business.AnalyticsPoint, error)
+
+	GetDataForMain(id int) ([]business.MainPoint, error)
 }

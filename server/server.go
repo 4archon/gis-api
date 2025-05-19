@@ -74,13 +74,6 @@ func (s Server) Run() {
 	router.HandleFunc("/auth", s.authentication)
 	router.HandleFunc("/logout", s.logout)
 
-	router.HandleFunc("/employees", s.getEmployees)
-	router.HandleFunc("/new_employee", s.newEmployee)
-	router.HandleFunc("/edit_employee/{id}", s.editEmployee)
-	router.HandleFunc("/profile", s.profile)
-
-	router.HandleFunc("/analytics", s.analytics)
-
 	router.HandleFunc("/distribute_tasks", s.distribute)
 	router.HandleFunc("/assign_tasks", s.assignTasks)
 
@@ -101,6 +94,18 @@ func (s Server) Run() {
 	router.HandleFunc("/points", s.getPoints)
 	router.HandleFunc("/account/login", s.getAccountLogin)
 	router.HandleFunc("/account/role", s.getAccountRole)
+
+
+
+	router.HandleFunc("/employees", s.getUsers).Methods("GET")
+	router.HandleFunc("/employees", s.postUsers).Methods("POST")
+
+	router.HandleFunc("/profile", s.getProfile).Methods("GET")
+	router.HandleFunc("/profile", s.postProfile).Methods("POST")
+
+	router.HandleFunc("/analytics", s.getAnalytics).Methods("GET")
+	router.HandleFunc("/analytics", s.postAnalytics).Methods("POST")
+
 
 	fmt.Println("Server is running")
 	http.ListenAndServe(fmt.Sprintf("%s:%s", s.Host, s.Port), router)

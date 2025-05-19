@@ -5,10 +5,13 @@ import (
 	"map/config"
 	"map/database"
 	"map/authentication"
+	"log"
 )
 
 
 func main() {
+	log.SetFlags(log.LstdFlags | log.Lshortfile);
+
 	var conf config.Config
 	conf.Init()
 

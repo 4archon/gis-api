@@ -84,6 +84,10 @@ func (p *PostgresDB) CreateInspection(reportID int, checkup string,
 }
 
 func (p *PostgresDB) GetInspection(inspectionID int) (point.InspectionReport, error) {
+	if inspectionID == -1 {
+		var insReport point.InspectionReport
+		return insReport, nil
+	}
 	row := p.db.QueryRow(`select inspection_log_id, checkup, repair_type,
 	photo_left, photo_right, photo_front, video, comment
 	from inspection_log_data where inspection_log_id = $1;`, inspectionID)
@@ -231,6 +235,10 @@ func (p *PostgresDB) ApproveServiceReport(reportID int, serviceLogID int,
 
 
 func (p *PostgresDB) GetService(serviceID int) ([]point.ServiceReport, error) {
+	if serviceID == -1 {
+		var serviceReports []point.ServiceReport
+		return serviceReports, nil
+	}
 	rows, err := p.db.Query(`select service_log_id, service_type, subtype, action_arc,
 	photo_before, photo_left, photo_right, photo_front, video, photo_extra, comment
 	from service_log_data where service_log_id = $1;`, serviceID)
