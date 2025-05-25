@@ -55,8 +55,9 @@ async function render_profile_media(id) {
             <a class="my-link" data-autoplay="true"
             data-vbtype="video"
             href="/media/${element.id}.${element.type}">
-            <img src="/media/${element.id}.${element.type}" 
-            alt="loading" style="max-height: 100%; max-width: 100%; border-radius: 5px;"/>
+            <video controls style="max-height: 100%; max-width: 100%; border-radius: 5px;">
+                <source src="/media/${element.id}.${element.type}" type="video/mp4" />
+            </video>
             </a>
             `
         } else {
