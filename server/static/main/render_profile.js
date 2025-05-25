@@ -52,10 +52,10 @@ async function render_profile_media(id) {
         let res;
         if (element.type == "mov") {
             res = `
-            <a class="my-link" data-autoplay="true"
+            <a class="my-link" data-gall="gallery01" data-autoplay="true"
             data-vbtype="video"
             href="/media/${element.id}.${element.type}">
-            <video controls style="max-height: 100%; max-width: 100%; border-radius: 5px;">
+            <video style="max-height: 200px; max-width: 200px; border-radius: 5px;">
                 <source src="/media/${element.id}.${element.type}" type="video/mp4" />
             </video>
             </a>
