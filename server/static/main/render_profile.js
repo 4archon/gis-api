@@ -83,13 +83,14 @@ function pointClick(event) {
     body.innerHTML = res;
     render_profile_media(event.targetData.userData.id).then((element) => {
         body.append(element);
+    }).then(() => {
+        new VenoBox({
+            selector: '.my-link',
+            numeration: true,
+            infinigall: true,
+            share: true,
+            spinner: 'circle'
+        });
     });
     pointProfile.show();
-    new VenoBox({
-        selector: '.my-link',
-        numeration: true,
-        infinigall: true,
-        share: true,
-        spinner: 'circle'
-    });
 }
