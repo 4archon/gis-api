@@ -17,10 +17,11 @@ type MainPoint struct {
 	ChangeDate	*time.Time		`json:"changeDate"`
 	Comment		*string			`json:"comment"`
 	Coordinates	[]*string		`json:"coordinates"`
-	Appointed	bool			`json:"appointed"`
+	Appointed	*bool			`json:"appointed"`
+	Deadline	*time.Time		`json:"deadline"`
 }
 
 type Main struct {
-	Points		[]AnalyticsPoint	`json:"points"`
+	Points		[]MainPoint			`json:"points"`
 	GisKey		string				`json:"gisKey"`
 }

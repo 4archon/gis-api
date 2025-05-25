@@ -8,7 +8,7 @@ import (
 	// "map/point"
 	// "time"
 	
-	// "github.com/lib/pq"
+	_ "github.com/lib/pq"
 )
 
 type PostgresDB struct {

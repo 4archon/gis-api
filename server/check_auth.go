@@ -83,5 +83,5 @@ func (s Server) checkUser(response http.ResponseWriter, req *http.Request) (int,
 func (s Server) logout(response http.ResponseWriter, req *http.Request) {
 	cookie := http.Cookie{Name: "AuthToken", Value: "null"}
 	http.SetCookie(response, &cookie)
-	http.Redirect(response, req, "main", http.StatusTemporaryRedirect)
+	http.Redirect(response, req, "auth", http.StatusTemporaryRedirect)
 }

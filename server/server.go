@@ -2,14 +2,11 @@ package server
 
 import (
 	"fmt"
-	"html/template"
 	"map/authentication"
 	"map/database"
 	"net/http"
-	"map/point"
 	"github.com/gorilla/mux"
 )
-
 
 type Server struct {
 	Host string
@@ -17,33 +14,6 @@ type Server struct {
 	GisApi string
 	DB database.DB
 	Auth authentication.Auth
-}
-
-type dataMain struct {
-	GisApiKey	string
-	Points		[]point.Point
-}
-
-func (s Server) rootPage(response http.ResponseWriter, req *http.Request) {
-	http.Redirect(response, req, "main", http.StatusFound)
-}
-
-func (s Server) mainPage(response http.ResponseWriter, req *http.Request) {
-	id, role, err := s.checkUser(response, req)
-	if err != nil {
-		return
-	}
-	var data dataMain
-	data.GisApiKey = s.GisApi
-	if role == "admin" {
-		data.Points = s.DB.GetAllTaskPoints()
-		tmpl, _ := template.ParseFiles("server/templates/main/main.html")
-		tmpl.Execute(response, data)
-	} else {
-		data.Points = s.DB.GetUserTaskPoints(id)
-		tmpl, _ := template.ParseFiles("server/templates/main/main.html")
-		tmpl.Execute(response, data)
-	}
 }
 
 func (s Server) blockFileServer(next http.Handler) http.Handler {
@@ -68,40 +38,25 @@ func (s Server) Run() {
 	fs := http.FileServer(http.Dir("server/static/"))
 	router.PathPrefix("/static/").Handler(http.StripPrefix("/static", s.blockFileServer(fs)))
 
-	router.HandleFunc("/", s.rootPage)
-	router.HandleFunc("/main", s.mainPage)
+	router.HandleFunc("/", s.rootPage).Methods("GET")
+	router.HandleFunc("/main", s.getMain).Methods("GET")
+	router.HandleFunc("/main", s.postMain).Methods("POST")
 
 	router.HandleFunc("/auth", s.authentication)
 	router.HandleFunc("/logout", s.logout)
 
-	router.HandleFunc("/distribute_tasks", s.distribute)
-	router.HandleFunc("/assign_tasks", s.assignTasks)
-
-	router.HandleFunc("/tasks", s.tasks)
-	router.HandleFunc("/inspection/{reportID}/{id}", s.inspection)
-	router.HandleFunc("/service/{reportID}/{id}", s.service)
-	router.HandleFunc("/change_point/{reportID}/{id}", s.changePoint)
-	router.HandleFunc("/deactivate/{reportID}/{id}", s.deactivate)
-	router.HandleFunc("/clear_report/{reportID}", s.deleteAllReport)
-	router.HandleFunc("/send_report/{reportID}", s.sendReport)
-	router.HandleFunc("/decline/{reportID}", s.declineReport)
-	router.HandleFunc("/verify/{reportID}", s.verifyReport)
-
-	router.HandleFunc("/view/{type}/{id}", s.getViewReport)
-	router.HandleFunc("/point_profile/{id}", s.pointProfile)
-	router.HandleFunc("/point_story/{id}", s.pointStory)
-
-	router.HandleFunc("/points", s.getPoints)
 	router.HandleFunc("/account/login", s.getAccountLogin)
 	router.HandleFunc("/account/role", s.getAccountRole)
 
-
+	router.HandleFunc("/history", s.history).Methods("POST")
 
 	router.HandleFunc("/employees", s.getUsers).Methods("GET")
 	router.HandleFunc("/employees", s.postUsers).Methods("POST")
 
 	router.HandleFunc("/profile", s.getProfile).Methods("GET")
 	router.HandleFunc("/profile", s.postProfile).Methods("POST")
+	router.HandleFunc("/recent_media", s.postPointRecentMedia).Methods("POST")
+	router.HandleFunc("/current_tasks", s.postPointCurrentTasks).Methods("POST")
 
 	router.HandleFunc("/analytics", s.getAnalytics).Methods("GET")
 	router.HandleFunc("/analytics", s.postAnalytics).Methods("POST")
