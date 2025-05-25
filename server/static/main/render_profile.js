@@ -52,7 +52,7 @@ async function render_profile_media(id) {
         let res;
         if (element.type == "mov") {
             res = `
-            <a class="my-video-links" data-autoplay="true"
+            <a class="my-link" data-autoplay="true"
             data-vbtype="video"
             href="/media/${element.id}.${element.type}">
             <img src="/media/${element.id}.${element.type}" 
