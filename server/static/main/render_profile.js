@@ -49,14 +49,26 @@ async function render_profile_media(id) {
     let medias = await getRecentMedia(id);
     let result = ``;
     medias.medias.forEach((element) => {
-        let res = `
-        <div class="col-4 d-flex justify-content-center">
-            <a class="my-link" data-gall="gallery01" href="/media/${element.id}.${element.type}">
-                <img src="/media/${element.id}.${element.type}" 
-                alt="loading" style="max-height: 100%; max-width: 100%; border-radius: 5px;"/>
+        let res;
+        if (element.type == "mov") {
+            res = `
+            <a class="my-video-links" data-autoplay="true"
+            data-vbtype="video"
+            href="/media/${element.id}.${element.type}">
+            <img src="/media/${element.id}.${element.type}" 
+            alt="loading" style="max-height: 100%; max-width: 100%; border-radius: 5px;"/>
             </a>
-        </div>
-        `
+            `
+        } else {
+            res = `
+            <div class="col-4 d-flex justify-content-center">
+                <a class="my-link" data-gall="gallery01" href="/media/${element.id}.${element.type}">
+                    <img src="/media/${element.id}.${element.type}" 
+                    alt="loading" style="max-height: 100%; max-width: 100%; border-radius: 5px;"/>
+                </a>
+            </div>
+            `
+        }
         result += res
     })
     conteiner.innerHTML = result;
