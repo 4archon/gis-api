@@ -16,9 +16,9 @@ async function getHistory(id) {
 async function historyClick(event) {
     let id = event.target.getAttribute("data-id");
     data = await getHistory(id);
+    console.log(data);
     render_history_header(data);
     render_history_body(data);
-    console.log(data);
     pointHistory.show();
 }
 
@@ -49,7 +49,8 @@ function render_history_body(data) {
                 <h5 class="card-title">Общая информация:</h5>
                 <ul class="list-group list-group-flush">
                     <li class="list-group-item">Исполнители: 
-                    ${element.userLogins.reduce((acc, el, index) => {
+                    ${element.userLogins === null ? "Не указано":
+                        element.userLogins.reduce((acc, el, index) => {
                         return acc +=
                         `<span class="badge text-bg-primary">` +
                         element.userIDs[index] +
