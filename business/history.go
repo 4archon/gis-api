@@ -6,6 +6,7 @@ import(
 
 
 type StoryPoint struct {
+	ID			int				`json:"id"`
 	UserIDs		[]string		`json:"userIDs"`
 	UserLogins	[]string		`json:"userLogins"`
 	Deadline	*time.Time		`json:"deadline"`
@@ -15,6 +16,7 @@ type StoryPoint struct {
 	Sent		*bool			`json:"sent"`
 	Works		[]Work			`json:"works"`
 	Tasks		[]Task			`json:"tasks"`
+	Medias		[]Media			`json:"medias"`
 }
 
 type History struct {

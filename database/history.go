@@ -51,6 +51,7 @@ func (p *PostgresDB) GetPointHistory(id int) (business.History, error) {
 			log.Println(err)
 			return result, err
 		}
+		res.ID = storyID
 		result.StoryPoints = append(result.StoryPoints, res)
 		storage_order = append(storage_order, storyID)
 	}
@@ -78,7 +79,7 @@ func (p *PostgresDB) GetPointHistory(id int) (business.History, error) {
 		storage[storyID].Works = append(storage[storyID].Works, res)
 	}
 
-	rows4, err := p.db.Query(`select s.id, type, t.comment 
+	rows4, err := p.db.Query(`select s.id, t.id, type, t.comment 
 	from service s inner join tasks t on s.id = t.service_id
 	where s.point_id = $1`, id)
 	if err != nil {
@@ -89,12 +90,31 @@ func (p *PostgresDB) GetPointHistory(id int) (business.History, error) {
 	for rows4.Next() {
 		var res business.Task
 		var storyID int
-		err := rows4.Scan(&storyID, &res.Type, &res.Comment)
+		err := rows4.Scan(&storyID, &res.ID, &res.Type, &res.Comment)
 		if err != nil {
 			log.Println(err)
 			return result, err
 		}
 		storage[storyID].Tasks = append(storage[storyID].Tasks, res)
+	}
+
+	rows5, err := p.db.Query(`select s.id, m.id, media_type, media_name
+	from service s inner join media m on s.id = m.service_id
+	where point_id = $1`, id)
+	if err != nil {
+		log.Println(err)
+		return result, err
+	}
+	defer rows5.Close()
+	for rows5.Next() {
+		var res business.Media
+		var storyID int
+		err := rows5.Scan(&storyID, &res.ID, &res.MediaType, &res.MediaName)
+		if err != nil {
+			log.Println(err)
+			return result, err
+		}
+		storage[storyID].Medias = append(storage[storyID].Medias, res)
 	}
 
 

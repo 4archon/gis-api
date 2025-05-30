@@ -53,10 +53,10 @@ async function render_profile_media(id) {
         if (element.type == "mov") {
             res = `
             <div class="col-4 d-flex justify-content-center">
-                <a class="my-link" data-gall="gallery01" data-autoplay="true"
+                <a class="profileMedia" data-gall="gallery-profile" data-autoplay="true"
                 data-vbtype="video"
                 href="/media/${element.id}.${element.type}">
-                <video style="max-height: 100%; max-width: 100%; border-radius: 5px;">
+                <video style="max-height: 200px; max-width: 100%; border-radius: 5px;">
                     <source src="/media/${element.id}.${element.type}" type="video/mp4" />
                 </video>
                 </a>
@@ -65,9 +65,9 @@ async function render_profile_media(id) {
         } else {
             res = `
             <div class="col-4 d-flex justify-content-center">
-                <a class="my-link" data-gall="gallery01" href="/media/${element.id}.${element.type}">
+                <a class="profileMedia" data-gall="gallery-profile" href="/media/${element.id}.${element.type}">
                     <img src="/media/${element.id}.${element.type}" 
-                    alt="loading" style="max-height: 100%; max-width: 100%; border-radius: 5px;"/>
+                    alt="loading" style="max-height: 200px; max-width: 100%; border-radius: 5px;"/>
                 </a>
             </div>
             `
@@ -100,7 +100,7 @@ function pointClick(event) {
         body.append(element);
     }).then(() => {
         new VenoBox({
-            selector: '.my-link',
+            selector: '.profileMedia',
             numeration: true,
             infinigall: true,
             share: true,
