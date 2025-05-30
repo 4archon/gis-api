@@ -120,18 +120,19 @@ function render_history_body(data) {
                             `
                             ${el.type == "mov"? `
                                 <div class="col-2 d-flex justify-content-center">
-                                    <a class="history-media" data-gall="gallery-${element.id}" data-autoplay="true"
+                                    <a class="d-flex align-items-center history-media" data-gall="gallery-${element.id}" data-autoplay="true"
                                     data-vbtype="video"
                                     href="/media/${el.id}.${el.type}">
-                                    <video preload="metadata"
-                                    style="max-height: 200px; max-width: 100%; border-radius: 5px;">
-                                        <source src="/media/${el.id}.${el.type}#t=0.5" type="video/mp4" />
-                                    </video>
+                                        <svg style="max-height: 200px; max-width: 100%; border-radius: 5px;" 
+                                        xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor" class="bi bi-play-circle" viewBox="0 0 16 16">
+                                            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
+                                            <path d="M6.271 5.055a.5.5 0 0 1 .52.038l3.5 2.5a.5.5 0 0 1 0 .814l-3.5 2.5A.5.5 0 0 1 6 10.5v-5a.5.5 0 0 1 .271-.445"/>
+                                        </svg>
                                     </a>
                                 </div>
                                 `:`
                                 <div class="col-2 d-flex justify-content-center">
-                                    <a class="history-media" data-gall="gallery-${element.id}" href="/media/${el.id}.${el.type}">
+                                    <a class="d-flex align-items-center history-media" data-gall="gallery-${element.id}" href="/media/${el.id}.${el.type}">
                                         <img src="/media/${el.id}.${el.type}" loading="lazy" 
                                         alt="loading" style="max-height: 200px; max-width: 100%; border-radius: 5px;"/>
                                     </a>

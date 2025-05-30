@@ -53,7 +53,7 @@ async function render_profile_media(id) {
         if (element.type == "mov") {
             res = `
             <div class="col-3 d-flex justify-content-center">
-                <a class="profileMedia" data-gall="gallery-profile" data-autoplay="true"
+                <a class="d-flex align-items-center profileMedia" data-gall="gallery-profile" data-autoplay="true"
                 data-vbtype="video"
                 href="/media/${element.id}.${element.type}">
                 <video preload="metadata"
@@ -66,7 +66,7 @@ async function render_profile_media(id) {
         } else {
             res = `
             <div class="col-3 d-flex justify-content-center">
-                <a class="profileMedia" data-gall="gallery-profile" href="/media/${element.id}.${element.type}">
+                <a class="profileMedia d-flex align-items-center" data-gall="gallery-profile" href="/media/${element.id}.${element.type}">
                     <img src="/media/${element.id}.${element.type}" 
                     alt="loading" style="max-height: 200px; max-width: 100%; border-radius: 5px;"/>
                 </a>
