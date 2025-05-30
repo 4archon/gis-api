@@ -52,19 +52,20 @@ async function render_profile_media(id) {
         let res;
         if (element.type == "mov") {
             res = `
-            <div class="col-4 d-flex justify-content-center">
+            <div class="col-3 d-flex justify-content-center">
                 <a class="profileMedia" data-gall="gallery-profile" data-autoplay="true"
                 data-vbtype="video"
                 href="/media/${element.id}.${element.type}">
-                <video style="max-height: 200px; max-width: 100%; border-radius: 5px;">
-                    <source src="/media/${element.id}.${element.type}" type="video/mp4" />
+                <video preload="metadata"
+                style="max-height: 200px; max-width: 100%; border-radius: 5px;">
+                    <source src="/media/${element.id}.${element.type}#t=0.5" type="video/mp4" />
                 </video>
                 </a>
             </div>
             `
         } else {
             res = `
-            <div class="col-4 d-flex justify-content-center">
+            <div class="col-3 d-flex justify-content-center">
                 <a class="profileMedia" data-gall="gallery-profile" href="/media/${element.id}.${element.type}">
                     <img src="/media/${element.id}.${element.type}" 
                     alt="loading" style="max-height: 200px; max-width: 100%; border-radius: 5px;"/>

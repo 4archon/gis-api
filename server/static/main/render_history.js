@@ -123,9 +123,9 @@ function render_history_body(data) {
                                     <a class="history-media" data-gall="gallery-${element.id}" data-autoplay="true"
                                     data-vbtype="video"
                                     href="/media/${el.id}.${el.type}">
-                                    <video preload="none" 
+                                    <video preload="metadata"
                                     style="max-height: 200px; max-width: 100%; border-radius: 5px;">
-                                        <source src="/media/${el.id}.${el.type}" type="video/mp4" />
+                                        <source src="/media/${el.id}.${el.type}#t=0.5" type="video/mp4" />
                                     </video>
                                     </a>
                                 </div>
