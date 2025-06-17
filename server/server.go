@@ -48,16 +48,18 @@ func (s Server) Run() {
 	router.HandleFunc("/account/login", s.getAccountLogin)
 	router.HandleFunc("/account/role", s.getAccountRole)
 
-	router.HandleFunc("/history", s.history).Methods("POST")
-
 	router.HandleFunc("/employees", s.getUsers).Methods("GET")
 	router.HandleFunc("/employees", s.postUsers).Methods("POST")
 
 	router.HandleFunc("/profile", s.getProfile).Methods("GET")
 	router.HandleFunc("/profile", s.postProfile).Methods("POST")
+
+	router.HandleFunc("/history", s.history).Methods("POST")
 	router.HandleFunc("/recent_media", s.postPointRecentMedia).Methods("POST")
 	router.HandleFunc("/current_tasks", s.postPointCurrentTasks).Methods("POST")
 
+	router.HandleFunc("/distribute_tasks", s.getDistributeTasks).Methods("GET")
+	
 	router.HandleFunc("/analytics", s.getAnalytics).Methods("GET")
 	router.HandleFunc("/analytics", s.postAnalytics).Methods("POST")
 

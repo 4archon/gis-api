@@ -10,7 +10,7 @@ func (p *PostgresDB) GetPointCurrentTasks(id int) (business.Tasks, error) {
 	result.PointID = id
 
 	rows, err := p.db.Query(`select id, type, comment
-	from tasks where point_id = $1`, id)
+	from tasks where point_id = $1 and service_id is null`, id)
 	if err != nil {
 		log.Println(err)
 		return result, err
@@ -26,12 +26,12 @@ func (p *PostgresDB) GetPointCurrentTasks(id int) (business.Tasks, error) {
 		result.Tasks = append(result.Tasks, res)
 	}
 
-	rows2, err := p.db.Query(`select type, work, arc
+	rows2, err := p.db.Query(`select w.id, type, work, arc
 	from service s inner join service_works w on s.id = w.service_id
 	where s.point_id = $1 and w.type = 'required' and 
-	s.execution_date > (select max(execution_date)
+	s.execution_date >= coalesce((select max(execution_date)
 	from service s inner join service_works w on s.id = w.service_id
-	where type = 'done' and point_id = $1)`, id)
+	where type = 'done' and point_id = $1), '01.01.2000')`, id)
 	if err != nil {
 		log.Println(err)
 		return result, err

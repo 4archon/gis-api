@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="ru">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Service</title>
+        <meta name="description" content="Test 2GIS Map API" />
+        <link rel="stylesheet" href="">
+        <link href="/bootstrap/css/bootstrap.css" rel="stylesheet">
+    </head>
+    <body>
+        <script src="/bootstrap/js/bootstrap.js"></script>
+        <script src="/static/header/render_header.js"></script>
+        <div class="container-fluid mt-1">
+            <div class="row">
+                <div id="map" class="z-0 position-relative col-12 p-0" style="overflow: hidden;"></div>
+                <script src="static/distibute_tasks/set_map_size.js"></script>
+                <div class="z-1 position-absolute col-2 p-0">
+                    <button id="" type="button" class="btn">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" class="bi bi-pencil-fill" viewBox="0 0 16 16">
+                            <path d="M12.854.146a.5.5 0 0 0-.707 0L10.5 1.793 14.207 5.5l1.647-1.646a.5.5 0 0 0 0-.708zm.646 6.061L9.793 2.5 3.293 9H3.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.207zm-7.468 7.468A.5.5 0 0 1 6 13.5V13h-.5a.5.5 0 0 1-.5-.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.5-.5V10h-.5a.5.5 0 0 1-.175-.032l-.179.178a.5.5 0 0 0-.11.168l-2 5a.5.5 0 0 0 .65.65l5-2a.5.5 0 0 0 .168-.11z"/>
+                        </svg>
+                    </button>
+                    <button id="" type="button" class="btn">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" class="bi bi-arrow-bar-left" viewBox="0 0 16 16">
+                            <path fill-rule="evenodd" d="M12.5 15a.5.5 0 0 1-.5-.5v-13a.5.5 0 0 1 1 0v13a.5.5 0 0 1-.5.5M10 8a.5.5 0 0 1-.5.5H3.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L3.707 7.5H9.5a.5.5 0 0 1 .5.5"/>
+                        </svg>
+                    </button>
+                    <button id="filter-button" type="button" class="btn">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" class="bi bi-filter" viewBox="0 0 16 16">
+                            <path d="M6 10.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5m-2-3a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5m-2-3a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5"/>
+                        </svg>
+                    </button>
+                    <div class="input-group">
+                        <span class="input-group-text">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                                <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
+                            </svg>
+                        </span>
+                        <input id="search" type="text" class="form-control" placeholder="Поиск по координатам">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script src="/static/gis/map.js"></script>
+        <script src="/static/gis/clus.js"></script>
+        <div id="point-filter" class="offcanvas offcanvas-start" data-bs-scroll="true"
+        data-bs-backdrop="false" tabindex="-1" aria-labelledby="offcanvasScrollingLabel">
+            <div class="offcanvas-header">
+                <h5 class="offcanvas-title" id="offcanvasScrollingLabel">Выберете фильтры:</h5>
+                <button type="button" class="btn-close"
+                data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            </div>
+            <div id="" class="offcanvas-body"></div>
+        </div>
+        <div class="offcanvas offcanvas-end" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1" id="offcanvasTasks" aria-labelledby="offcanvasScrollingLabel">
+            <div class="offcanvas-header">
+                <h5 class="offcanvas-title" id="offcanvasScrollingLabel">Выбор задач и сотрудников</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            </div>
+            <div class="offcanvas-body">
+                <div class="container-fluid mt-1">
+                    <div class="row">
+                        <div class="col-12 p-0">
+                            <div class="card">
+                                <div class="card-header">
+                                    Выбранные точки:
+                                    <button id="clear-list-work" type="button" class="btn btn-outline-danger btn-sm float-end">Очистить</button>
+                                </div>
+                                <ul id="list-work" class="list-group list-group-flush" style="min-height: 200px; max-height: 200px; overflow-y: auto;">
+                                    
+                                </ul>
+                            </div>
+                            <div class="col-12 d-flex justify-content-center my-4">
+                                <button id="assign_work" type="button" class="btn btn-outline-success btn">Назначить</button>
+                                <input id="deadline" class="form-control mx-3" type="date" />
+                            </div>
+                            <div class="card">
+                                <div class="card-header">
+                                    Выбранные сотрудники:
+                                    <button id="clear-list-employees" type="button" class="btn btn-outline-danger btn-sm float-end">Очистить</button>
+                                </div>
+                                <ul id="list-employees" class="list-group list-group-flush" style="min-height: 200px; max-height: 200px; overflow-y: auto;">
+
+                                </ul>
+                            </div>
+                            <div class="card mt-3">
+                                <div class="card-header">
+                                    Все сотрудники:
+                                </div>
+                                <ul id="list_all_employees" class="list-group list-group-flush" style="min-height: 200px; max-height: 200px; overflow-y: auto;">
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script src="/static/distibute_tasks/distribute.js"></script>
+        
+        <canvas id="draw-canvas" style="position: absolute; left: 0; top: 0; display: none; z-index: 2;"></canvas>
+        <script src="/static/distibute_tasks/filter.js"></script>
+        <script src="/static/distibute_tasks/search.js"></script>
+        <!-- <script src="/static/distibute_tasks/canvas.js"></script> -->
+        <!-- <script src="/static/distibute_tasks/drag_drop.js"></script> -->
+    </body>
+</html>

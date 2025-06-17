@@ -121,7 +121,7 @@ function render_history_body(data) {
                             `
                             ${el.type == "mov"? `
                                 <div class="col-2 d-flex justify-content-center">
-                                    <a class="d-flex align-items-center history-media" data-gall="gallery-${element.id}" data-autoplay="true"
+                                    <a class="d-flex align-items-center history-media" data-gall="history-${element.id}" data-autoplay="true"
                                     data-vbtype="video"
                                     href="/media/${el.id}.${el.type}">
                                         <svg style="max-height: 200px; max-width: 100%; border-radius: 5px;" 
@@ -133,7 +133,7 @@ function render_history_body(data) {
                                 </div>
                                 `:`
                                 <div class="col-2 d-flex justify-content-center">
-                                    <a class="d-flex align-items-center history-media" data-gall="gallery-${element.id}" href="/media/${el.id}.${el.type}">
+                                    <a class="d-flex align-items-center history-media" data-gall="history-${element.id}" href="/media/${el.id}.${el.type}">
                                         <img src="/media/${el.id}.${el.type}" loading="lazy" 
                                         alt="loading" style="max-height: 200px; max-width: 100%; border-radius: 5px;"/>
                                     </a>

@@ -1,8 +1,12 @@
+let tasks;
+
+
 function render_profile_info(profile) {
     result = `
+    <h5 class="mt-2">Данные точки:
     <button data-id="${profile.id}" onclick="historyClick(event)"
-    type="button" class="btn btn-info btn-sm mb-2">История точки</button>
-    <h5>Данные точки:</h5>
+    type="button" class="btn btn-info btn-sm">История точки</button>
+    </h5>
     <div class="card-body">
         <ul class="list-group list-group-flush">
             <li class="list-group-item">Статус:
@@ -25,7 +29,9 @@ function render_profile_info(profile) {
     </div>
     <h5 class="mt-2">Недавние материалы:</h5>
     `
-    return result;
+
+    let body = document.getElementById("point-profile-body");
+    body.innerHTML = result;
 }
 
 async function getRecentMedia(id) {
@@ -51,7 +57,8 @@ async function render_profile_media(id) {
     medias.medias.forEach((element) => {
         let res;
         if (element.type == "mov") {
-            res = `
+            res = 
+            `
             <div class="col-3 d-flex justify-content-center">
                 <a class="d-flex align-items-center profileMedia" data-gall="gallery-profile" data-autoplay="true"
                 data-vbtype="video"
@@ -64,7 +71,8 @@ async function render_profile_media(id) {
             </div>
             `
         } else {
-            res = `
+            res = 
+            `
             <div class="col-3 d-flex justify-content-center">
                 <a class="profileMedia d-flex align-items-center" data-gall="gallery-profile" href="/media/${element.id}.${element.type}">
                     <img src="/media/${element.id}.${element.type}" 
@@ -88,15 +96,122 @@ function render_profile_header(profile) {
         new Date(profile.deadline).toLocaleDateString()}</span>
     </h1>
     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>`
-    return result;
+    
+    document.getElementById("point-profile-header").innerHTML = result;
 }
 
+async function getCurrentTasks(id) {
+    url = "/current_tasks"
+    response = await fetch(url, {
+        method: "POST",
+        cache: "no-cache",
+        credentials: "same-origin",
+        headers: {
+            "Content-Type": "text/plain"
+        },
+        body: id
+    })
+    res = await response.json();
+    tasks = res.tasks;
+    return res;
+}
+
+function sort_works(data) {
+    targetWorks = [];
+    if (data.works !== null) {
+        data.works.forEach((element) => {
+            let found = targetWorks.find((el) => el.work == element.work);
+            if (found === undefined) {
+                targetWorks.push(element);
+            } else {
+                if (element.arc > found.arc) {
+                    found.arc = element.arc;
+                }
+            }
+        });
+        data.works = targetWorks;
+    }
+
+    if (targetWorks.length > 1) {
+        targetWorks = targetWorks.filter((el) => el.work != "Работа не требуется");
+    }
+
+    return targetWorks;
+}
+
+async function render_profile_tasks(id) {
+    let data = await getCurrentTasks(id);
+    // console.log(data);
+    data.works = sort_works(data);
+    let result = data === null ? "": 
+    `
+    <h5 class="">Задачи:</h5>
+    <div class="accordion accordion-flush">
+        ${data.tasks === null ? 
+            `
+            <ul class="list-group list-group-flush">
+            <li class="list-group-item">Задачи не выставлены</li>
+            </ul>
+            `:
+            data.tasks.reduce((acc, el) => {
+            return acc +=
+            `
+            <div class="accordion-item">
+                <h2 class="accordion-header">
+                    <button class="accordion-button collapsed" type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#task${el.id}" aria-expanded="false"
+                    aria-controls="task${el.id}">
+                        ${el.type}
+                    </button>
+                </h2>
+                <div id="task${el.id}" class="accordion-collapse collapse">
+                    <div class="accordion-body">
+                    ${el.comment === null ? "Нет комменатария": el.comment}</div>
+                </div>
+            </div>
+            `
+        }, "")}
+    </div>
+    <h5 class="mt-2">Результаты инспекции:</h5>
+    <ul class="list-group list-group-flush">
+        ${data.works === null ? "Нет релевантных данных по инспекции":
+            data.works.reduce((acc, el) => {
+            return acc +=
+            `
+            <li class="list-group-item">    
+            ${el.work}, количество дуг: ${el.arc} 
+            </li>
+            `
+        }, "")}
+    </ul>
+    `
+
+    let body = document.getElementById("point-profile-body");
+    let cont = document.createElement("div");
+    cont.innerHTML = result;
+    body.prepend(cont);
+}
+
+function render_profile_footer(data) {
+    let cont = document.getElementById("point-profile-footer")
+    if (data.appointed) {
+        cont.innerHTML = `
+        <button data-id="${data.id}" type="button" class="btn btn-primary" onclick="reportClick(event)">
+            Отправить отчёт
+        </button>
+        `
+    } else {
+        cont.innerHTML = "";
+    }
+}
 
 function pointClick(event) {
-    document.getElementById("point-profile-header").innerHTML = render_profile_header(event.targetData.userData);
-    res = render_profile_info(event.targetData.userData);
-    let body = document.getElementById("point-profile-body")
-    body.innerHTML = res;
+    render_profile_header(event.targetData.userData);
+    render_profile_info(event.targetData.userData);
+    render_profile_footer(event.targetData.userData);
+    let body = document.getElementById("point-profile-body");
+    render_profile_tasks(event.targetData.userData.id);
     render_profile_media(event.targetData.userData.id).then((element) => {
         body.append(element);
     }).then(() => {

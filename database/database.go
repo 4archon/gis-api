@@ -16,7 +16,7 @@ type DB interface {
 	
 	GetPointsForAnalytics() ([]business.AnalyticsPoint, error)
 
-	GetDataForMain(id int) ([]business.MainPoint, error)
+	GetDataForMain(id int) ([]business.Point, error)
 	
 	GetPointHistory(id int) (business.History, error)
 	GetPointMedia(id int) (business.PointMedias, error)

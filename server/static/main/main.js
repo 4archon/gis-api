@@ -5,6 +5,7 @@ let notAppointedPoints = [];
 let shown = false;
 let pointProfile = new bootstrap.Modal(document.getElementById("point-profile"), null);
 let pointHistory = new bootstrap.Modal(document.getElementById("point-history"), null);
+let pointReport = new bootstrap.Modal(document.getElementById("point-report"), null);
 
 
 async function getPoinst() {
@@ -36,6 +37,7 @@ function fillNotAppointedPoints() {
     data.forEach((element) => {
         if (!element.appointed) {
             element["icon"] = `/static/svg/marker.svg`;
+            // element["anchor"] = [1, 1]; have to
             marker = new mapgl.Marker(map, element);
             marker.userData = element;
             marker.on("click", pointClick);
@@ -50,6 +52,7 @@ function fillAppointedPoints() {
         if (element.appointed) {
             if (element.deadline !== null) {
                 element["icon"] = `/static/svg/danger_marker.svg`;
+                element["anchor"] = [15, 46]
             }
             marker = new mapgl.Marker(map, element);
             marker.userData = element;

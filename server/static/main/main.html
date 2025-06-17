@@ -31,10 +31,7 @@
                     </div>
                     <div id="point-profile-body" class="modal-body">
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-primary">
-                            Отправить отчёт
-                        </button>
+                    <div id="point-profile-footer" class="modal-footer">
                     </div>
                 </div>
             </div>
@@ -43,15 +40,45 @@
             <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
                 <div class="modal-content">
                     <div id="point-history-header" class="modal-header">
-                        
                     </div>
                     <div id="point-history-body" class="modal-body">
                     </div>
                 </div>
             </div>
         </div>
+        <div class="modal fade" id="point-report" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-scrollable modal-lg">
+                <div class="modal-content">
+                    <div id="point-report-header" class="modal-header">
+                    </div>
+                    <div id="point-report-body" class="modal-body">
+                    </div>
+                    <div id="point-report-footer" class="modal-footer">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="change-location" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                    <h5>Изменение позиции точки</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div id="map-change-location" style="overflow: hidden; height: 500px;"></div>
+                    </div>
+                    <div class="modal-footer">
+                        <button id="change-location-hide" type="button" class="btn btn-secondary">Скрыть</button>
+                        <button id="change-location-save" type="button" class="btn btn-primary">Сохранить</button>
+                    </div>
+                </div>
+            </div>
+        </div>
         <script src="/static/main/render_profile.js"></script>
         <script src="/static/main/render_history.js"></script>
+        <script src="/static/main/render_report.js"></script>
+        <script src="/static/main/render_change_location.js"></script>
         <script src="/static/main/main.js"></script>
     </body>
 </html>

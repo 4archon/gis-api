@@ -5,8 +5,8 @@ import (
 	"log"
 )
 
-func (p *PostgresDB) GetDataForMain(id int) ([]business.MainPoint, error) {
-	var result []business.MainPoint
+func (p *PostgresDB) GetDataForMain(id int) ([]business.Point, error) {
+	var result []business.Point
 	
 	rows, err := p.db.Query(`select p.id, active, long, lat, address,
 	district, number_arc, arc_type, carpet, change_date, p.comment,
@@ -21,7 +21,7 @@ func (p *PostgresDB) GetDataForMain(id int) ([]business.MainPoint, error) {
 	}
 	defer rows.Close()
 	for rows.Next() {
-		var res business.MainPoint
+		var res business.Point
 		err := rows.Scan(&res.ID, &res.Active, &res.Long, &res.Lat, &res.Address,
 			&res.District, &res.NumberArc, &res.ArcType, &res.Carpet, &res.ChangeDate, &res.Comment,
 			&res.Appointed, &res.Deadline)
