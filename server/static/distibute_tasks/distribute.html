@@ -15,7 +15,15 @@
             <div class="row">
                 <div id="map" class="z-0 position-relative col-12 p-0" style="overflow: hidden;"></div>
                 <script src="static/distibute_tasks/set_map_size.js"></script>
-                <div class="z-1 position-absolute col-2 p-0">
+                <div class="z-1 position-absolute col-2 p-0 mt-2 ms-2">
+                    <div class="input-group">
+                        <span class="input-group-text">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                                <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
+                            </svg>
+                        </span>
+                        <input id="search" type="text" class="form-control" placeholder="Поиск по координатам">
+                    </div>
                     <button id="" type="button" class="btn">
                         <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" class="bi bi-pencil-fill" viewBox="0 0 16 16">
                             <path d="M12.854.146a.5.5 0 0 0-.707 0L10.5 1.793 14.207 5.5l1.647-1.646a.5.5 0 0 0 0-.708zm.646 6.061L9.793 2.5 3.293 9H3.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.207zm-7.468 7.468A.5.5 0 0 1 6 13.5V13h-.5a.5.5 0 0 1-.5-.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.5-.5V10h-.5a.5.5 0 0 1-.175-.032l-.179.178a.5.5 0 0 0-.11.168l-2 5a.5.5 0 0 0 .65.65l5-2a.5.5 0 0 0 .168-.11z"/>
@@ -31,14 +39,6 @@
                             <path d="M6 10.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5m-2-3a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5m-2-3a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5"/>
                         </svg>
                     </button>
-                    <div class="input-group">
-                        <span class="input-group-text">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
-                                <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
-                            </svg>
-                        </span>
-                        <input id="search" type="text" class="form-control" placeholder="Поиск по координатам">
-                    </div>
                 </div>
             </div>
         </div>
@@ -51,7 +51,166 @@
                 <button type="button" class="btn-close"
                 data-bs-dismiss="offcanvas" aria-label="Close"></button>
             </div>
-            <div id="" class="offcanvas-body"></div>
+            <div id="" class="offcanvas-body">
+                <h5>Количество ремонтов за период:</h5>
+                <div class="container">
+                    <div class="row">
+                        <div class="col-6">
+                            <label class="col-form-label">Начало периода:</label>
+                        </div>
+                        <div class="col-6">
+                            <input type="date" class="form-control">
+                        </div>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col-6">
+                            <label class="col-form-label">Конец периода:</label>
+                        </div>
+                        <div class="col-6">
+                            <input type="date" class="form-control">
+                        </div>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col-7">
+                            <label class="col-form-label">Количество ремонтов:</label>
+                        </div>
+                        <div class="col-5">
+                            <input type="number" class="form-control" min="0">
+                        </div>
+                    </div>
+                </div>
+                <h5 class="mt-3">Длительность отсутствия проверки:</h5>
+                <div class="container">
+                    <div class="row">
+                        <div class="col-7">
+                            <label class="col-form-label">Дней без проверки:</label>
+                        </div>
+                        <div class="col-5">
+                            <input type="number" class="form-control" min="0">
+                        </div>
+                    </div>
+                </div>
+                <h5 class="mt-3">Длительность отсутствия ремонта:</h5>
+                <div class="container">
+                    <div class="row">
+                        <div class="col-7">
+                            <label class="col-form-label">Дней без ремонта:</label>
+                        </div>
+                        <div class="col-5">
+                            <input type="number" class="form-control" min="0">
+                        </div>
+                    </div>
+                </div>
+                <h5 class="mt-3">Длительность простоя задач:</h5>
+                <div class="container">
+                    <div class="row">
+                        <div class="col-7">
+                            <label class="col-form-label">Дней без выполнения:</label>
+                        </div>
+                        <div class="col-5">
+                            <input type="number" class="form-control" min="0">
+                        </div>
+                    </div>
+                </div>
+
+                <h5 class="mt-3">Данные точки:</h5>
+                <div class="my-3">
+                    <label class="form-check-label" for="pd1">
+                        Включить деактивированные точки
+                    </label>
+                    <input id="pd1" class="form-check-input ms-2" type="checkbox">
+                </div>
+                <div class="container">
+                    <div class="row">
+                        <div class="col-7">
+                            <label class="col-form-label">Количество дуг:</label>
+                        </div>
+                        <div class="col-5">
+                            <input type="number" class="form-control" min="1">
+                        </div>
+                    </div>
+                </div>
+                <input id="pd3" type="checkbox" class="btn-check" autocomplete="off">
+                <label class="btn" for="pd3">Алюминиевая</label>
+                <input id="pd4" type="checkbox" class="btn-check" autocomplete="off">
+                <label class="btn" for="pd4">Металическая</label>
+                <input id="pd5" type="checkbox" class="btn-check" autocomplete="off">
+                <label class="btn" for="pd5">Асфальт</label>
+                <input id="pd6" type="checkbox" class="btn-check" autocomplete="off">
+                <label class="btn" for="pd6">Плитка</label>
+
+                <h5 class="mt-3">Статусы точек:</h5>
+                <input id="st1" type="checkbox" class="btn-check" autocomplete="off">
+                <label class="btn" for="st1">Точка доступна</label>
+                <input id="st2" type="checkbox" class="btn-check" autocomplete="off">
+                <label class="btn" for="st2">Временно невозможно проверить точку</label>
+                <input id="st3" type="checkbox" class="btn-check" autocomplete="off">
+                <label class="btn" for="st3">Идет благоустройство</label>
+                <input id="st4" type="checkbox" class="btn-check" autocomplete="off">
+                <label class="btn text-start" for="st4">
+                    Идет благоустройство - требуется забрать дуги
+                </label>
+                <input id="st5" type="checkbox" class="btn-check" autocomplete="off">
+                <label class="btn text-start" for="st5">
+                    Идет благоустройство - требуется демонтировать и забрать дуги
+                </label>
+                <input id="st6" type="checkbox" class="btn-check" autocomplete="off">
+                <label class="btn" for="st6">Точка является дублем</label>
+                <input id="st7" type="checkbox" class="btn-check" autocomplete="off">
+                <label class="btn text-start" for="st7">
+                    Невозможно установить дуги, необходимо деактивировать
+                </label>
+                <input id="st8" type="checkbox" class="btn-check" autocomplete="off">
+                <label class="btn" for="st8">Временно демонтирована</label>
+
+                <h5 class="mt-3">Виды задач:</h5>
+                <input id="ex1" type="checkbox" class="btn-check" autocomplete="off">
+                <label class="btn text-start" for="ex1">Временный демонтаж по разным причинам</label>
+                <input id="ex2" type="checkbox" class="btn-check" autocomplete="off">
+                <label class="btn" for="ex2">Благоустройство - Временный демонтаж</label>
+                <input id="ex3" type="checkbox" class="btn-check" autocomplete="off">
+                <label class="btn" for="ex3">Заделать отверстия</label>
+                
+                <input id="ex4" type="checkbox" class="btn-check" autocomplete="off">
+                <label class="btn" for="ex4">Снятие дуг в конце сезона</label>
+                <input id="ex5" type="checkbox" class="btn-check" autocomplete="off">
+                <label class="btn" for="ex5">Поставить дуги в начале сезона</label>
+                <input id="ex6" type="checkbox" class="btn-check" autocomplete="off">
+                <label class="btn" for="ex6">Частичный демонтаж</label>
+
+
+                <input id="ex7" type="checkbox" class="btn-check" autocomplete="off">
+                <label class="btn" for="ex7">Деактивация дуги</label>
+                <input id="ex8" type="checkbox" class="btn-check" autocomplete="off">
+                <label class="btn" for="ex8">Монтаж новой точки</label>
+                <input id="ex9" type="checkbox" class="btn-check" autocomplete="off">
+                <label class="btn" for="ex9">Монтаж старой точки</label>
+                <input id="ex10" type="checkbox" class="btn-check" autocomplete="off">
+                <label class="btn" for="ex10">Добавить дугу</label>
+                <input id="ex11" type="checkbox" class="btn-check" autocomplete="off">
+                <label class="btn" for="ex11">Убрать дугу</label>
+                <input id="ex12" type="checkbox" class="btn-check" autocomplete="off">
+                <label class="btn" for="ex12">Перенос точки</label>
+
+                <input id="ex13" type="checkbox" class="btn-check" autocomplete="off">
+                <label class="btn" for="ex13">Проинспектировать</label>
+                <input id="ex14" type="checkbox" class="btn-check" autocomplete="off">
+                <label class="btn" for="ex14">Произвести сервис</label>
+
+                <input id="ex15" type="checkbox" class="btn-check" autocomplete="off">
+                <label class="btn" for="ex15">Нанести разметку - Дорожная краска</label>
+                <input id="ex16" type="checkbox" class="btn-check" autocomplete="off">
+                <label class="btn" for="ex16">Нанести разметку - Термопластик</label>
+                <input id="ex17" type="checkbox" class="btn-check" autocomplete="off">
+                <label class="btn" for="ex17">Нанести разметку - Болончик</label>
+                <input id="ex18" type="checkbox" class="btn-check" autocomplete="off">
+                <label class="btn" for="ex18">Демаркировка</label>
+
+                <input id="ex19" type="checkbox" class="btn-check" autocomplete="off">
+                <label class="btn" for="ex19">Замена дуги на алюминиевую</label>
+                <input id="ex20" type="checkbox" class="btn-check" autocomplete="off">
+                <label class="btn" for="ex20">Сделать не свою дугу</label>
+            </div>
         </div>
         <div class="offcanvas offcanvas-end" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1" id="offcanvasTasks" aria-labelledby="offcanvasScrollingLabel">
             <div class="offcanvas-header">

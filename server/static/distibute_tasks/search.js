@@ -6,6 +6,7 @@ function search(event) {
     res = val.match(re);
     if (res.length == 2 && res.every((el) => el <= 180 && el >=-180)) {
         res = res.map((el) => Number(el));
+        res = res.reverse();
         event.currentTarget.classList.remove("is-invalid");
         if (userMarker !== null) {userMarker.destroy()};
         userMarker = new mapgl.Marker(map, {

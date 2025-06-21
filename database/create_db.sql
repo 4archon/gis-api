@@ -28,7 +28,10 @@ create table points (
     arc_type        varchar(30),
     carpet          varchar(30),
     change_date     timestamp,
-    comment         varchar(500)
+    comment         varchar(500),
+    status          varchar(100),
+    owner           varchar(100),
+    operator        varchar(100)
 );
 
 create table service (
@@ -36,7 +39,6 @@ create table service (
     point_id            integer         references points(id),
     user_id             integer[],
     appointment_date    timestamp,
-    deadline            timestamp,
     execution_date      timestamp,
     comment             varchar(500),
     status              varchar(100),
@@ -65,5 +67,9 @@ create table tasks (
     point_id        integer         references points(id),
     type            varchar(100),
     comment         varchar(500),
-    service_id      integer         references service(id)
+    service_id      integer         references service(id),
+    customer        varchar(100),
+    entry_date      timestamp,
+    deadline        timestamp,
+    done            boolean
 );
