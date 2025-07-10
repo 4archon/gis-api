@@ -1,6 +1,7 @@
 let tasks;
-let pointProfile = new bootstrap.Modal(document.getElementById("point-profile"), null);
 let selectPoint = new bootstrap.Modal(document.getElementById("select-point"), null);
+let pointProfile = new bootstrap.Modal(document.getElementById("point-profile"), null);
+let pointHistory = new bootstrap.Modal(document.getElementById("point-history"), null);
 
 
 function render_profile_info(profile) {
@@ -232,11 +233,9 @@ function showPointProfile(pointID) {
 function clusterClick(event) {
     if (event.target.type == "marker") {
         showPointProfile(event.target.data.id)
-        console.log("marker");
     } else {
         fillPointSelection(event.target.data);
         selectPoint.show();
-        console.log("cluster");
     }
 }
 
@@ -248,9 +247,7 @@ function fillPointSelection(points) {
         ${points.reduce((acc, el) => {
             return acc +=
             `
-            <div class="card mt-1
-            ${el.deadline !== null ? "text-bg-danger bg-gradient":""}"
-            data-id="${el.id}" onclick="pointSelected(event)">
+            <div class="card mt-1" data-id="${el.id}" onclick="pointSelected(event)">
                 <div class="card-body">
                     <h5>Внутренний id: ${el.id}, внешний id: ${el.externalID}</h5>
                     <p class="card-text">

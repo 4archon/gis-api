@@ -35,7 +35,8 @@ func (s Server) postPointRecentMedia(response http.ResponseWriter, req *http.Req
 		return
 	}
 
-	data.Medias = data.Medias[0:3]
+	// data.Medias = data.Medias[0:3]
+	data.Medias = recentMedia(data.Medias)
 
 	resutl, err := json.Marshal(data)
 	if err != nil {

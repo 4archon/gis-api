@@ -1,10 +1,12 @@
 let data;
 let gisKey;
 let map;
+let cluster;
+let filteredPoints;
 
 
 async function getPoinst() {
-    url = "/main"
+    url = "/distribute_tasks"
     response = await fetch(url, {
         method: "POST",
         cache: "no-cache",
@@ -25,14 +27,26 @@ function createMap() {
         style: "c080bb6a-8134-4993-93a1-5b4d8c36a59b"
     });
 
+    map.on("click", (event) => {
+        console.log(event.lngLat);
+    });
+
     fillPoints()
 }
 
 function fillPoints() {
-    data.forEach((element) => {
-        marker = new mapgl.Marker(map, element);
-        marker.userData = element;
+    cluster = new mapgl.Clusterer(map, {
+        radius: 60,
+        clusterStyle: {
+        icon: '/static/svg/cluster.svg',
+        labelColor: '#ffffff',
+        labelFontSize: 16,
+        }
     });
+
+    filteredPoints = data;
+    cluster.load(filteredPoints);
+    cluster.on("click", clusterClick);
 }
 
 getPoinst();

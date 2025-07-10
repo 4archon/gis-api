@@ -50,6 +50,9 @@ func (s Server) Run() {
 
 	router.HandleFunc("/employees", s.getUsers).Methods("GET")
 	router.HandleFunc("/employees", s.postUsers).Methods("POST")
+	router.HandleFunc("/create_new_user", s.postCreateNewUser).Methods("POST")
+	router.HandleFunc("/change_user", s.postChangeUser).Methods("POST")
+	router.HandleFunc("/change_user_profile", s.postChangeUserProfile).Methods("POST")
 
 	router.HandleFunc("/profile", s.getProfile).Methods("GET")
 	router.HandleFunc("/profile", s.postProfile).Methods("POST")
@@ -59,6 +62,9 @@ func (s Server) Run() {
 	router.HandleFunc("/current_tasks", s.postPointCurrentTasks).Methods("POST")
 
 	router.HandleFunc("/distribute_tasks", s.getDistributeTasks).Methods("GET")
+	router.HandleFunc("/distribute_tasks", s.postDistributeTasks).Methods("POST")
+	router.HandleFunc("/new_task", s.postApplyTaskToPoints).Methods("POST")
+	router.HandleFunc("/appoint", s.postAppointUsersToPoints).Methods("POST")
 	
 	router.HandleFunc("/analytics", s.getAnalytics).Methods("GET")
 	router.HandleFunc("/analytics", s.postAnalytics).Methods("POST")

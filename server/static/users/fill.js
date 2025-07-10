@@ -12,7 +12,7 @@ function renderCards(data) {
 let data;
 
 async function getUsers() {
-    url = "/employees"
+    let url = "/employees"
     response = await fetch(url, {
         method: "POST",
         cache: "no-cache",
@@ -49,12 +49,33 @@ function changeUserData(event) {
     element.name = document.getElementById("inputName").value;
     element.surname = document.getElementById("inputSurname").value;
     element.patronymic = document.getElementById("inputPatronymic").value;
-    element.tgID = document.getElementById("inputTgID").value;
-    renderCards(data);
-    dialog.hide();
+    element.tgID = Number(document.getElementById("inputTgID").value);
+    element.subgroup = document.getElementById("inputSubgroup").value;
+    element.trust = document.getElementById("inputTrust").value == "true" ? true : false;
+    console.log(element);
+
+    element["password"] = document.getElementById("inputPassword").value;
+    changeUserBackend(element).then(() => {
+        renderCards(data);
+        dialog.hide();
+    })
     // backend change user data
     // backend change password
-    document.getElementById("inputPassword").value;
+    
+}
+
+async function changeUserBackend(element) {
+    let url = "/change_user"
+    response = await fetch(url, {
+        method: "POST",
+        cache: "no-cache",
+        credentials: "same-origin",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(element)
+    })
+    res = await response;
 }
 
 function newUser() {
@@ -69,19 +90,38 @@ function newUser() {
 function createNewUser() {
     let element = {
         login: document.getElementById("inputLogin").value,
+        password: document.getElementById("inputPassword").value,
         role: document.getElementById("inputRole").value,
         active: document.getElementById("inputActive").value == "true" ? true : false,
         name: document.getElementById("inputName").value,
         surname: document.getElementById("inputSurname").value,
         patronymic: document.getElementById("inputPatronymic").value,
-        tgID: document.getElementById("inputTgID").value
+        tgID: Number(document.getElementById("inputTgID").value),
+        subgroup: document.getElementById("inputSubgroup").value,
+        trust: document.getElementById("inputTrust").value == "true" ? true : false
     }
-    data.unshift(element);
-    renderCards(data);
-    dialog.hide();
+    createNewUserBackend(element).then(() => {
+        data.unshift(element);
+        renderCards(data);
+        dialog.hide();
+    });
     // backend add new user data
     // backend new user password
-    document.getElementById("inputPassword").value;
+}
+
+async function createNewUserBackend(element) {
+    let url = "/create_new_user"
+    response = await fetch(url, {
+        method: "POST",
+        cache: "no-cache",
+        credentials: "same-origin",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(element)
+    })
+    res = await response.text();
+    element["id"] = Number(res);
 }
 
 document.getElementById("new-user-button").onclick = newUser;

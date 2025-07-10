@@ -1,4 +1,7 @@
-document.getElementById("draw_button").onclick = click_canvas;
+let polygons = [];
+
+document.getElementById("draw-select-points").onclick = click_canvas;
+
 
 var canvasOptions = {
     strokeStyle: '#33b859',
@@ -17,10 +20,8 @@ function simple(coordinates) {
     return coordinates;
 }
 
-polygons_list = [];
-
 function click_canvas() {
-    var canvas = document.querySelector('#draw-canvas');
+    var canvas = document.getElementById("draw-canvas");
     var ctx2d = canvas.getContext('2d');
     var drawing = false;
     var coordinates = [];
@@ -28,7 +29,7 @@ function click_canvas() {
     var rect = map.getContainer().getBoundingClientRect();
     canvas.style.width = rect.width + 'px';
     canvas.style.height = rect.height + 'px';
-    canvas.style.top = rect.top + 2 + 'px';
+    canvas.style.top = rect.top + 'px';
     canvas.width = rect.width;
     canvas.height = rect.height;
 
@@ -81,24 +82,20 @@ function click_canvas() {
             strokeColor: '#00AB00',
         });
 
-        polygons_list.push(polygon)
+        polygons.push(polygon)
 
-        markers_in = markers.filter((x) => {
+        let selectedPointsIDs = filteredPoints.filter((x) => {
             if (inside(x.coordinates, coordinates)) {
                 return x;
             }
-        });
-        id_in = markers_in.map((x) => {
-            return x.ID;
-        })
+        }).map((x) => x.id)
 
-        to_work_side_bar(id_in);
+        checkSelectedPointsIDs(selectedPointsIDs);
     }
 }
 
 function inside(point, vs) {
-    var x = point[0], y = point[1];
-    
+    var x = point[0], y = point[1];   
     var inside = false;
     for (var i = 0, j = vs.length - 1; i < vs.length; j = i++) {
         var xi = vs[i][0], yi = vs[i][1];
@@ -110,45 +107,14 @@ function inside(point, vs) {
     }
     
     return inside;
-};
+}
 
-work_list = [];
-
-async function to_work_side_bar(id_in) {
-    data_json = await getPoints(id_in);
-    parent = document.getElementById("list-work")
-    data_json.forEach(element => {
-        create_work(element, parent);
+function checkSelectedPointsIDs(selectedPointsIDs) {
+    selectedPointsIDs.forEach((id) => {
+        point = filteredPoints.find((el) => el.id == id);
+        if (!selectedPoints.includes(point)) {
+            selectedPoints.push(point)
+        }
     });
-
-    show_work_side();
-}
-
-function create_work(row_json, parent) {
-    new_li = document.createElement('li');
-    new_li.className = "list-group-item";
-    new_li.draggable = true;
-    tx = document.createTextNode("ID точки: " + row_json.id);
-    new_li.appendChild(tx);
-    parent.appendChild(new_li);
-    work_list.push(row_json.id)
-}
-
-document.getElementById("clear-list-work").onclick = clear_work;
-
-function clear_work() {
-    parent = document.getElementById("list-work");
-    parent.innerHTML = '';
-    work_list = [];
-    polygons_list.forEach((pol) => {
-        pol.destroy()
-    })
-}
-
-document.getElementById("show_work_side").onclick = show_work_side;
-
-function show_work_side() {
-    el = document.getElementById("offcanvasTasks");
-    off_canvas_tasks = new bootstrap.Offcanvas(el);
-    off_canvas_tasks.show();
+    render_selected_points();
 }

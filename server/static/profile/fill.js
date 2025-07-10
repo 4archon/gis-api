@@ -28,14 +28,32 @@ getProfile();
 document.getElementById("cancel").onclick = () => {window.history.back();}
 
 function changeProfile() {
-    document.getElementById("inputName").value;
-    document.getElementById("inputSurname").value;
-    document.getElementById("inputPatronymic").value;
-    document.getElementById("inputTgID").value;
+    element = {
+        name: document.getElementById("inputName").value,
+        surname: document.getElementById("inputSurname").value,
+        patronymic: document.getElementById("inputPatronymic").value,
+        tgID: Number(document.getElementById("inputTgID").value),
+        password: document.getElementById("inputPassword").value
+    };
+    changeProfileBackend(element).then(() => {
+        window.history.back();
+    })
     // backend change user data
-    document.getElementById("inputPassword").value;
     // backend change user password
-    window.history.back();
+}
+
+async function changeProfileBackend(element) {
+    url = "/change_user_profile"
+    response = await fetch(url, {
+        method: "POST",
+        cache: "no-cache",
+        credentials: "same-origin",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(element)
+    })
+    res = await response;
 }
 
 document.getElementById("save").onclick = changeProfile;

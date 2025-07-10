@@ -67,7 +67,8 @@ function render_report_tasks() {
                     <h5>Невозможно произвести работы</h5>
                 </div>
             </div>
-            `:
+            `
+            :
             tasks.reduce((acc, el) => {
             return acc +=
             `
@@ -197,7 +198,7 @@ function render_report_form() {
         if (selectedTasks.some((el) => el.type == "Невозможно произвести работы")) {
             result = 
             `
-            <h5>Выберете причины невозможности выполнения работ:</h5>
+            <h5>Выберите причины невозможности выполнения работ:</h5>
             <div id="report-data"/>
             `
             reportData = new_report_data("decline");

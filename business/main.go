@@ -16,8 +16,12 @@ type Point struct {
 	Carpet		*string			`json:"carpet"`
 	ChangeDate	*time.Time		`json:"changeDate"`
 	Comment		*string			`json:"comment"`
+	Status		*string			`json:"status"`
+	Owner		*string			`json:"owner"`
+	Operator	*string			`json:"operator"`
+	ExternalID	*string			`json:"externalID"`
 	Coordinates	[]*string		`json:"coordinates"`
-	Appointed	*bool			`json:"appointed"`
+	Appoint		[]int			`json:"appoint"`
 	Deadline	*time.Time		`json:"deadline"`
 }
 

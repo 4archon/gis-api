@@ -26,6 +26,11 @@ function render_card(element) {
                     ${element.active ? "Активный": "Деактивирован"}</li>
                     <li class="list-group-item">Telegram id:
                     ${element.tgID === null ? "не указан": element.tgID}</li>
+                    <li class="list-group-item">Группа:
+                    ${element.subgroup === null ? "не указана": 
+                        element.subgroup == "service" ? "Сервис":"Инспекция"}</li>
+                    <li class="list-group-item">Доверять сотруднику:
+                    ${element.trust === null ? "не указано": element.trust}</li>
                 </ul>
             </div>`
     return res;
@@ -64,6 +69,32 @@ function render_edit(element) {
                             </option>
                             <option value="${element.active ? "false": "true"}">
                             ${element.active ? "Деактивирован": "Активирован"}
+                            </option>
+                        </select>
+                    </div>
+                    <div class="col-6">
+                        <label for="inputSubgroup" class="form-label">Группа</label>
+                        <select id="inputSubgroup" class="form-select">
+                            <option 
+                            value="${element.subgroup == "inspection" ? "inspection": "service"}"
+                            selected>
+                            ${element.subgroup == "inspection" ? "Инспекция": "Сервис"}
+                            </option>
+                            <option 
+                            value="${element.subgroup == "inspection" ? "service": "inspection"}"
+                            >
+                            ${element.subgroup == "inspection" ? "Сервис": "Инспекция"}
+                            </option>
+                        </select>
+                    </div>
+                    <div class="col-6">
+                        <label for="inputTrust" class="form-label">Доверять сотруднику?</label>
+                        <select id="inputTrust" class="form-select">
+                            <option value="${element.trust ? "true": "false"}" selected>
+                            ${element.trust ? "Да": "Нет"}
+                            </option>
+                            <option value="${element.trust ? "false": "true"}">
+                            ${element.trust ? "Нет": "Да"}
                             </option>
                         </select>
                     </div>
@@ -119,6 +150,20 @@ function render_new_edit() {
                         <select id="inputActive" class="form-select">
                             <option value="true" selected>Активирован</option>
                             <option value="false">Деактивирован</option>
+                        </select>
+                    </div>
+                    <div class="col-6">
+                        <label for="inputSubgroup" class="form-label">Группа</label>
+                        <select id="inputSubgroup" class="form-select">
+                            <option value="service" selected>Сервис</option>
+                            <option value="inspection">Инспекция</option>
+                        </select>
+                    </div>
+                    <div class="col-6">
+                        <label for="inputTrust" class="form-label">Доверять сотруднику?</label>
+                        <select id="inputTrust" class="form-select">
+                            <option value="true" selected>Да</option>
+                            <option value="false">Нет</option>
                         </select>
                     </div>
                     <label class="form-label mt-5"><h4>Личные данные</h3></label>

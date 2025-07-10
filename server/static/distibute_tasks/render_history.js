@@ -1,5 +1,3 @@
-let pointHistory = new bootstrap.Modal(document.getElementById("point-history"), null);
-
 async function getHistory(id) {
     url = "/history"
     response = await fetch(url, {

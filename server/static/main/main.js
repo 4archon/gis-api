@@ -2,9 +2,11 @@ let data;
 let gisKey;
 let map;
 let notAppointedPoints = [];
+let appointedPoints = [];
 let shown = false;
-let pointProfile = new bootstrap.Modal(document.getElementById("point-profile"), null);
-let pointHistory = new bootstrap.Modal(document.getElementById("point-history"), null);
+let clusterAppointed;
+let clusterNotAppointed;
+
 let pointReport = new bootstrap.Modal(document.getElementById("point-report"), null);
 
 
@@ -35,42 +37,68 @@ function fillPoints() {
 
 function fillNotAppointedPoints() {
     data.forEach((element) => {
-        if (!element.appointed) {
+        if (element.appoint === null) {
             element["icon"] = `/static/svg/marker.svg`;
-            // element["anchor"] = [1, 1]; have to
-            marker = new mapgl.Marker(map, element);
-            marker.userData = element;
-            marker.on("click", pointClick);
-            marker.hide();
-            notAppointedPoints.push(marker);
+            element["anchor"] = [8, 8];
+            notAppointedPoints.push(element);
         }
     });
 }
 
 function fillAppointedPoints() {
     data.forEach((element) => {
-        if (element.appointed) {
+        if (element.appoint !== null) {
             if (element.deadline !== null) {
                 element["icon"] = `/static/svg/danger_marker.svg`;
                 element["anchor"] = [15, 46]
             }
-            marker = new mapgl.Marker(map, element);
-            marker.userData = element;
-            marker.on("click", pointClick);
+            appointedPoints.push(element);
         }
     });
+    showAppointedPoints();
+}
+
+function showAppointedPoints() {
+    clusterAppointed = new mapgl.Clusterer(map, {
+        radius: 60,
+        clusterStyle: clusterAppointedStyle
+    });
+    clusterAppointed.load(appointedPoints);
+    clusterAppointed.on("click", clusterClick);
+}
+
+function clusterAppointedStyle(pointsCount, target) {
+    let points = target.data;
+    if (points.some(el => el.deadline !== null)) {
+        return {
+            icon: '/static/svg/cluster_danger.svg',
+            labelColor: '#ffffff',
+            labelFontSize: 16,
+        }    
+    } else {
+        return {
+            icon: '/static/svg/cluster.svg',
+            labelColor: '#ffffff',
+            labelFontSize: 16,
+        }
+    }
 }
 
 function showNotAppointedPoints() {
     if (shown == false) {
-        notAppointedPoints.forEach((element) => {
-            element.show();
+        clusterNotAppointed = new mapgl.Clusterer(map, {
+            radius: 60,
+            clusterStyle: {
+                icon: '/static/svg/cluster_not_appointed.svg',
+                labelColor: '#ffffff',
+                labelFontSize: 16,
+            }
         });
+        clusterNotAppointed.load(notAppointedPoints);
+        clusterNotAppointed.on("click", clusterClick);
         shown = true;
     } else {
-        notAppointedPoints.forEach((element) => {
-            element.hide();
-        });
+        clusterNotAppointed.destroy();
         shown = false;
     }
 }

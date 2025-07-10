@@ -5,6 +5,7 @@ import (
 	"log"
 	"map/business"
 	"net/http"
+	"io"
 )
 
 
@@ -22,14 +23,18 @@ func (s Server) getDistributeTasks(response http.ResponseWriter, req *http.Reque
 }
 
 func (s Server) postDistributeTasks(response http.ResponseWriter, req *http.Request) {
-	id, _, err := s.checkUser(response, req)
+	_, role, err := s.checkUser(response, req)
 	if err != nil {
 		return
 	}
 
-	var data business.Main
+	if role != "admin" {
+		http.Redirect(response, req, "/main", http.StatusFound)
+	}
+
+	var data business.Distibute
 	data.GisKey = s.GisApi
-	data.Points, err = s.DB.GetDataForMain(id)
+	data.Points, err = s.DB.GetDataForDistribute()
 	if err != nil {
 		return
 	}
@@ -43,4 +48,68 @@ func (s Server) postDistributeTasks(response http.ResponseWriter, req *http.Requ
 	response.Header().Set("Content-Type", "applicaton/json")
 	response.WriteHeader(http.StatusOK)
 	response.Write(resutl)
+}
+
+func (s Server) postApplyTaskToPoints(response http.ResponseWriter, req *http.Request) {
+	_, role, err := s.checkUser(response, req)
+	if err != nil {
+		return
+	}
+
+	if role != "admin" {
+		http.Redirect(response, req, "/main", http.StatusFound)
+	}
+
+	defer req.Body.Close()
+	body, err := io.ReadAll(req.Body)
+	if err != nil {
+		log.Println(err);
+		return
+	}
+
+	var task business.ApplyTask
+	err = json.Unmarshal(body, &task)
+	if err != nil {
+		log.Println(err);
+		return
+	}
+
+	err = s.DB.NewTaskToPoints(task)
+	if err != nil {
+		return
+	}
+
+	response.WriteHeader(http.StatusOK)
+}
+
+func (s Server) postAppointUsersToPoints(response http.ResponseWriter, req *http.Request) {
+	_, role, err := s.checkUser(response, req)
+	if err != nil {
+		return
+	}
+
+	if role != "admin" {
+		http.Redirect(response, req, "/main", http.StatusFound)
+	}
+
+	defer req.Body.Close()
+	body, err := io.ReadAll(req.Body)
+	if err != nil {
+		log.Println(err);
+		return
+	}
+
+	var appoint business.Appoint
+	err = json.Unmarshal(body, &appoint)
+	if err != nil {
+		log.Println(err);
+		return
+	}
+
+	err = s.DB.AppointPointsToUsers(appoint)
+	if err != nil {
+		return
+	}
+
+	response.WriteHeader(http.StatusOK)
 }

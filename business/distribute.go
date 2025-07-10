@@ -16,14 +16,30 @@ type DistibutePoint struct {
 	Carpet		*string			`json:"carpet"`
 	ChangeDate	*time.Time		`json:"changeDate"`
 	Comment		*string			`json:"comment"`
-	Coordinates	[]*string		`json:"coordinates"`
-	Appointed	*bool			`json:"appointed"`
-	Deadline	*time.Time		`json:"deadline"`
 	Status		*string			`json:"status"`
+	Owner		*string			`json:"owner"`
+	Operator	*string			`json:"operator"`
+	ExternalID	*string			`json:"externalID"`
+	Coordinates	[]*string		`json:"coordinates"`
+	Deadline	*time.Time		`json:"deadline"`
 	Tasks		[]Task			`json:"tasks"`
 }
 
 type Distibute struct {
 	Points		[]DistibutePoint	`json:"points"`
 	GisKey		string				`json:"gisKey"`
+}
+
+
+type ApplyTask struct {
+	Task		*string			`json:"task"`
+	Customer	*string			`json:"customer"`
+	Deadline	*time.Time		`json:"deadline"`
+	Comment		*string			`json:"comment"`
+	Points		[]int			`json:"points"`
+}
+
+type Appoint struct {
+	Users		[]int			`json:"users"`
+	Points		[]int			`json:"points"`
 }
