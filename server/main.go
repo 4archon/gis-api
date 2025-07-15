@@ -33,6 +33,16 @@ func (s Server) postMain(response http.ResponseWriter, req *http.Request) {
 		return
 	}
 
+	data.Subgroup, err = s.DB.GetUserSubgroup(id)
+	if err != nil {
+		return
+	}
+
+	data.Trust, err = s.DB.GetUserTrust(id)
+	if err != nil {
+		return
+	}
+
 	resutl, err := json.Marshal(data)
 	if err != nil {
 		log.Println(err)

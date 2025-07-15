@@ -1,12 +1,31 @@
+let tasks;
+let appoint;
 let selectedTasks = [];
 let reportData = null;
 let reportPointID = null;
 
-function reportClick(event) {
+function filterTasks() {
+    if (tasks === null) {
+        return
+    }
+    if (userSubgroup == "inspection") {
+        tasks = tasks.filter((el) => el.type == "Проинспектировать");
+    } else if (userSubgroup == "service") {
+        tasks = tasks.filter((el) => el.type != "Проинспектировать");
+    }
+    if (tasks.length == 0) {
+        tasks = null;
+    }
+}
+
+async function reportClick(event) {
     let id = event.target.getAttribute("data-id");
     reportPointID = id;
     selectedTasks = [];
     reportData = null;
+    tasks = (await getCurrentTasks(id)).tasks;
+    filterTasks();
+    appoint = data.find((el) => el.id == id).appoint;
     render_report_header(id);
     render_report_tasks();
     render_report_footer(id, false);
@@ -27,16 +46,16 @@ function render_report_header(id) {
 }
 
 function render_report_footer(id, able) {
-    let cont = document.getElementById("point-report-footer");
+    let container = document.getElementById("point-report-footer");
     if (able) {
-        cont.innerHTML = 
+        container.innerHTML = 
         `
         <button data-id="${id}" type="button" class="btn btn-success" onclick="">
             Отправить отчёт
         </button>
         `
     } else {
-        cont.innerHTML = 
+        container.innerHTML = 
         `
         <button data-id="${id}" disabled type="button" class="btn btn-success" onclick="">
             Отправить отчёт
@@ -52,21 +71,33 @@ function render_report_tasks() {
     <div class="accordion accordion-flush">
         ${tasks === null ? 
             `
-            <div class="card mt-1" data-id="-1" onclick="taskClick(event)">
-                <div class="card-body">
-                    <h5>Проинспектировать</h5>
+            ${userSubgroup == "service" ? 
+                `
+                <div class="card mt-1" data-id="-2" onclick="taskClick(event)">
+                    <div class="card-body">
+                        <h5>Произвести сервис</h5>
+                    </div>
                 </div>
-            </div>
-            <div class="card mt-1" data-id="-2" onclick="taskClick(event)">
-                <div class="card-body">
-                    <h5>Произвести сервис</h5>
+                <div class="card mt-1" data-id="-3" onclick="taskClick(event)">
+                    <div class="card-body">
+                        <h5>Невозможно произвести работы</h5>
+                    </div>
                 </div>
-            </div>
-            <div class="card mt-1" data-id="-3" onclick="taskClick(event)">
-                <div class="card-body">
-                    <h5>Невозможно произвести работы</h5>
+                `
+                :
+                `
+                <div class="card mt-1" data-id="-1" onclick="taskClick(event)">
+                    <div class="card-body">
+                        <h5>Проинспектировать</h5>
+                    </div>
                 </div>
-            </div>
+                <div class="card mt-1" data-id="-3" onclick="taskClick(event)">
+                    <div class="card-body">
+                        <h5>Невозможно произвести работы</h5>
+                    </div>
+                </div>
+                `
+            }
             `
             :
             tasks.reduce((acc, el) => {
@@ -100,33 +131,37 @@ function render_report_tasks() {
 
 function findTask(id) {
     let task;
-    if (id == -1) {
+    switch(Number(id)) {
+    case -1:
         task = {
             id: id,
             type: "Проинспектировать",
             comment: null
-        }
-    } else if (id == -2) {
+        };
+        break;
+    case -2:
         task = {
             id: id,
             type: "Произвести сервис",
             comment: null
-        }
-    } else if (id == -3) {
+        };
+        break;
+    case -3:
         task = {
             id: id,
             type: "Невозможно произвести работы"
-        }
-    } 
-    else {
+        };
+        break;
+    default:
         task = tasks.find((element) => element.id == id);
+        break;
     }
     return task
 }
 
 function taskClick(event) {
-    target = event.currentTarget;
-    id = target.getAttribute("data-id");
+    let target = event.currentTarget;
+    let id = target.getAttribute("data-id");
     let task = findTask(id);
     task["target"] = target;
     let found = selectedTasks.find((element) => element.id == task.id);
@@ -218,8 +253,8 @@ function render_report_form() {
             `
             reportData = new_report_data("inspection");
         }
-    form.innerHTML = result;
-    render_data_to_form();
+        form.innerHTML = result;
+        render_data_to_form();
     }
 }
 
@@ -481,7 +516,24 @@ function render_service_to_form() {
     let container = document.getElementById("report-data");
     container.innerHTML = reportData.data === null ? ``:
     `
-
+    <div class="container">
+        <div class="row">
+            ${reportData.data.reduce((acc, el) => {
+                return acc += 
+                `
+                <div class="card mt-1 col-lg-6 col-12">
+                    <div class="card-body row">
+                        <h6 class="col-4 align-self-center m-0">${el.type}</h6>
+                        <label class="col-form-label col-5 text-end">Количество:</label>
+                        <div class="col-3 p-0">
+                            <input type="number" class="form-control" min="0">
+                        </div>
+                    </div>
+                </div>
+                `
+            }, "")}
+        </div>
+    </div>
     `
     render_add_button_to_form();
     container.innerHTML += reportData.carry === null ? 
@@ -564,10 +616,12 @@ function render_add_button_to_form() {
                         <button class="btn btn-outline-secondary" type="button"
                         onclick="add_new_unit()">Добавить</button>
                         <select id="unit-selector" class="form-select">
-                            <option value="dismantling" selected>Демотнаж</option>
-                            <option value="mounting">Монтаж</option>
-                            <option value="dyeing">Покраска</option>
-                            <option value="marking">Нанесение разметки</option>
+                            <option value="Демотнаж" selected>Демотнаж</option>
+                            <option value="Монтаж">Монтаж</option>
+                            <option value="Покраска">Покраска</option>
+                            <option value="Нанесение разметки">Нанесение разметки</option>
+                            <option value="Частичное нанесение">Частичное нанесение</option>
+                            <option value="Демаркировка">Демаркировка</option>
                         </select>
                     </div>
                 </div>
@@ -584,10 +638,10 @@ function render_add_button_to_form() {
                         <button class="btn btn-outline-secondary" type="button"
                         onclick="add_new_unit()">Добавить</button>
                         <select id="unit-selector" class="form-select">
-                            <option value="dismantling" selected>Демотнаж-монтаж</option>
-                            <option value="mounting">Монтаж</option>
-                            <option value="dyeing">Покраска</option>
-                            <option value="marking">Исправить разметку</option>
+                            <option value="Демотнаж-монтаж" selected>Демотнаж-монтаж</option>
+                            <option value="Монтаж">Монтаж</option>
+                            <option value="Покраска">Покраска</option>
+                            <option value="Частичное нанесение">Частичное нанесение</option>
                         </select>
                     </div>
                 </div>
@@ -602,48 +656,11 @@ function render_add_button_to_form() {
 
 function add_new_unit() {
     let val = document.getElementById("unit-selector").value;
-    if (reportData.type == "service") {
-        if (reportData.data === null) {reportData.data = []}
-        if (val == "dismantling") {
-            reportData.data.push({
-                type: "dismantling"
-
-            });
-        } else if (val == "mounting") {
-            reportData.data.push({
-                type: "mounting"
-            });
-        } else if (val == "dyeing") {
-            reportData.data.push({
-                type: "dyeing"
-            });
-        } else {
-            reportData.data.push({
-                type: "marking"
-            });
-        }
-    } else if (reportData.type == "inspection") {
-        if (reportData.data === null) {reportData.data = []}
-        if (val == "dismantling") {
-            reportData.data.push({
-                type: "dismantling"
-            });
-        } else if (val == "mounting") {
-            reportData.data.push({
-                type: "mounting"
-            });
-        } else if (val == "dyeing") {
-            reportData.data.push({
-                type: "dyeing",
-                yourself: null
-            });
-        } else {
-            reportData.data.push({
-                type: "marking"
-            });
-        }
-    }
-    console.log(reportData);
+    if (reportData.data === null) {reportData.data = []}
+    reportData.data.push({
+        type: val,
+        count: 0
+    });
     render_data_to_form();
 }
 

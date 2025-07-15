@@ -17,7 +17,7 @@ async function getHistory(id) {
 
 async function historyClick(event) {
     let id = event.target.getAttribute("data-id");
-    data = await getHistory(id);
+    let data = await getHistory(id);
     console.log(data);
     render_history_header(data);
     render_history_body(data);
@@ -43,7 +43,7 @@ function render_history_body(data) {
         <div class="card">
             <div class="card-header">
                 Сервис номер: ${element.id}
-                ${element.sent != false ? "": 
+                ${element.sent != false ? "":
                 `<span class="badge text-bg-primary" style="font-size: 11pt;">
                 В работе</span>`}
             </div>
@@ -64,11 +64,7 @@ function render_history_body(data) {
                     ${element.execution === null ? "Не указано": 
                     new Date(element.execution).toLocaleDateString()}
                     </li>
-                    <li class="list-group-item">Дедлайн: 
-                    ${element.deadline === null ? "Без дедлайна": 
-                    new Date(element.deadline).toLocaleDateString()}
-                    </li>
-                    <li class="list-group-item">Статус: 
+                    <li class="list-group-item">Статус:
                     ${element.status === null ? "Не указан": element.status}</li>
                     <li class="list-group-item">Комментарий: 
                     ${element.comment === null || element.comment == "" ?
@@ -93,7 +89,15 @@ function render_history_body(data) {
                             </h2>
                             <div id="task${el.id}" class="accordion-collapse collapse">
                                 <div class="accordion-body">
-                                ${el.comment === null ? "Нет комменатария": el.comment}</div>
+                                    <span class="badge text-bg-danger">
+                                        ${el.deadline === null ? "Без дедлайна":el.deadline}
+                                    </span>
+                                    <span class="badge text-bg-danger">
+                                        ${el.customer === null ? "Заказчик не указан":el.customer}
+                                    </span>
+                                    <br>
+                                    ${el.comment === null ? "Нет комменатария": el.comment}
+                                </div>
                             </div>
                         </div>
                         `

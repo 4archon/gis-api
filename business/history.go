@@ -9,7 +9,6 @@ type StoryPoint struct {
 	ID			int				`json:"id"`
 	UserIDs		[]string		`json:"userIDs"`
 	UserLogins	[]string		`json:"userLogins"`
-	Deadline	*time.Time		`json:"deadline"`
 	Execution	*time.Time		`json:"execution"`
 	Comment		*string			`json:"comment"`
 	Status		*string			`json:"status"`

@@ -14,6 +14,7 @@ type DB interface {
 	GetUsersInfo() (business.UsersInfo, error)
 	GetUserInfo(id int) (business.UserInfo, error)
 	GetUserSubgroup(id int) (string, error)
+	GetUserTrust(id int) (bool, error)
 	
 	GetPointsForAnalytics() ([]business.AnalyticsPoint, error)
 

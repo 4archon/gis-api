@@ -28,4 +28,6 @@ type Point struct {
 type Main struct {
 	Points		[]Point				`json:"points"`
 	GisKey		string				`json:"gisKey"`
+	Subgroup	string				`json:"subgroup"`
+	Trust		bool				`json:"trust"`
 }

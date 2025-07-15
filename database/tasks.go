@@ -9,8 +9,9 @@ func (p *PostgresDB) GetPointCurrentTasks(id int) (business.Tasks, error) {
 	var result business.Tasks
 	result.PointID = id
 
-	rows, err := p.db.Query(`select id, type, comment
-	from tasks where point_id = $1 and service_id is null`, id)
+	rows, err := p.db.Query(`select id, type, comment, customer,
+	entry_date, deadline
+	from tasks where point_id = $1 and (done is null or done is false)`, id)
 	if err != nil {
 		log.Println(err)
 		return result, err
@@ -18,7 +19,8 @@ func (p *PostgresDB) GetPointCurrentTasks(id int) (business.Tasks, error) {
 	defer rows.Close()
 	for rows.Next() {
 		var res business.Task
-		err := rows.Scan(&res.ID, &res.Type, &res.Comment)
+		err := rows.Scan(&res.ID, &res.Type, &res.Comment, &res.Customer,
+		&res.EntryDate, &res.Deadline)
 		if err != nil {
 			log.Println(err)
 			return result, err

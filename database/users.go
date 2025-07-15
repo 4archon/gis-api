@@ -149,13 +149,31 @@ func (p *PostgresDB) ChangeUserProfile(user business.User) error {
 }
 
 func (p *PostgresDB) GetUserSubgroup(id int) (string, error) {
-	var result string
+	var result *string
 	row := p.db.QueryRow(`select subgroup from users where id = $1`, id)
 	err := row.Scan(&result)
 	if err != nil {
 		log.Println(err)
 		return "", err
 	}
+	if result == nil {
+		return "", nil
+	}
 
-	return result, nil
+	return *result, nil
+}
+
+func (p *PostgresDB) GetUserTrust(id int) (bool, error) {
+	var result *bool
+	row := p.db.QueryRow(`select trust from users where id = $1`, id)
+	err := row.Scan(&result)
+	if err != nil {
+		log.Println(err)
+		return false, err
+	}
+	if result == nil {
+		return false, nil
+	}
+
+	return *result, nil
 }

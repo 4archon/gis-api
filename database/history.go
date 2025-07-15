@@ -34,7 +34,7 @@ func (p *PostgresDB) GetPointHistory(id int) (business.History, error) {
 		}
 	}
 
-	rows, err := p.db.Query(`select id, user_id, deadline, execution_date,
+	rows, err := p.db.Query(`select id, user_id, execution_date,
 	comment, status, sent 
 	from service where point_id = $1 order by execution_date desc`, id)
 	if err != nil {
@@ -45,7 +45,7 @@ func (p *PostgresDB) GetPointHistory(id int) (business.History, error) {
 	for rows.Next() {
 		var res business.StoryPoint
 		var storyID int
-		err := rows.Scan(&storyID, pq.Array(&res.UserIDs), &res.Deadline, &res.Execution,
+		err := rows.Scan(&storyID, pq.Array(&res.UserIDs), &res.Execution,
 			&res.Comment, &res.Status, &res.Sent)
 		if err != nil {
 			log.Println(err)
@@ -79,7 +79,8 @@ func (p *PostgresDB) GetPointHistory(id int) (business.History, error) {
 		storage[storyID].Works = append(storage[storyID].Works, res)
 	}
 
-	rows4, err := p.db.Query(`select s.id, t.id, type, t.comment 
+	rows4, err := p.db.Query(`select s.id, t.id, type, t.comment,
+	t.customer, t.entry_date, t.deadline, t.done 
 	from service s inner join tasks t on s.id = t.service_id
 	where s.point_id = $1`, id)
 	if err != nil {
@@ -90,7 +91,8 @@ func (p *PostgresDB) GetPointHistory(id int) (business.History, error) {
 	for rows4.Next() {
 		var res business.Task
 		var storyID int
-		err := rows4.Scan(&storyID, &res.ID, &res.Type, &res.Comment)
+		err := rows4.Scan(&storyID, &res.ID, &res.Type, &res.Comment,
+		&res.Customer, &res.EntryDate, &res.Deadline, &res.Done)
 		if err != nil {
 			log.Println(err)
 			return result, err

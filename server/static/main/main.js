@@ -6,6 +6,8 @@ let appointedPoints = [];
 let shown = false;
 let clusterAppointed;
 let clusterNotAppointed;
+let userSubgroup;
+let userTrust;
 
 let pointReport = new bootstrap.Modal(document.getElementById("point-report"), null);
 
@@ -20,6 +22,11 @@ async function getPoinst() {
     res = await response.json();
     data = res.points;
     gisKey = res.gisKey;
+    userSubgroup = res.subgroup;
+    userTrust = res.trust;
+    console.log(userSubgroup);
+    console.log(userTrust);
+    
     fillPoints();
 }
 
@@ -37,7 +44,7 @@ function fillPoints() {
 
 function fillNotAppointedPoints() {
     data.forEach((element) => {
-        if (element.appoint === null) {
+        if (element.appoint === null && element.owner == "yandex") {
             element["icon"] = `/static/svg/marker.svg`;
             element["anchor"] = [8, 8];
             notAppointedPoints.push(element);

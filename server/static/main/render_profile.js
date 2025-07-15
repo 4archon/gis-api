@@ -1,14 +1,10 @@
-let tasks;
 let pointProfile = new bootstrap.Modal(document.getElementById("point-profile"), null);
 let selectPoint = new bootstrap.Modal(document.getElementById("select-point"), null);
 
 
 function render_profile_info(profile) {
     result = `
-    <h5 class="mt-2">Данные точки:
-    <button data-id="${profile.id}" onclick="historyClick(event)"
-    type="button" class="btn btn-info btn-sm">История точки</button>
-    </h5>
+    <h5 class="mt-2">Данные точки:</h5>
     <div class="card-body">
         <ul class="list-group list-group-flush">
             <li class="list-group-item">Статус:
@@ -16,17 +12,25 @@ function render_profile_info(profile) {
             <li class="list-group-item">Адрес:
             ${profile.address === null ? "Не указано" : profile.address}</li>
             <li class="list-group-item">Округ:
-            ${profile.district === null ? "Не указано" : profile.district}</li>
+            ${profile.district === null || profile.district === "" ? 
+                "Не указано" : profile.district}</li>
             <li class="list-group-item">Координаты:
             ${profile.coordinates}</li>
             <li class="list-group-item">Количество дуг:
             ${profile.numberArc === null ? "Не указано" : profile.numberArc}</li>
             <li class="list-group-item">Тип дуги:
-            ${profile.arcType === null ? "Не указано" : profile.arcType}</li>
+            ${profile.arcType === null || profile.arcType === "" ?
+                "Не указано" : profile.arcType}</li>
             <li class="list-group-item">Покрытие:
-            ${profile.carpet === null ? "Не указано" : profile.carpet}</li>
+            ${profile.carpet === null || profile.carpet === "" ?
+                "Не указано" : profile.carpet}</li>
+            <li class="list-group-item">Владелец:
+            ${profile.owner === null ? "Не указано" : profile.owner}</li>
+            <li class="list-group-item">Покрытие:
+            ${profile.operator === null ? "Не указано" : profile.operator}</li>
             <li class="list-group-item">Дата последних изменений данных:
-            ${profile.changeDate === null ? "Не указано" : new Date(profile.changeDate).toLocaleDateString()}</li>
+            ${profile.changeDate === null ? "Не указано" :
+                new Date(profile.changeDate).toLocaleDateString()}</li>
         </ul>
     </div>
     <h5 class="mt-2">Недавние материалы:</h5>
@@ -93,9 +97,10 @@ function render_profile_header(profile) {
     result = `
     <h1 class="modal-title fs-5">Профиль точки 
     <span class="badge text-bg-primary">${profile.id}</span>
-    <span class="badge text-bg-danger">
-    ${profile.deadline === null ? "Без дедлайна" : 
-        new Date(profile.deadline).toLocaleDateString()}</span>
+    <span class="badge text-bg-primary"
+    data-id="${profile.id}" onclick="historyClick(event)">
+        История точки
+    </span>
     </h1>
     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>`
     
@@ -113,13 +118,12 @@ async function getCurrentTasks(id) {
         },
         body: id
     })
-    res = await response.json();
-    tasks = res.tasks;
+    let res = await response.json();
     return res;
 }
 
-function sort_works(data) {
-    targetWorks = [];
+function filterWorks(data) {
+    let targetWorks = [];
     if (data.works !== null) {
         data.works.forEach((element) => {
             let found = targetWorks.find((el) => el.work == element.work);
@@ -141,10 +145,26 @@ function sort_works(data) {
     return targetWorks;
 }
 
+function filterProfileTasks(tasks) {
+    if (tasks === null) {
+        return tasks
+    }
+    if (userSubgroup == "inspection") {
+        tasks = tasks.filter((el) => el.type == "Проинспектировать");
+    } else if (userSubgroup == "service") {
+        tasks = tasks.filter((el) => el.type != "Проинспектировать");
+    }
+    if (tasks.length == 0) {
+        return null
+    }
+    return tasks;
+}
+
 async function render_profile_tasks(id) {
     let data = await getCurrentTasks(id);
     // console.log(data);
-    data.works = sort_works(data);
+    data.works = filterWorks(data);
+    data.tasks = filterProfileTasks(data.tasks);
     let result = data === null ? "": 
     `
     <h5 class="">Задачи:</h5>
@@ -152,24 +172,28 @@ async function render_profile_tasks(id) {
         ${data.tasks === null ? 
             `
             <ul class="list-group list-group-flush">
-            <li class="list-group-item">Задачи не выставлены</li>
+                <li class="list-group-item">Задачи не выставлены</li>
             </ul>
             `:
             data.tasks.reduce((acc, el) => {
+            if (userSubgroup == "inspection" && el.type != "Проинспектировать") {
+                return acc;
+            } else if (userSubgroup == "service" && el.type == "Проинспектировать") {
+                return acc;
+            }
             return acc +=
             `
-            <div class="accordion-item">
-                <h2 class="accordion-header">
-                    <button class="accordion-button collapsed" type="button"
-                    data-bs-toggle="collapse"
-                    data-bs-target="#task${el.id}" aria-expanded="false"
-                    aria-controls="task${el.id}">
+            <div class="card mt-1">
+                <div class="card-body">
+                    <h5>
                         ${el.type}
-                    </button>
-                </h2>
-                <div id="task${el.id}" class="accordion-collapse collapse">
-                    <div class="accordion-body">
-                    ${el.comment === null ? "Нет комменатария": el.comment}</div>
+                        <span class="badge text-bg-danger">
+                            ${el.deadline === null ? "Без дедлайна":
+                                new Date(el.deadline).toLocaleDateString()}
+                        </span>
+                    </h5>
+                    ${el.comment === null || el.comment == "" ? "":
+                        `<p class="card-text">Комментарий: ${el.comment}</p>`}
                 </div>
             </div>
             `
@@ -177,7 +201,13 @@ async function render_profile_tasks(id) {
     </div>
     <h5 class="mt-2">Результаты инспекции:</h5>
     <ul class="list-group list-group-flush">
-        ${data.works === null ? "Нет релевантных данных по инспекции":
+        ${data.works === null || data.works.length == 0 ?
+            `
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item">Нет релевантных данных по инспекции</li>
+            </ul>
+            `
+            :
             data.works.reduce((acc, el) => {
             return acc +=
             `
@@ -197,7 +227,7 @@ async function render_profile_tasks(id) {
 
 function render_profile_footer(data) {
     let cont = document.getElementById("point-profile-footer")
-    if (data.appointed) {
+    if (data.appoint || userTrust) {
         cont.innerHTML = `
         <button data-id="${data.id}" type="button" class="btn btn-primary" onclick="reportClick(event)">
             Отправить отчёт
@@ -232,11 +262,9 @@ function showPointProfile(pointID) {
 function clusterClick(event) {
     if (event.target.type == "marker") {
         showPointProfile(event.target.data.id)
-        console.log("marker");
     } else {
         fillPointSelection(event.target.data);
         selectPoint.show();
-        console.log("cluster");
     }
 }
 
