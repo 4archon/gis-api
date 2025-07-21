@@ -23,6 +23,14 @@ type Point struct {
 	Coordinates	[]*string		`json:"coordinates"`
 	Appoint		[]int			`json:"appoint"`
 	Deadline	*time.Time		`json:"deadline"`
+	Marks		[]Mark			`json:"marks"`
+}
+
+type Mark struct {
+	ID			int				`json:"id"`
+	Number		*string			`json:"number"`
+	Type		*string			`json:"type"`
+	Active		*bool			`json:"active"`
 }
 
 type Main struct {

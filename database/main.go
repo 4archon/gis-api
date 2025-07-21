@@ -119,5 +119,24 @@ func (p *PostgresDB) GetDataForMain(id int) ([]business.Point, error) {
 		storage[pointID].Appoint = append(storage[pointID].Appoint, serviceID)
 	}
 
+	rows4, err := p.db.Query(`select point_id, id, number, type, active from markings
+	where active is true`)
+	if err != nil {
+		log.Println(err)
+		return result, err
+	}
+	defer rows4.Close()
+	for rows4.Next() {
+		var res business.Mark
+		var pointID int
+		err := rows4.Scan(&pointID, &res.ID, &res.Number, &res.Type, &res.Active)
+		if err != nil {
+			log.Println(err)
+			return result, err
+		}
+
+		storage[pointID].Marks = append(storage[pointID].Marks, res)
+	}
+
 	return result, nil
 }

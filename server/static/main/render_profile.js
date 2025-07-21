@@ -26,14 +26,13 @@ function render_profile_info(profile) {
                 "Не указано" : profile.carpet}</li>
             <li class="list-group-item">Владелец:
             ${profile.owner === null ? "Не указано" : profile.owner}</li>
-            <li class="list-group-item">Покрытие:
+            <li class="list-group-item">Оператор:
             ${profile.operator === null ? "Не указано" : profile.operator}</li>
             <li class="list-group-item">Дата последних изменений данных:
             ${profile.changeDate === null ? "Не указано" :
                 new Date(profile.changeDate).toLocaleDateString()}</li>
         </ul>
     </div>
-    <h5 class="mt-2">Недавние материалы:</h5>
     `
 
     let body = document.getElementById("point-profile-body");
@@ -59,7 +58,11 @@ async function render_profile_media(id) {
     let conteiner = document.createElement("div");
     conteiner.className = "row mt-3"
     let medias = await getRecentMedia(id);
-    let result = ``;
+    if (medias.medias === null) {
+        let result = `<h5 class="mt-2">Недавние материалы:</h5>`; 
+    } else {
+        let result = ``;
+    }
     medias.medias.forEach((element) => {
         let res;
         if (element.type == "mov") {
@@ -238,10 +241,30 @@ function render_profile_footer(data) {
     }
 }
 
+function render_profile_marking(data) {
+    let result = `<h5 class="mt-2">Разметка:</h5>`;
+    if (data.marks !== null) {
+        result += data.marks.reduce((acc, el) => {
+            return acc + 
+            `
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item">
+                ${el.type}
+                <span class="badge text-bg-primary">${el.number}</span>
+                </li>
+            </ul>
+            `
+        }, "");
+        let body = document.getElementById("point-profile-body");
+        body.innerHTML += result;
+    }
+}
+
 function showPointProfile(pointID) {
     let point = data.find((el) => el.id == pointID);
     render_profile_header(point);
     render_profile_info(point);
+    render_profile_marking(point);
     render_profile_footer(point);
     let body = document.getElementById("point-profile-body");
     render_profile_tasks(point.id);

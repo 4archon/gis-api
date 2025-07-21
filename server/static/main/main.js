@@ -24,8 +24,7 @@ async function getPoinst() {
     gisKey = res.gisKey;
     userSubgroup = res.subgroup;
     userTrust = res.trust;
-    console.log(userSubgroup);
-    console.log(userTrust);
+    console.log(data);
     
     fillPoints();
 }
