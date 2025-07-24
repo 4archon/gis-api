@@ -50,14 +50,14 @@ function render_report_footer(able) {
     if (able) {
         container.innerHTML = 
         `
-        <button type="button" class="btn btn-success" onclick="">
+        <button type="button" class="btn btn-success" onclick="sendReport(event)">
             Отправить отчёт
         </button>
         `
     } else {
         container.innerHTML = 
         `
-        <button disabled type="button" class="btn btn-success" onclick="">
+        <button disabled type="button" class="btn btn-success">
             Отправить отчёт
         </button>
         `
@@ -213,11 +213,12 @@ function new_report_data(type) {
     } else if (type == "service") {
         return {
             type: "service",
+            data: null,
             carry: null,
             newLocation: null,
-            data: null,
             left: null,
-            comment: null
+            comment: null,
+            notRequire: false
         }
     } else if (type == "inspection") {
         return {
@@ -225,7 +226,8 @@ function new_report_data(type) {
             data: null,
             yourself: null,
             paintCount: null,
-            comment: null
+            comment: null,
+            notRequire: false
         }
     }
 }
@@ -276,22 +278,40 @@ function render_data_to_form() {
     render_report_footer(false);
     let valid = validateForm();
     if (valid) {
-        console.log(valid);
+        // console.log(valid);
         render_load_media();
     }
-    // console.log(valid);
 }
 
 function validateForm() {
-    if (reportData.type == "service" && 
-        reportData.data !== null && reportData.data.length > 0 && 
-        reportData.left !== null && reportData.carry !== null) {
-        if (reportData.carry) {
-            if(reportData.newLocation !== null) {
-                return true;    
+    if (reportData.type == "service") {
+        if (reportData.data !== null && reportData.data.length > 0) {
+            if (reportData.left !== null && reportData.carry !== null
+                && !reportData.notRequire) {
+                if (reportData.carry) {
+                    if(reportData.newLocation !== null &&
+                        reportData.data.some((el) => el.type == "Демонтаж") &&
+                        reportData.data.some((el) => el.type == "Монтаж")) {
+                        if (reportData.left === false) {
+                            return true
+                        } else {
+                            if (reportData.left !== null && reportData.left.length > 0) {
+                                return true;
+                            }
+                        }
+                    }
+                } else {
+                    if (reportData.left === false) {
+                        return true
+                    } else {
+                        if (reportData.left !== null && reportData.left.length > 0) {
+                            return true;
+                        }
+                    }
+                }
+            } else if (reportData.notRequire) {
+                return true;
             }
-        } else {
-            return true;
         }
     } else if (reportData.type == "decline" && reportData.reason !== null) {
         if (reportData.reason == "Идет благоустройство - требуется забрать дуги" ||
@@ -306,6 +326,16 @@ function validateForm() {
         } else {
             return true;
         }
+    } else if (reportData.type == "inspection" && 
+        reportData.data !== null && reportData.data.length > 0) {
+        if (reportData.data.some((el) => el.type == "Покраска")) {
+            if (reportData.yourself !== null && reportData.count !== null) {
+                return true;
+            }
+        } else {
+            return true;
+        }
+
     }
     return false;
 }
@@ -651,6 +681,8 @@ function render_service_to_form() {
     </div>
     `
     render_add_button_to_form();
+    if (!reportData.notRequire) {
+    // плохой перенос строки
     container.innerHTML += reportData.carry === null ? 
     `
     <h5>Был ли перенос точки?</h5>
@@ -789,6 +821,7 @@ function render_service_to_form() {
         `
         render_service_letf_add_button();
     }
+    }
     container.innerHTML +=
     `
     <h5 class="mt-1">Оставить комментарий</h5>
@@ -813,7 +846,6 @@ function carry_changed(event) {
 
 function left_work_changed(event) {
     let id = event.currentTarget.id;
-    reportData.newLocation = null;
     switch(id) {
         case "left-button-yes":
             reportData.left = [];
@@ -840,7 +872,7 @@ function render_add_button_to_form() {
                         <button class="btn btn-outline-secondary" type="button"
                         onclick="add_new_unit()">Добавить</button>
                         <select id="unit-selector" class="form-select">
-                            <option value="Демотнаж" selected>Демотнаж</option>
+                            <option value="Демонтаж" selected>Демонтаж</option>
                             <option value="Монтаж">Монтаж</option>
                             <option value="Покраска">Покраска</option>
                             <option value="Нанесение разметки">Нанесение разметки</option>
@@ -856,14 +888,14 @@ function render_add_button_to_form() {
     } else if (reportData.type == "inspection") {
         result = 
         `
-        <div class="container mt-4">
+        <div class="container my-2">
             <div class="row">
                 <div class="col-12 col-sm-6">
                     <div class="input-group">
                         <button class="btn btn-outline-secondary" type="button"
                         onclick="add_new_unit()">Добавить</button>
                         <select id="unit-selector" class="form-select">
-                            <option value="Демотнаж-монтаж" selected>Демотнаж-монтаж</option>
+                            <option value="Демонтаж-монтаж" selected>Демонтаж-монтаж</option>
                             <option value="Монтаж">Монтаж</option>
                             <option value="Покраска">Покраска</option>
                             <option value="Частичное нанесение">Частичное нанесение</option>
@@ -884,7 +916,10 @@ function add_new_unit() {
     let val = document.getElementById("unit-selector").value;
     if (reportData.data === null) {reportData.data = []}
     if (val == "Работа не требуется") {
+        reportData = new_report_data(reportData.type);
         reportData.data = [];
+        reportData.notRequire = true;
+        // bag with further form
     }
     if (reportData.data.some((el) => el.type == val && val != "Нанесение разметки")) {
          return
@@ -911,7 +946,7 @@ function render_service_letf_add_button() {
                         <button class="btn btn-outline-secondary" type="button"
                         onclick="add_new_left()">Добавить</button>
                         <select id="left-selector" class="form-select">
-                            <option value="Демотнаж-монтаж" selected>Демотнаж-монтаж</option>
+                            <option value="Демонтаж-монтаж" selected>Демонтаж-монтаж</option>
                             <option value="Монтаж">Монтаж</option>
                             <option value="Покраска">Покраска</option>
                             <option value="Частичное нанесение">Частичное нанесение</option>
@@ -958,6 +993,9 @@ function changeLeftWorkCounter(event) {
 
 function deleteWork(event) {
     let index = Number(event.currentTarget.getAttribute("data-index"));
+    if (reportData.data[index].type == "Работа не требуется") {
+        reportData.notRequire = false;
+    }
     reportData.data.splice(index, 1);
     render_data_to_form();
 }
@@ -1043,6 +1081,12 @@ function render_inspection_to_form() {
     `
     render_add_button_to_form();
     render_inspection_yourself_paint();
+    container.innerHTML +=
+    `
+    <h5 class="mt-1">Оставить комментарий</h5>
+    <textarea class="form-control" onchange="commentChange(event)"
+    rows="3" >${reportData.comment === null ? "": reportData.comment}</textarea>
+    `
 }
 
 function render_inspection_yourself_paint() {
@@ -1160,9 +1204,9 @@ function render_different_media_sets() {
             break;
         }
     } else if (reportData.type == "service") {
-        console.log(selectedTasks);
+        // console.log(selectedTasks);
         let parsedServiceWorks = parseServiceWorks();
-        console.log(parsedServiceWorks);
+        // console.log(parsedServiceWorks);
         if (parsedServiceWorks.some((el) => el.type == "Демонтаж-монтаж") && 
         reportData.carry) {
             render_set_service_extended_media();
@@ -1190,7 +1234,13 @@ function render_different_media_sets() {
             render_set_mark_media();
         });
     } else if (reportData.type == "inspection") {
-
+        // console.log(selectedTasks);
+        let parsedInspectionWorks = parseInspectionWorks();
+        // console.log(parsedInspectionWorks);
+        render_set_inspection_media();
+        if (reportData.data.some((el) => el.type == "Покраска") && reportData.yourself) {
+            render_set_paint_inspection_media();
+        }
     }
     let valid = validateMedia();
     render_report_footer(valid);
@@ -1201,9 +1251,9 @@ function parseServiceWorks() {
     reportData.data.forEach((el) => {
         serviceWorks.push(structuredClone(el));
     });
-    if (serviceWorks.some((el) => el.type == "Демотнаж") &&
+    if (serviceWorks.some((el) => el.type == "Демонтаж") &&
     serviceWorks.some((el) => el.type == "Монтаж")) {
-        let dismount = serviceWorks.find((el) => el.type == "Демотнаж");
+        let dismount = serviceWorks.find((el) => el.type == "Демонтаж");
         let mount = serviceWorks.find((el) => el.type == "Монтаж");
         if (dismount.count > mount.count) {
             dismount.count = dismount.count - mount.count;
@@ -1222,6 +1272,21 @@ function parseServiceWorks() {
         paint.type = "Покраска комплекс";
     }
     return serviceWorks;
+}
+
+function parseInspectionWorks() {
+    let inspectionWorks = [];
+    reportData.data.forEach((el) => {
+        inspectionWorks.push(structuredClone(el));
+    });
+    if (inspectionWorks.some((el) => el.type == "Покраска") && reportData.yourself) {
+        let paint = inspectionWorks.find((el) => el.type == "Покраска");
+        paint.count = paint.count - reportData.paintCount;
+        if (paint.count == 0) {
+            inspectionWorks = inspectionWorks.filter((el) => el != paint);
+        }
+    }
+    return inspectionWorks;
 }
 
 function render_set_service_extended_media() {
@@ -1264,6 +1329,19 @@ function render_set_inspection_media() {
     render_loader_by_name("Фото справа", mediaCounter);
     mediaCounter++;
     render_loader_by_name("Видео", mediaCounter);
+    mediaCounter++;
+}
+
+function render_set_paint_inspection_media() {
+    render_loader_by_name("Фото до покраски", mediaCounter);
+    mediaCounter++;
+    render_loader_by_name("Фото слева после покраски", mediaCounter);
+    mediaCounter++;
+    render_loader_by_name("Фото спереди после покраски", mediaCounter);
+    mediaCounter++;
+    render_loader_by_name("Фото справа после покраски", mediaCounter);
+    mediaCounter++;
+    render_loader_by_name("Видео после покраски", mediaCounter);
     mediaCounter++;
 }
 
@@ -1310,7 +1388,7 @@ function render_loader_by_name(name, mediaCounter) {
             <div class="card-header">${name}</div>
             <div class="card-body d-flex justify-content-center">
                 <input type="file" id="file${mediaCounter}"
-                data-id="${mediaCounter}" onchange="inputMediaChanged(event)"
+                data-id="${mediaCounter}" data-name="${name}" onchange="inputMediaChanged(event)"
                 style="display: none;" />
                 <div onclick="loadMedia(event)" data-id="${mediaCounter}" id="loader${mediaCounter}"
                 class="d-flex justify-content-center">

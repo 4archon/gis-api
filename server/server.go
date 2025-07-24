@@ -65,6 +65,9 @@ func (s Server) Run() {
 	router.HandleFunc("/distribute_tasks", s.postDistributeTasks).Methods("POST")
 	router.HandleFunc("/new_task", s.postApplyTaskToPoints).Methods("POST")
 	router.HandleFunc("/appoint", s.postAppointUsersToPoints).Methods("POST")
+
+	router.HandleFunc("/report/decline", s.postReportDecline).Methods("POST")
+	router.HandleFunc("/report/media", s.postReportMedia).Methods("POST")
 	
 	router.HandleFunc("/analytics", s.getAnalytics).Methods("GET")
 	router.HandleFunc("/analytics", s.postAnalytics).Methods("POST")

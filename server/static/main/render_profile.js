@@ -164,21 +164,23 @@ function filterProfileTasks(tasks) {
 }
 
 async function render_profile_tasks(id) {
-    let data = await getCurrentTasks(id);
-    // console.log(data);
-    data.works = filterWorks(data);
-    data.tasks = filterProfileTasks(data.tasks);
-    let result = data === null ? "": 
+    if (data.find((el) => el.id == id).appoint === null) {
+        return
+    }
+    let taskData = await getCurrentTasks(id);
+    taskData.works = filterWorks(taskData);
+    taskData.tasks = filterProfileTasks(taskData.tasks);
+    let result = taskData === null ? "": 
     `
     <h5 class="">Задачи:</h5>
     <div class="accordion accordion-flush">
-        ${data.tasks === null ? 
+        ${taskData.tasks === null ? 
             `
             <ul class="list-group list-group-flush">
                 <li class="list-group-item">Задачи не выставлены</li>
             </ul>
             `:
-            data.tasks.reduce((acc, el) => {
+            taskData.tasks.reduce((acc, el) => {
             if (userSubgroup == "inspection" && el.type != "Проинспектировать") {
                 return acc;
             } else if (userSubgroup == "service" && el.type == "Проинспектировать") {
@@ -204,14 +206,14 @@ async function render_profile_tasks(id) {
     </div>
     <h5 class="mt-2">Результаты инспекции:</h5>
     <ul class="list-group list-group-flush">
-        ${data.works === null || data.works.length == 0 ?
+        ${taskData.works === null || taskData.works.length == 0 ?
             `
             <ul class="list-group list-group-flush">
                 <li class="list-group-item">Нет релевантных данных по инспекции</li>
             </ul>
             `
             :
-            data.works.reduce((acc, el) => {
+            taskData.works.reduce((acc, el) => {
             return acc +=
             `
             <li class="list-group-item">    

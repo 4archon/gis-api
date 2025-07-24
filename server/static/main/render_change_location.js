@@ -61,6 +61,7 @@ function save_new_location() {
     if (userMarker !== null) {
         reportData.newLocation = userMarker.getCoordinates();
         change_location.hide();
+        change_location_map.destroy();
         render_data_to_form();
     } else {
         alert("Новая точка не указана на карте");

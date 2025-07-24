@@ -31,4 +31,6 @@ type DB interface {
 	CreateNewUser(user business.User) (int, error)
 	ChangeUser(user business.User) error
 	ChangeUserProfile(user business.User) error
+
+	NewDeclineReport(userID int, report business.DeclineReport) (int, error)
 }
