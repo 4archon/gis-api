@@ -56,8 +56,8 @@ async function sendMedia(res) {
     for (let i = 0; i < mediaCounter; i++) {
         let element = document.getElementById(`file${i}`);
 
-        let index = Number(element.getAttribute("data-id"));
-        formData.append(`index${i}`, index);
+        // let index = Number(element.getAttribute("data-id"));
+        // formData.append(`index${i}`, index);
         
         let name = element.getAttribute("data-name");
         formData.append(`name${i}`, name);

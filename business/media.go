@@ -2,6 +2,7 @@ package business
 
 type Media struct {
 	ID			int		`json:"id"`
+	ServiceID	int		`json:"serviceID"`
 	MediaType	string	`json:"type"`
 	MediaName	string	`json:"name"`
 }

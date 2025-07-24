@@ -15,11 +15,11 @@ func (p *PostgresDB) NewDeclineReport(userID int, report business.DeclineReport)
 	}
 	targetAppoint := report.Appoint[len(report.Appoint) - 1]
 
-	var primaryReson string = report.Reason
+	var primaryReason string = report.Reason
 	if report.Reason == "Идет благоустройство - требуется забрать дуги" ||
 	report.Reason == "Идет благоустройство - требуется демонтировать и забрать дуги" {
 		if report.Yourself != nil && *report.Yourself {
-			primaryReson = report.Reason
+			primaryReason = report.Reason
 			report.Reason = "Идет благоустройство"
 		}
 	}
@@ -31,8 +31,10 @@ func (p *PostgresDB) NewDeclineReport(userID int, report business.DeclineReport)
 	}
 
 	if targetAppoint == 0 {
-		row := tx.QueryRow(`insert into service values(default, $1, $2, $3, $4,
-		$5, $6, $7, $8, $9) returning id`, report.PointID, pq.Array(userID), time.Now(), time.Now(),
+		row := tx.QueryRow(`insert into service values(default, $1, $2,
+		$3, $4,
+		$5, $6, $7, $8, $9) returning id`, report.PointID, pq.Array([]int{userID}),
+		time.Now(), time.Now(),
 		report.Comment, report.Reason, true, userID, true)
 		err := row.Scan(&targetAppoint)
 		if err != nil {
@@ -65,7 +67,20 @@ func (p *PostgresDB) NewDeclineReport(userID int, report business.DeclineReport)
 		}
 	}
 
-	if primaryReson == "Идет благоустройство - требуется забрать дуги" &&
+	_, err = tx.Exec(`insert into tasks values(default, $1, $2, $3,
+	$4, $5, $6, $7, $8)`, report.PointID, "Невозможно произвести работы", nil,
+	targetAppoint, "Ultradop", time.Now(), nil, true)
+	if err != nil {
+		err2 := tx.Rollback()
+		if err2 != nil {
+			log.Println(err2)
+			return 0, err2
+		}
+		log.Println(err)
+		return 0, err
+	}
+
+	if primaryReason == "Идет благоустройство - требуется забрать дуги" &&
 	report.Yourself != nil && *report.Yourself {
 		var numberArc int
 		row := tx.QueryRow(`select number_arc from points where id = $1`, report.PointID)
@@ -92,7 +107,7 @@ func (p *PostgresDB) NewDeclineReport(userID int, report business.DeclineReport)
 		}
 	}
 
-	if primaryReson == "Идет благоустройство - требуется демонтировать и забрать дуги" &&
+	if primaryReason == "Идет благоустройство - требуется демонтировать и забрать дуги" &&
 	report.Yourself != nil && *report.Yourself {
 		var numberArc int
 		row := tx.QueryRow(`select number_arc from points where id = $1`, report.PointID)
@@ -130,7 +145,7 @@ func (p *PostgresDB) NewDeclineReport(userID int, report business.DeclineReport)
 		}
 	}
 
-	if primaryReson == "Точка является дублем" {
+	if primaryReason == "Точка является дублем" {
 		_, err = tx.Exec(`update points set active = $1, change_date = $2,
 		comment = $3, status = $4 where id = $5`, false, time.Now(),
 		"Точка явлется дублем точки - " + strconv.Itoa(report.Duplicate.Original),
@@ -146,10 +161,25 @@ func (p *PostgresDB) NewDeclineReport(userID int, report business.DeclineReport)
 		}
 	}
 
-	if primaryReson == "Невозможно установить дуги, необходимо деактивировать" {
+	if primaryReason == "Невозможно установить дуги, необходимо деактивировать" {
 		_, err = tx.Exec(`update points set active = $1, change_date = $2,
 		status = $3 where id = $4`, false, time.Now(),
 		"Точка недоступна", report.PointID)
+		if err != nil {
+			err2 := tx.Rollback()
+			if err2 != nil {
+				log.Println(err2)
+				return 0, err2
+			}
+			log.Println(err)
+			return 0, err
+		}
+	}
+
+	if primaryReason != "Точка является дублем" && 
+	primaryReason != "Невозможно установить дуги, необходимо деактивировать"{
+		_, err = tx.Exec(`update points set change_date = $1, status = $2
+		where id = $3`, time.Now(), report.Reason, report.PointID)
 		if err != nil {
 			err2 := tx.Rollback()
 			if err2 != nil {

@@ -33,4 +33,6 @@ type DB interface {
 	ChangeUserProfile(user business.User) error
 
 	NewDeclineReport(userID int, report business.DeclineReport) (int, error)
+
+	NewMedia(media business.Media) (int, error)
 }

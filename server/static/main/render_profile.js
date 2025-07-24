@@ -7,8 +7,10 @@ function render_profile_info(profile) {
     <h5 class="mt-2">Данные точки:</h5>
     <div class="card-body">
         <ul class="list-group list-group-flush">
-            <li class="list-group-item">Статус:
+            <li class="list-group-item">Статус активации:
             ${profile.active ? "Активная точка" : "Деактивирована"}</li>
+            <li class="list-group-item">Статус точки:
+            ${profile.status === null ? "Не указано" : profile.status}</li>
             <li class="list-group-item">Адрес:
             ${profile.address === null ? "Не указано" : profile.address}</li>
             <li class="list-group-item">Округ:
@@ -31,6 +33,9 @@ function render_profile_info(profile) {
             <li class="list-group-item">Дата последних изменений данных:
             ${profile.changeDate === null ? "Не указано" :
                 new Date(profile.changeDate).toLocaleDateString()}</li>
+            <li class="list-group-item">Комментарий к точке:
+            ${profile.comment === null || profile.comment == "" ?
+                "Не указано" : profile.comment}</li>
         </ul>
     </div>
     `
@@ -56,12 +61,11 @@ async function getRecentMedia(id) {
 
 async function render_profile_media(id) {
     let conteiner = document.createElement("div");
-    conteiner.className = "row mt-3"
+    conteiner.className = "row"
     let medias = await getRecentMedia(id);
-    if (medias.medias === null) {
-        let result = `<h5 class="mt-2">Недавние материалы:</h5>`; 
-    } else {
-        let result = ``;
+    let result = ``
+    if (medias.medias !== null) {
+        result = `<h5 class="mt-2">Недавние материалы:</h5>`; 
     }
     medias.medias.forEach((element) => {
         let res;
