@@ -1285,6 +1285,12 @@ function parseInspectionWorks() {
         if (paint.count == 0) {
             inspectionWorks = inspectionWorks.filter((el) => el != paint);
         }
+        if (inspectionWorks.length == 0) {
+            inspectionWorks.push({
+                type: "Работа не требуется",
+                count: 1
+            });
+        }
     }
     return inspectionWorks;
 }
@@ -1464,11 +1470,12 @@ function uploadMediaToForm(id, mediaURL, mediaType) {
 }
 
 function validateMedia() {
-    for (let j = 0; j < mediaCounter; j++) {
-        let input = document.getElementById("file" + j);
-        if (input.value === null || input.value == "") {
-            return false;
-        }
-    }
+    //для теста временно
+    // for (let j = 0; j < mediaCounter; j++) {
+    //     let input = document.getElementById("file" + j);
+    //     if (input.value === null || input.value == "") {
+    //         return false;
+    //     }
+    // }
     return true;
 }

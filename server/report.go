@@ -49,6 +49,83 @@ func (s Server) postReportDecline(response http.ResponseWriter, req *http.Reques
 	response.Write(resutl)
 }
 
+func (s Server) postReportService(response http.ResponseWriter, req *http.Request) {
+	id, _, err := s.checkUser(response, req)
+	if err != nil {
+		return
+	}
+
+	defer req.Body.Close()
+	body, err := io.ReadAll(req.Body)
+	if err != nil {
+		log.Println(err);
+		return
+	}
+
+	var report business.ServiceReport
+	err = json.Unmarshal(body, &report)
+	if err != nil {
+		log.Println(err);
+		return
+	}
+
+
+	serviceID, err := s.DB.NewServiceReport(id, report)
+	if err != nil {
+		return
+	}
+
+	var data business.ServiceID
+	data.ID = serviceID
+	resutl, err := json.Marshal(data)
+	if err != nil {
+		log.Println(err)
+		return
+	}
+
+	response.Header().Set("Content-Type", "applicaton/json")
+	response.WriteHeader(http.StatusOK)
+	response.Write(resutl)
+}
+
+func (s Server) postReportInspection(response http.ResponseWriter, req *http.Request) {
+	id, _, err := s.checkUser(response, req)
+	if err != nil {
+		return
+	}
+
+	defer req.Body.Close()
+	body, err := io.ReadAll(req.Body)
+	if err != nil {
+		log.Println(err);
+		return
+	}
+
+	var report business.InspectionReport
+	err = json.Unmarshal(body, &report)
+	if err != nil {
+		log.Println(err);
+		return
+	}
+
+	serviceID, err := s.DB.NewInspectionReport(id, report)
+	if err != nil {
+		return
+	}
+
+	var data business.ServiceID
+	data.ID = serviceID
+	resutl, err := json.Marshal(data)
+	if err != nil {
+		log.Println(err)
+		return
+	}
+
+	response.Header().Set("Content-Type", "applicaton/json")
+	response.WriteHeader(http.StatusOK)
+	response.Write(resutl)
+}
+
 func (s Server) postReportMedia(response http.ResponseWriter, req *http.Request) {
 	_, _, err := s.checkUser(response, req)
 	if err != nil {
