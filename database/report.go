@@ -348,12 +348,22 @@ func (p *PostgresDB) NewServiceReport(userID int, report business.ServiceReport)
 		return 0, err
 	}
 
+	if report.Status == nil {
+		row := tx.QueryRow(`select * from service where point_id = $1 and status is not null
+		order by id desc`, report.PointID)
+		err := row.Scan(&report.Status)
+		if err != nil {
+			val := "Точка доступна"
+			report.Status = &val
+		}
+	}
+
 	if targetAppoint == 0 {
 		row := tx.QueryRow(`insert into service values(default, $1, $2,
 		$3, $4,
 		$5, $6, $7, $8, $9) returning id`, report.PointID, pq.Array([]int{userID}),
 		reportTimeNow, reportTimeNow,
-		report.Comment, "Точка доступна", true, userID, true)
+		report.Comment, report.Status, true, userID, true)
 		err := row.Scan(&targetAppoint)
 		if err != nil {
 			err2 := tx.Rollback()
@@ -372,7 +382,7 @@ func (p *PostgresDB) NewServiceReport(userID int, report business.ServiceReport)
 			}
 			_, err := tx.Exec(`update service set execution_date = $1, comment = $2, sent_by = $3,
 			without_task = $4, sent = $5, status = $6 where id = $7`, reportTimeNow, comment, userID,
-			false, true, "Точка доступна", i)
+			false, true, report.Status, i)
 			if err != nil {
 				err2 := tx.Rollback()
 				if err2 != nil {
@@ -385,9 +395,47 @@ func (p *PostgresDB) NewServiceReport(userID int, report business.ServiceReport)
 		}
 	}
 
+	_, err = tx.Exec(`update points set status = $1, change_date = $2 where id = $3`,
+	report.Status, reportTimeNow, report.PointID)
+	if err != nil {
+		err2 := tx.Rollback()
+		if err2 != nil {
+			log.Println(err2)
+			return 0, err2
+		}
+		log.Println(err)
+		return 0, err
+	}
+
+	_, err = tx.Exec(`update points set number_arc = $1, change_date = $2 where id = $3`,
+	report.NumberArc, reportTimeNow, report.PointID)
+	if err != nil {
+		err2 := tx.Rollback()
+		if err2 != nil {
+			log.Println(err2)
+			return 0, err2
+		}
+		log.Println(err)
+		return 0, err
+	}
+
 	if report.NewLocation != nil {
-		_, err = tx.Exec(`update points set long = $1, lat = $2 where id = $3`,
-			report.NewLocation[0], report.NewLocation[1], report.PointID)
+		_, err = tx.Exec(`update points set long = $1, lat = $2, change_date = $3 where id = $4`,
+			report.NewLocation[0], report.NewLocation[1], reportTimeNow, report.PointID)
+		if err != nil {
+			err2 := tx.Rollback()
+			if err2 != nil {
+				log.Println(err2)
+				return 0, err2
+			}
+			log.Println(err)
+			return 0, err
+		}
+	}
+
+	if report.NewCarpet != nil {
+		_, err = tx.Exec(`update points set carpet = $1, change_date = $2 where id = $3`,
+			report.NewCarpet, reportTimeNow, report.PointID)
 		if err != nil {
 			err2 := tx.Rollback()
 			if err2 != nil {
@@ -469,9 +517,8 @@ func (p *PostgresDB) NewServiceReport(userID int, report business.ServiceReport)
 		}
 
 		if i.WorkType == "Нанесение разметки" {
-			// Изменить термипластик на нужный тип от i
 			_, err = tx.Exec(`insert into markings values(default, $1, $2, $3, $4)`,
-				report.PointID, i.Number, "Термопластик", true)
+				report.PointID, i.Number, i.MarkType, true)
 			if err != nil {
 				err2 := tx.Rollback()
 				if err2 != nil {
@@ -511,8 +558,35 @@ func (p *PostgresDB) NewServiceReport(userID int, report business.ServiceReport)
 				return 0, err
 			}
 		}
+
+		if i.Type == "Замена дуги на алюминиевую" {
+			_, err = tx.Exec(`update points set arc_type = $1, change_date = $2 where id = $3`,
+			"Алюминиевая", reportTimeNow, report.PointID)
+			if err != nil {
+				err2 := tx.Rollback()
+				if err2 != nil {
+					log.Println(err2)
+					return 0, err2
+				}
+				log.Println(err)
+				return 0, err
+			}
+		}
 	}
-	// добавить последействие от задач
+	
+	if *report.Status == "Точка недоступна" {
+		_, err = tx.Exec(`update points set active = $1, change_date = $2 where id = $3`,
+			false, reportTimeNow, report.PointID)
+		if err != nil {
+			err2 := tx.Rollback()
+			if err2 != nil {
+				log.Println(err2)
+				return 0, err2
+			}
+			log.Println(err)
+			return 0, err
+		}
+	}
 
 	err = tx.Commit()
 	if err != nil {

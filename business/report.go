@@ -25,8 +25,11 @@ type ServiceReport struct {
 	PointID			int				`json:"pointID"`
 	Tasks			[]Task			`json:"tasks"`
 	NewLocation		[]float64		`json:"location"`
+	NewCarpet		*string			`json:"carpet"`
+	NumberArc		int				`json:"numberArc"`
 	Done			[]serviceWorks	`json:"done"`
 	Required		[]serviceWorks	`json:"required"`
+	Status			*string			`json:"status"`
 	Comment			*string			`json:"comment"`
 }
 
@@ -35,6 +38,7 @@ type serviceWorks struct {
 	Count			int				`json:"count"`
 	Number			*string			`json:"number"`
 	MarksID			[]int			`json:"selectedMarks"`
+	MarkType		*string			`json:"markingType"`
 }
 
 

@@ -7,6 +7,25 @@ function extractDataWorks() {
     return null;
 }
 
+function extractStatusFromGroup(group) {
+    switch (group) {
+    case "group1":
+        return "Временно сняты дуги";
+    case "group2":
+        return "Идет благоустройство";
+    case "group3":
+        return "Точка доступна";
+    case "group4":
+        return "Точка недоступна";
+    case "group5":
+        return "Точка доступна";
+    case "group6":
+        return null;
+    case "group10":
+        return null;
+    }
+}
+
 async function sendDecline() {
     let report = {
         appoint: appoint,
@@ -60,6 +79,9 @@ async function sendService() {
         done: extractDataWorks(),
         required: reportData.left ? reportData.left : null,
         location: reportData.carry ? reportData.newLocation : null,
+        carpet: reportData.carry ? reportData.newCarpet : null,
+        numberArc: reportData.numberArc,
+        status: extractStatusFromGroup(reportGroup),
         comment: reportData.comment
     }
 
@@ -78,9 +100,9 @@ async function sendService() {
     let res = await response;
     console.log(res.ok);
 
-    if (res.ok) {
-        sendMedia(res);
-    }
+    // if (res.ok) {
+    //     sendMedia(res);
+    // }
 }
 
 async function sendInspection() {
@@ -114,9 +136,9 @@ async function sendInspection() {
     let res = await response;
     console.log(res.ok);
 
-    if (res.ok) {
-        sendMedia(res);
-    }
+    // if (res.ok) {
+    //     sendMedia(res);
+    // }
 }
 
 function sendReport() {

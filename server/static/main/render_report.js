@@ -3,6 +3,9 @@ let appoint;
 let selectedTasks = [];
 let reportData = null;
 let reportPointID = null;
+let pointNumberArc = null;
+let pointNumberMarks = null;
+let reportGroup = null;
 
 function filterTasks() {
     if (tasks === null) {
@@ -26,6 +29,9 @@ async function reportClick(event) {
     tasks = (await getCurrentTasks(id)).tasks;
     filterTasks();
     appoint = data.find((el) => el.id == id).appoint;
+    pointNumberArc = Number(data.find((el) => el.id == id).numberArc);
+    pointNumberMarks = data.find((el) => el.id == id).marks === null ? 0 :
+    data.find((el) => el.id == id).marks.length;
     render_report_header(id);
     render_report_tasks();
     render_report_footer(false);
@@ -164,41 +170,122 @@ function taskClick(event) {
     let id = target.getAttribute("data-id");
     let task = findTask(id);
     task["target"] = target;
-    let found = selectedTasks.find((element) => element.id == task.id);
-    if (found === undefined) {
+    
+    let group = getGroup(task.type);
+    console.log(group);
+
+    if (reportGroup === null && selectedTasks.length == 0) {
+        selectedTasks.push(task);
+        reportGroup = group;
         if (task.id == -3) {
-            selectedTasks.forEach((el) => {
-                el.target.classList.remove("text-bg-success");
-                el.target.classList.remove("bg-gradient");
-            })
-            selectedTasks = [];
-            selectedTasks.push(task)
             target.classList.add("text-bg-danger");
             target.classList.add("bg-gradient");
         } else {
-            decline = selectedTasks.find((element) => element.id == -3);
-            if (decline !== undefined) {
-                decline.target.classList.remove("text-bg-danger");
-                decline.target.classList.remove("bg-gradient");
-                selectedTasks = selectedTasks.filter((element) => element.id != -3);
-            }
-            selectedTasks.push(task)
             target.classList.add("text-bg-success");
             target.classList.add("bg-gradient");
         }
     } else {
-        selectedTasks = selectedTasks.filter((element) => element.id != found.id);
-        if (found.id == -3) {
-            target.classList.remove("text-bg-danger");
-            target.classList.remove("bg-gradient");
+        let found = selectedTasks.find((element) => element.id == task.id);
+        if (found === undefined) {
+            if (group == reportGroup) {
+                selectedTasks.push(task);
+                if (task.id == -3) {
+                    target.classList.add("text-bg-danger");
+                    target.classList.add("bg-gradient");
+                } else {
+                    target.classList.add("text-bg-success");
+                    target.classList.add("bg-gradient");
+                }
+            } else {
+                if (group != "group10" && reportGroup != "group10") {
+                    selectedTasks.forEach((el) => {
+                        el.target.classList.remove("text-bg-success");
+                        el.target.classList.remove("text-bg-danger");
+                        el.target.classList.remove("bg-gradient");
+                    })
+                    selectedTasks = [];
+                    reportGroup = group;
+                    selectedTasks.push(task);
+                    if (task.id == -3) {
+                        target.classList.add("text-bg-danger");
+                        target.classList.add("bg-gradient");
+                    } else {
+                        target.classList.add("text-bg-success");
+                        target.classList.add("bg-gradient");
+                    }
+                } else {
+                    if (group == "group6" || reportGroup == "group6") {
+                        selectedTasks.forEach((el) => {
+                            el.target.classList.remove("text-bg-success");
+                            el.target.classList.remove("text-bg-danger");
+                            el.target.classList.remove("bg-gradient");
+                        })
+                        selectedTasks = [];
+                        reportGroup = group;
+                        selectedTasks.push(task);
+                        if (task.id == -3) {
+                            target.classList.add("text-bg-danger");
+                            target.classList.add("bg-gradient");
+                        } else {
+                            target.classList.add("text-bg-success");
+                            target.classList.add("bg-gradient");
+                        }
+                    } else {
+                        reportGroup = group == "group10" ? reportGroup : group
+                        selectedTasks.push(task);
+                        if (task.id == -3) {
+                            target.classList.add("text-bg-danger");
+                            target.classList.add("bg-gradient");
+                        } else {
+                            target.classList.add("text-bg-success");
+                            target.classList.add("bg-gradient");
+                        }
+                    }
+                }
+            }
         } else {
-            target.classList.remove("text-bg-success");
-            target.classList.remove("bg-gradient");
+            selectedTasks = selectedTasks.filter((element) => element.id != found.id);
+            if (found.id == -3) {
+                target.classList.remove("text-bg-danger");
+                target.classList.remove("bg-gradient");
+            } else {
+                target.classList.remove("text-bg-success");
+                target.classList.remove("bg-gradient");
+            }
+            if (!selectedTasks.some((el) => getGroup(el.type) != "group10")) {
+                reportGroup = "group10";
+            }
         }
-        
     }
+
     render_report_form();
-    // console.log(selectedTasks);
+    console.log(selectedTasks);
+    console.log(reportGroup);
+}
+
+function getGroup(type) {
+    let group1 = ["Временный демонтаж по разным причинам", "Снятие дуг в конце сезона"];
+    let group2 = ["Благоустройство - временный демонтаж"];
+    let group3 = ["Поставить дуги в начале сезона", "Добавить дугу", "Убрать дугу",
+        "Монтаж новой точки", "Монтаж старой точки", "Перенос точки",
+        "Нанести разметку - Дорожная краска", "Нанести разметку - Термопластик",
+        "Нанести разметку - Болончик", "Демаркировка", "Частичное нанесение",
+        "Снятие всех дуг", "Демаркировка всех разметок", "Произвести сервис",
+        "Замена дуги на алюминиевую"
+    ];
+    let group4 = ["Полная деактивация точки"];
+    let group5 = ["Проинспектировать"];
+    let group6 = ["Невозможно произвести работы"];
+    let group10 = ["Заделать отверстия", "Частичный демонтаж", "Сделать не свою дугу"];
+
+    if (group1.includes(type)) {return "group1"}
+    if (group2.includes(type)) {return "group2"}
+    if (group3.includes(type)) {return "group3"}
+    if (group4.includes(type)) {return "group4"}
+    if (group5.includes(type)) {return "group5"}
+    if (group6.includes(type)) {return "group6"}
+    if (group10.includes(type)) {return "group10"}
+    return null;
 }
 
 function new_report_data(type) {
@@ -216,7 +303,9 @@ function new_report_data(type) {
             data: null,
             carry: null,
             newLocation: null,
+            newCarpet: null,
             left: null,
+            numberArc: pointNumberArc,
             comment: null,
             notRequire: false
         }
@@ -234,32 +323,32 @@ function new_report_data(type) {
 
 function render_report_form() {
     let form = document.getElementById("report-form");
-    if (selectedTasks.length == 0) {
+    if (selectedTasks.length == 0 || reportGroup === null) {
         form.innerHTML = ``;
         reportData = null;
+        reportGroup = null;
     } else {
-        if (selectedTasks.some((el) => el.type == "Невозможно произвести работы")) {
+        if (reportGroup == "group6") {
             result = 
             `
             <h5>Выберите причины невозможности выполнения работ:</h5>
             <div id="report-data"/>
             `
             reportData = new_report_data("decline");
-            
-        } else if (selectedTasks.some((el) => el.type !== "Проинспектировать")) {
-            result = 
-            `
-            <h5>Добавьте выполненные работы:</h5>
-            <div id="report-data"/>
-            `
-            reportData = new_report_data("service");
-        } else {
+        } else if (reportGroup == "group5") {
             result = 
             `
             <h5>Заполните отчет инспекции:</h5>
             <div id="report-data"/>
             `
             reportData = new_report_data("inspection");
+        } else {
+            result = 
+            `
+            <h5>Добавьте выполненные работы:</h5>
+            <div id="report-data"/>
+            `
+            reportData = new_report_data("service");
         }
         form.innerHTML = result;
         render_data_to_form();
@@ -289,7 +378,7 @@ function validateForm() {
             if (reportData.left !== null && reportData.carry !== null
                 && !reportData.notRequire) {
                 if (reportData.carry) {
-                    if(reportData.newLocation !== null &&
+                    if(reportData.newLocation !== null && reportData.newCarpet !== null &&
                         reportData.data.some((el) => el.type == "Демонтаж") &&
                         reportData.data.some((el) => el.type == "Монтаж")) {
                         if (reportData.left === false) {
@@ -629,6 +718,26 @@ function render_service_to_form() {
                                 value="${el.number === undefined ? "": el.number}"
                                 data-index="${index}" onchange="markingChangeNumber(event)">
                             </div>
+                            ${el.markingType === undefined ? 
+                                `
+                                <div class="input-group mt-2">
+                                    <button class="btn btn-outline-secondary" type="button"
+                                    onclick="marking_type_change(event)" data-index="${index}">
+                                        Выбрать
+                                    </button>
+                                    <select id="marking-type-selector${index}"
+                                    class="form-select">
+                                        <option value="Термполастик" selected>Термполастик</option>
+                                        <option value="Дорожная краска">Дорожная краска</option>
+                                        <option value="Болончик">Болончик</option>
+                                    </select>
+                                </div>
+                                `
+                                :
+                                `
+                                <h6 class="mt-2">Тип покрытия - ${el.markingType}</h6>
+                                `
+                            }
                             `:""
                         }
                         ${el.type == "Демаркировка" ? 
@@ -717,6 +826,28 @@ function render_service_to_form() {
             :
             `
             <h5>Выбрано новое местоположение</h5>
+            `
+        }
+        ${reportData.newCarpet === null ?
+            `
+            <div class="container mt-2 p-0">
+                <div class="row">
+                    <div class="col-12 col-sm-6">
+                        <div class="input-group">
+                            <button class="btn btn-outline-secondary" type="button"
+                            onclick="new_carpet_choice()">Выбрать</button>
+                            <select id="new-carpet-selector" class="form-select">
+                                <option value="Асфальт" selected>Асфальт</option>
+                                <option value="Плитка">Плитка</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            `
+            :
+            `
+            <h5>Новое покрытие - ${reportData.newCarpet}</h5>
             `
         }
         `
@@ -822,9 +953,21 @@ function render_service_to_form() {
         render_service_letf_add_button();
     }
     }
+    container.innerHTML += 
+    `
+    <h5 class="mt-1">Укажите итоговое количество дуг на точке:</h5>
+    <div class="container">
+        <div class="row">
+            <div class="col-3">
+            <input type="number" class="form-control" value="${reportData.numberArc}" min="0"
+            onchange="changeNumberOfArc(event)">
+            </div>
+        </div>
+    </div>
+    `
     container.innerHTML +=
     `
-    <h5 class="mt-1">Оставить комментарий</h5>
+    <h5 class="mt-1">Оставить комментарий:</h5>
     <textarea class="form-control" onchange="commentChange(event)"
     rows="3" >${reportData.comment === null ? "": reportData.comment}</textarea>
     `
@@ -833,6 +976,7 @@ function render_service_to_form() {
 function carry_changed(event) {
     let id = event.currentTarget.id;
     reportData.newLocation = null;
+    reportData.newCarpet = null;
     switch(id) {
         case "carry1":
             reportData.carry = true;
@@ -854,6 +998,25 @@ function left_work_changed(event) {
             reportData.left = false;
             break;
     }
+    render_data_to_form();
+}
+
+function new_carpet_choice() {
+    let val = document.getElementById("new-carpet-selector").value;
+    reportData.newCarpet = val;
+    render_data_to_form();
+}
+
+function marking_type_change(event) {
+    let index = Number(event.currentTarget.getAttribute("data-index"));
+    let val = document.getElementById(`marking-type-selector${index}`).value;
+    reportData.data[index]["markingType"] = val;
+    render_data_to_form();
+}
+
+function changeNumberOfArc(event) {
+    let val = Number(event.currentTarget.value);
+    reportData.numberArc = val;
     render_data_to_form();
 }
 
