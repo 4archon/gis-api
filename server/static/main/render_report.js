@@ -7,6 +7,8 @@ let pointNumberArc = null;
 let pointNumberMarks = null;
 let reportGroup = null;
 
+let pointReport = new bootstrap.Modal(document.getElementById("point-report"), null);
+
 function filterTasks() {
     if (tasks === null) {
         return

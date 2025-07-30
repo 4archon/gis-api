@@ -1,15 +1,14 @@
 let data;
 let gisKey;
-let map;
-let notAppointedPoints = [];
-let appointedPoints = [];
-let shown = false;
-let clusterAppointed;
-let clusterNotAppointed;
 let userSubgroup;
 let userTrust;
-
-let pointReport = new bootstrap.Modal(document.getElementById("point-report"), null);
+let notAppointedPoints = [];
+let appointedPoints = [];
+let map = null;
+let clusterAppointed = null;
+let clusterNotAppointed = null;
+let shown = false;
+let currentDataJson = null;
 
 
 async function getPoinst() {
@@ -24,24 +23,28 @@ async function getPoinst() {
     gisKey = res.gisKey;
     userSubgroup = res.subgroup;
     userTrust = res.trust;
-    console.log(data);
+    currentDataJson = JSON.stringify(res);
+    // console.log(data);
     
     fillPoints();
 }
 
 function fillPoints() {
-    map = new mapgl.Map("map", {
-        center: [37.6156, 55.7522],
-        zoom: 10,
-        key: gisKey,
-        style: "c080bb6a-8134-4993-93a1-5b4d8c36a59b"
-    });
+    if (map === null) {
+        map = new mapgl.Map("map", {
+            center: [37.6156, 55.7522],
+            zoom: 10,
+            key: gisKey,
+            style: "c080bb6a-8134-4993-93a1-5b4d8c36a59b"
+        });
+    }
 
     fillAppointedPoints();
     fillNotAppointedPoints();
 }
 
 function fillNotAppointedPoints() {
+    notAppointedPoints = [];
     data.forEach((element) => {
         if (element.appoint === null && element.owner == "yandex") {
             element["icon"] = `/static/svg/marker.svg`;
@@ -49,9 +52,13 @@ function fillNotAppointedPoints() {
             notAppointedPoints.push(element);
         }
     });
+
+    shown = !shown;
+    showNotAppointedPoints();
 }
 
 function fillAppointedPoints() {
+    appointedPoints = [];
     data.forEach((element) => {
         if (element.appoint !== null) {
             if (element.deadline !== null) {
@@ -65,6 +72,9 @@ function fillAppointedPoints() {
 }
 
 function showAppointedPoints() {
+    if (clusterAppointed !== null) {
+        clusterAppointed.destroy();
+    }
     clusterAppointed = new mapgl.Clusterer(map, {
         radius: 60,
         clusterStyle: clusterAppointedStyle
@@ -92,6 +102,9 @@ function clusterAppointedStyle(pointsCount, target) {
 
 function showNotAppointedPoints() {
     if (shown == false) {
+        if (clusterNotAppointed !== null) {
+            clusterNotAppointed.destroy();
+        }
         clusterNotAppointed = new mapgl.Clusterer(map, {
             radius: 60,
             clusterStyle: {
@@ -104,11 +117,15 @@ function showNotAppointedPoints() {
         clusterNotAppointed.on("click", clusterClick);
         shown = true;
     } else {
-        clusterNotAppointed.destroy();
+        if (clusterNotAppointed !== null) {
+            clusterNotAppointed.destroy();
+            clusterNotAppointed = null;
+        }
         shown = false;
     }
 }
 
 getPoinst();
+reloadData();
 
 document.getElementById("show-hidden").onclick = showNotAppointedPoints;

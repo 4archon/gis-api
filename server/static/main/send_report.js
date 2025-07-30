@@ -163,6 +163,7 @@ function newNotification(success) {
     let container = document.getElementById("notification-bar");
     container.appendChild(alertContainer);
     pointReport.hide();
+    getPoinst();
 
     setTimeout(() => {
         alertContainer.remove();
