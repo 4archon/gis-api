@@ -59,10 +59,7 @@ async function sendDecline() {
     })
     let res = await response;
     console.log(res.ok);
-
-    if (res.ok) {
-        sendMedia(res);
-    }
+    reportResponseHandler(res);
 }
 
 async function sendService() {
@@ -99,10 +96,7 @@ async function sendService() {
     })
     let res = await response;
     console.log(res.ok);
-
-    // if (res.ok) {
-    //     sendMedia(res);
-    // }
+    reportResponseHandler(res);
 }
 
 async function sendInspection() {
@@ -135,18 +129,10 @@ async function sendInspection() {
     })
     let res = await response;
     console.log(res.ok);
-
-    // if (res.ok) {
-    //     sendMedia(res);
-    // }
+    reportResponseHandler(res);
 }
 
 function sendReport() {
-    // console.log(appoint);
-    // console.log(reportPointID);
-    // console.log(selectedTasks);
-    // console.log(reportData);
-
     if (reportData.type == "decline") {
         sendDecline();
     } else if (reportData.type == "service") {
@@ -154,7 +140,33 @@ function sendReport() {
     } else if (reportData.type == "inspection") {
         sendInspection();
     }
+}
 
+async function reportResponseHandler(res) {
+    console.log(res.ok);
+    if (res.ok) {
+        sendMedia(res);
+    } else {
+        newNotification(false);
+    }
+}
+
+function newNotification(success) {
+    let alertContainer = document.createElement("div");
+    if (success) {
+        alertContainer.className = "alert alert-success my-1";
+        alertContainer.innerHTML = `<h6 class="m-0">Отчет успешно отправлен</h6>`;
+    } else {
+        alertContainer.className = "alert alert-danger my-1";
+        alertContainer.innerHTML = `<h6 class="m-0">Произошла ошибка сервера</h6>`;
+    }
+    let container = document.getElementById("notification-bar");
+    container.appendChild(alertContainer);
+    pointReport.hide();
+
+    setTimeout(() => {
+        alertContainer.remove();
+    }, 10000);
 }
 
 async function sendMedia(res) {
@@ -187,4 +199,5 @@ async function sendMedia(res) {
     })
     let resMedia = await response;
     console.log(resMedia.ok);
+    newNotification(resMedia.ok);
 }

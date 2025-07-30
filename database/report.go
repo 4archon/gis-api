@@ -192,6 +192,21 @@ func (p *PostgresDB) NewDeclineReport(userID int, report business.DeclineReport)
 		}
 	}
 
+	if report.Reason == "Идет благоустройство - требуется забрать дуги" ||
+	report.Reason == "Идет благоустройство - требуется демонтировать и забрать дуги"{
+		_, err = tx.Exec(`insert into tasks values(default, $1, $2, $3,
+		$4, $5, $6, $7, $8)`, report.PointID, "Благоустройство - временный демонтаж", nil,
+		nil, "Ultradop", reportTimeNow, nil, false)
+		if err != nil {
+			err2 := tx.Rollback()
+			if err2 != nil {
+				log.Println(err2)
+				return 0, err2
+			}
+			log.Println(err)
+			return 0, err
+		}
+	}
 
 	err = tx.Commit()
 	if err != nil {
@@ -562,6 +577,34 @@ func (p *PostgresDB) NewServiceReport(userID int, report business.ServiceReport)
 		if i.Type == "Замена дуги на алюминиевую" {
 			_, err = tx.Exec(`update points set arc_type = $1, change_date = $2 where id = $3`,
 			"Алюминиевая", reportTimeNow, report.PointID)
+			if err != nil {
+				err2 := tx.Rollback()
+				if err2 != nil {
+					log.Println(err2)
+					return 0, err2
+				}
+				log.Println(err)
+				return 0, err
+			}
+		}
+
+		if i.Type == "Монтаж новой точки" {
+			_, err = tx.Exec(`update points set active = $1, change_date = $2 where id = $3`,
+			true, reportTimeNow, report.PointID)
+			if err != nil {
+				err2 := tx.Rollback()
+				if err2 != nil {
+					log.Println(err2)
+					return 0, err2
+				}
+				log.Println(err)
+				return 0, err
+			}
+		}
+
+		if i.Type == "Монтаж старой точки" {
+			_, err = tx.Exec(`update points set active = $1, change_date = $2 where id = $3`,
+			true, reportTimeNow, report.PointID)
 			if err != nil {
 				err2 := tx.Rollback()
 				if err2 != nil {

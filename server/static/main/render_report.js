@@ -960,6 +960,8 @@ function render_service_to_form() {
         <div class="row">
             <div class="col-3">
             <input type="number" class="form-control" value="${reportData.numberArc}" min="0"
+            ${reportGroup == "group1" || reportGroup == "group2"
+                || reportGroup == "group10" ? "disabled" : ""}
             onchange="changeNumberOfArc(event)">
             </div>
         </div>
@@ -1634,11 +1636,11 @@ function uploadMediaToForm(id, mediaURL, mediaType) {
 
 function validateMedia() {
     //для теста временно
-    // for (let j = 0; j < mediaCounter; j++) {
-    //     let input = document.getElementById("file" + j);
-    //     if (input.value === null || input.value == "") {
-    //         return false;
-    //     }
-    // }
+    for (let j = 0; j < mediaCounter; j++) {
+        let input = document.getElementById("file" + j);
+        if (input.value === null || input.value == "") {
+            return false;
+        }
+    }
     return true;
 }
