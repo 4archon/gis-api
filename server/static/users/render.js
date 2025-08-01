@@ -30,7 +30,7 @@ function render_card(element) {
                     ${element.subgroup === null ? "не указана": 
                         element.subgroup == "service" ? "Сервис":"Инспекция"}</li>
                     <li class="list-group-item">Доверять сотруднику:
-                    ${element.trust === null ? "не указано": element.trust}</li>
+                    ${element.trust === null ? "не указано": element.trust ? "Да":"Нет"}</li>
                 </ul>
             </div>`
     return res;

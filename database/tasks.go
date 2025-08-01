@@ -5,8 +5,8 @@ import (
 	"log"
 )
 
-func (p *PostgresDB) GetPointCurrentTasks(id int) (business.Tasks, error) {
-	var result business.Tasks
+func (p *PostgresDB) GetPointCurrentTasks(id int) (business.TasksAndWorks, error) {
+	var result business.TasksAndWorks
 	result.PointID = id
 
 	rows, err := p.db.Query(`select id, type, comment, customer,

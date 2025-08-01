@@ -90,7 +90,8 @@ function render_history_body(data) {
                             <div id="task${el.id}" class="accordion-collapse collapse">
                                 <div class="accordion-body">
                                     <span class="badge text-bg-danger">
-                                        ${el.deadline === null ? "Без дедлайна":el.deadline}
+                                        ${el.deadline === null ? "Без дедлайна":
+                                        new Date(el.deadline).toLocaleDateString()}
                                     </span>
                                     <span class="badge text-bg-danger">
                                         ${el.customer === null ? "Заказчик не указан":el.customer}

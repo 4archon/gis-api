@@ -27,6 +27,7 @@ function search(event) {
             event.currentTarget.classList.add("is-invalid");
         }
     }
+    event.currentTarget.blur();
 }
 
 function showSearchedCoordinates(coordinates) {

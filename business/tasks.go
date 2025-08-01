@@ -21,7 +21,7 @@ type Work struct {
 	Arc			*int			`json:"arc"`
 }
 
-type Tasks struct {
+type TasksAndWorks struct {
 	PointID		int		`json:"id"`
 	Tasks		[]Task	`json:"tasks"`
 	Works		[]Work	`json:"works"`

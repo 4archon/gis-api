@@ -21,8 +21,10 @@ type DistibutePoint struct {
 	Operator	*string			`json:"operator"`
 	ExternalID	*string			`json:"externalID"`
 	Coordinates	[]*string		`json:"coordinates"`
-	Deadline	*time.Time		`json:"deadline"`
 	Tasks		[]Task			`json:"tasks"`
+	Works		[]Work			`json:"works"`
+	Appoint		[]AppointUser	`json:"appoint"`
+	Marks		[]Mark			`json:"marks"`
 }
 
 type Distibute struct {
@@ -42,4 +44,9 @@ type ApplyTask struct {
 type Appoint struct {
 	Users		[]int			`json:"users"`
 	Points		[]int			`json:"points"`
+}
+
+type AppointUser struct {
+	ID			int				`json:"id"`
+	Subgroup	*string			`json:"subgroup"`
 }

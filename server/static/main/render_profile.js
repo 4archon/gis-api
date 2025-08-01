@@ -129,10 +129,10 @@ async function getCurrentTasks(id) {
     return res;
 }
 
-function filterWorks(data) {
+function filterWorks(works) {
     let targetWorks = [];
-    if (data.works !== null) {
-        data.works.forEach((element) => {
+    if (works !== null) {
+        works.forEach((element) => {
             let found = targetWorks.find((el) => el.work == element.work);
             if (found === undefined) {
                 targetWorks.push(element);
@@ -142,7 +142,6 @@ function filterWorks(data) {
                 }
             }
         });
-        data.works = targetWorks;
     }
 
     if (targetWorks.length > 1) {
@@ -172,7 +171,7 @@ async function render_profile_tasks(id) {
         return
     }
     let taskData = await getCurrentTasks(id);
-    taskData.works = filterWorks(taskData);
+    taskData.works = filterWorks(taskData.works);
     taskData.tasks = filterProfileTasks(taskData.tasks);
     let result = taskData === null ? "": 
     `
