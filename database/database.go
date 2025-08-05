@@ -23,6 +23,7 @@ type DB interface {
 	GetDataForDistribute() ([]business.DistibutePoint, error)
 	NewTaskToPoints(data business.ApplyTask) (error)
 	AppointPointsToUsers(data business.Appoint) (error)
+	ChangePoint(data business.ChangePoint) (error)
 	
 	GetPointHistory(id int) (business.History, error)
 	GetPointMedia(id int) (business.PointMedias, error)

@@ -86,8 +86,7 @@ func (p *PostgresDB) GetDataForDistribute() ([]business.DistibutePoint, error) {
 		storage[pointID].Tasks = append(storage[pointID].Tasks, res)
 	}
 
-	rows4, err := p.db.Query(`select point_id, id, number, type, active from markings
-	where active is true`)
+	rows4, err := p.db.Query(`select point_id, id, number, type, active from markings`)
 	if err != nil {
 		log.Println(err)
 		return result, err
@@ -184,6 +183,55 @@ func (p *PostgresDB) AppointPointsToUsers(data business.Appoint) (error) {
 			}
 			log.Println(err)
 			return err
+		}
+	}
+
+	err = tx.Commit()
+	if err != nil {
+		log.Println(err)
+		return err
+	}
+
+	return nil
+}
+
+func (p *PostgresDB) ChangePoint(data business.ChangePoint) (error) {
+	tx, err := p.db.Begin()
+	if err != nil {
+		log.Println(err)
+		return err
+	}
+
+	_, err = tx.Exec(`update points set active = $1, long = $2, lat = $3,
+	status = $4, address = $5, district = $6, number_arc = $7, arc_type = $8,
+	carpet = $9, comment = $10, owner = $11, operator = $12, external_id = $13,
+	change_date = $14 where id = $15`, data.Active, data.Long, data.Lat,
+	data.Status, data.Address, data.District, data.NumberArc, data.ArcType,
+	data.Carpet, data.Comment, data.Owner, data.Operator, data.ExternalID,
+	time.Now(), data.ID)
+	if err != nil {
+		err2 := tx.Rollback()
+		if err2 != nil {
+			log.Println(err2)
+			return err2
+		}
+		log.Println(err)
+		return err
+	}
+
+	if (data.Marks != nil) {
+		for _, i := range data.Marks {
+			_, err := tx.Exec(`update markings set number = $1, type = $2, active = $3
+			where id = $4`, i.Number, i.Type, i.Active, i.ID)
+			if err != nil {
+				err2 := tx.Rollback()
+				if err2 != nil {
+					log.Println(err2)
+					return err2
+				}
+				log.Println(err)
+				return err
+			}
 		}
 	}
 

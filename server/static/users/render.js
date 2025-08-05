@@ -50,7 +50,7 @@ function render_edit(element) {
                         <input id="inputPassword" class="form-control" 
                         type="password" placeholder="Пароль останется прежним">
                     </div>
-                    <div class="col-6">
+                    <div class="col-md-6">
                         <label for="inputRole" class="form-label">Роль</label>
                         <select id="inputRole" class="form-select">
                             <option value="${element.role == "admin" ? "admin": "worker"}" selected>
@@ -61,7 +61,7 @@ function render_edit(element) {
                             </option>
                         </select>
                     </div>
-                    <div class="col-6">
+                    <div class="col-md-6">
                         <label for="inputActive" class="form-label">Статус</label>
                         <select id="inputActive" class="form-select">
                             <option value="${element.active ? "true": "false"}" selected>
@@ -72,7 +72,7 @@ function render_edit(element) {
                             </option>
                         </select>
                     </div>
-                    <div class="col-6">
+                    <div class="col-md-6">
                         <label for="inputSubgroup" class="form-label">Группа</label>
                         <select id="inputSubgroup" class="form-select">
                             <option 
@@ -87,7 +87,7 @@ function render_edit(element) {
                             </option>
                         </select>
                     </div>
-                    <div class="col-6">
+                    <div class="col-md-6">
                         <label for="inputTrust" class="form-label">Доверять сотруднику?</label>
                         <select id="inputTrust" class="form-select">
                             <option value="${element.trust ? "true": "false"}" selected>
@@ -98,7 +98,7 @@ function render_edit(element) {
                             </option>
                         </select>
                     </div>
-                    <label class="form-label mt-5"><h4>Личные данные</h3></label>
+                    <label class="form-label mt-5"><h4>Личные данные</h4></label>
                     <div class="col-md-6">
                         <label for="inputName" class="form-label">Имя</label>
                         <input id="inputName" class="form-control" placeholder="Введите имя"
@@ -138,35 +138,35 @@ function render_new_edit() {
                         <input id="inputPassword" class="form-control" 
                         type="password" placeholder="Пароль останется прежним">
                     </div>
-                    <div class="col-6">
+                    <div class="col-md-6">
                         <label for="inputRole" class="form-label">Роль</label>
                         <select id="inputRole" class="form-select">
                             <option value="worker" selected>Работник</option>
                             <option value="admin">Администратор</option>
                         </select>
                     </div>
-                    <div class="col-6">
+                    <div class="col-md-6">
                         <label for="inputActive" class="form-label">Статус</label>
                         <select id="inputActive" class="form-select">
                             <option value="true" selected>Активирован</option>
                             <option value="false">Деактивирован</option>
                         </select>
                     </div>
-                    <div class="col-6">
+                    <div class="col-md-6">
                         <label for="inputSubgroup" class="form-label">Группа</label>
                         <select id="inputSubgroup" class="form-select">
                             <option value="service" selected>Сервис</option>
                             <option value="inspection">Инспекция</option>
                         </select>
                     </div>
-                    <div class="col-6">
+                    <div class="col-md-6">
                         <label for="inputTrust" class="form-label">Доверять сотруднику?</label>
                         <select id="inputTrust" class="form-select">
                             <option value="true" selected>Да</option>
                             <option value="false">Нет</option>
                         </select>
                     </div>
-                    <label class="form-label mt-5"><h4>Личные данные</h3></label>
+                    <label class="form-label mt-5"><h4>Личные данные</h4></label>
                     <div class="col-md-6">
                         <label for="inputName" class="form-label">Имя</label>
                         <input id="inputName" class="form-control" placeholder="Введите имя"

@@ -14,7 +14,7 @@ function render_new_task_header_selected_points() {
     let container = document.getElementById("new-task-header");
     container.innerHTML = 
     `
-    <h5>Добавить новую задачу выбранным точкам</h5>
+    <h1 class="modal-title fs-5">Добавить новую задачу выбранным точкам</h1>
     <button type="button" class="btn-close"
     data-bs-dismiss="modal" aria-label="Close"></button>
     `
@@ -46,7 +46,7 @@ function render_new_task_body_selected_points() {
                     <option value="Произвести сервис">Произвести сервис</option>
                 </select>
             </div>
-            <div class="col-6">
+            <div class="col-md-6">
                 <label for="inputTaskCustomer" class="form-label">Заказчик</label>
                 <select id="inputTaskCustomer" class="form-select">
                     <option value="Яндекс" selected>Яндекс</option>
@@ -54,7 +54,7 @@ function render_new_task_body_selected_points() {
                     <option value="Другое">Другое</option>
                 </select>
             </div>
-            <div class="col-6">
+            <div class="col-md-6">
                 <label for="inputTaskDeadline" class="form-label">Срок исполнения до</label>
                 <input id="inputTaskDeadline" class="form-control" type="date">
             </div>

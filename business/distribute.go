@@ -50,3 +50,21 @@ type AppointUser struct {
 	ID			int				`json:"id"`
 	Subgroup	*string			`json:"subgroup"`
 }
+
+type ChangePoint struct {
+	ID			int				`json:"id"`
+	Long		*float64		`json:"long"`
+	Lat			*float64		`json:"lat"`
+	Address		*string			`json:"address"`
+	District	*string			`json:"district"`
+	Active		*bool			`json:"active"`
+	Status		*string			`json:"status"`
+	ExternalID	*string			`json:"externalID"`
+	Carpet		*string			`json:"carpet"`
+	NumberArc	*int			`json:"numberArc"`
+	ArcType		*string			`json:"arcType"`
+	Owner		*string			`json:"owner"`
+	Operator	*string			`json:"operator"`
+	Comment		*string			`json:"comment"`
+	Marks		[]Mark			`json:"marks"`
+}

@@ -22,7 +22,7 @@ function render_profile_info(profile) {
             ${profile.district === null || profile.district === "" ? 
                 "Не указано" : profile.district}</li>
             <li class="list-group-item">Координаты:
-            ${profile.coordinates}</li>
+            ${profile.coordinates.toReversed()}</li>
             <li class="list-group-item">Количество дуг:
             ${profile.numberArc === null ? "Не указано" : profile.numberArc}</li>
             <li class="list-group-item">Тип дуги:
@@ -225,6 +225,7 @@ function render_profile_marking(data) {
                 <li class="list-group-item">
                 ${el.type}
                 <span class="badge text-bg-primary">${el.number}</span>
+                ${el.active ? "": `<span class="badge text-bg-danger">Деактивирована</span>`}
                 </li>
             </ul>
             `

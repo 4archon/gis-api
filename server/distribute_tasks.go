@@ -113,3 +113,35 @@ func (s Server) postAppointUsersToPoints(response http.ResponseWriter, req *http
 
 	response.WriteHeader(http.StatusOK)
 }
+
+func (s Server) postPointEdit(response http.ResponseWriter, req *http.Request) {
+	_, role, err := s.checkUser(response, req)
+	if err != nil {
+		return
+	}
+
+	if role != "admin" {
+		http.Redirect(response, req, "/main", http.StatusFound)
+	}
+
+	defer req.Body.Close()
+	body, err := io.ReadAll(req.Body)
+	if err != nil {
+		log.Println(err);
+		return
+	}
+
+	var changePoint business.ChangePoint
+	err = json.Unmarshal(body, &changePoint)
+	if err != nil {
+		log.Println(err);
+		return
+	}
+
+	err = s.DB.ChangePoint(changePoint)
+	if err != nil {
+		return
+	}
+
+	response.WriteHeader(http.StatusOK)
+}
