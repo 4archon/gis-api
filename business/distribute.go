@@ -25,6 +25,9 @@ type DistibutePoint struct {
 	Works		[]Work			`json:"works"`
 	Appoint		[]AppointUser	`json:"appoint"`
 	Marks		[]Mark			`json:"marks"`
+	MaxRepair	*time.Time		`json:"maxRepair"`
+	MaxCheck	*time.Time		`json:"maxCheck"`
+	Repairs		[]time.Time		`json:"repairs"`
 }
 
 type Distibute struct {

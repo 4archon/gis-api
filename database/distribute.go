@@ -124,6 +124,53 @@ func (p *PostgresDB) GetDataForDistribute() ([]business.DistibutePoint, error) {
 		storage[pointID].Appoint = append(storage[pointID].Appoint, res)
 	}
 
+	rows6, err := p.db.Query(`select s.point_id, w.type, max(s.execution_date)
+	from service s inner join service_works w on s.id = w.service_id
+	group by s.point_id, w.type`)
+	if err != nil {
+		log.Println(err)
+		return result, err
+	}
+	defer rows6.Close()
+	for rows6.Next() {
+		var pointID int
+		var workType string
+		var maxDate *time.Time
+		err := rows6.Scan(&pointID, &workType, &maxDate)
+		if err != nil {
+			log.Println(err)
+			return result, err
+		}
+
+		if (workType == "required") {
+			storage[pointID].MaxCheck = maxDate	
+		}
+
+		if (workType == "done") {
+			storage[pointID].MaxRepair = maxDate	
+		}
+	}
+
+	rows7, err := p.db.Query(`select s.point_id, s.execution_date
+	from service s inner join service_works w on s.id = w.service_id
+	where w.type = 'done'`)
+	if err != nil {
+		log.Println(err)
+		return result, err
+	}
+	defer rows7.Close()
+	for rows7.Next() {
+		var pointID int
+		var executionDate time.Time
+		err := rows7.Scan(&pointID, &executionDate)
+		if err != nil {
+			log.Println(err)
+			return result, err
+		}
+
+		storage[pointID].Repairs = append(storage[pointID].Repairs, executionDate)
+	}
+
 	return result, nil
 }
 

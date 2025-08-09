@@ -177,9 +177,19 @@ async function render_profile_tasks(id) {
                     <div class="card-body">
                         <h5>
                             ${el.type}
+                        </h5>
+                        <h5>
                             <span class="badge text-bg-danger">
                                 ${el.deadline === null ? "Без дедлайна":
                                     new Date(el.deadline).toLocaleDateString()}
+                            </span>
+                            <span class="badge text-bg-secondary">
+                                ${el.customer === null ? "Заказчик не указан":
+                                    el.customer}
+                            </span>
+                            <span class="badge text-bg-secondary">
+                                ${el.entryDate === null ? "Дата назначения неизвестна":
+                                    new Date(el.entryDate).toLocaleDateString()}
                             </span>
                         </h5>
                         ${el.comment === null || el.comment == "" ? "":

@@ -52,7 +52,7 @@ function fillPoints() {
         }
     });
 
-    filteredPoints = data;
+    filteredPoints = filterPoints(data);
     cluster.load(filteredPoints);
     cluster.on("click", clusterClick);
 }

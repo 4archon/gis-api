@@ -55,26 +55,26 @@
                 <div class="container">
                     <div class="row">
                         <div class="col-6">
-                            <label class="col-form-label">Начало периода:</label>
+                            <label class="col-form-label" for="repair-period-start">Начало периода:</label>
                         </div>
                         <div class="col-6">
-                            <input type="date" class="form-control">
+                            <input id="repair-period-start" type="date" class="form-control" onchange="fillPoints()">
                         </div>
                     </div>
                     <div class="row mt-2">
                         <div class="col-6">
-                            <label class="col-form-label">Конец периода:</label>
+                            <label class="col-form-label" for="repair-period-end">Конец периода:</label>
                         </div>
                         <div class="col-6">
-                            <input type="date" class="form-control">
+                            <input id="repair-period-end" type="date" class="form-control" onchange="fillPoints()">
                         </div>
                     </div>
                     <div class="row mt-2">
                         <div class="col-7">
-                            <label class="col-form-label">Количество ремонтов:</label>
+                            <label class="col-form-label" for="repair-count">Количество ремонтов:</label>
                         </div>
                         <div class="col-5">
-                            <input type="number" class="form-control" min="0">
+                            <input id="repair-count" type="number" class="form-control" min="0" onchange="fillPoints()">
                         </div>
                     </div>
                 </div>
@@ -82,10 +82,10 @@
                 <div class="container">
                     <div class="row">
                         <div class="col-7">
-                            <label class="col-form-label">Дней без проверки:</label>
+                            <label class="col-form-label" for="days-without-checks">Дней без проверки:</label>
                         </div>
                         <div class="col-5">
-                            <input type="number" class="form-control" min="0">
+                            <input id="days-without-checks" type="number" class="form-control" min="0" onchange="fillPoints()">
                         </div>
                     </div>
                 </div>
@@ -93,10 +93,10 @@
                 <div class="container">
                     <div class="row">
                         <div class="col-7">
-                            <label class="col-form-label">Дней без ремонта:</label>
+                            <label class="col-form-label" for="days-without-repair">Дней без ремонта:</label>
                         </div>
                         <div class="col-5">
-                            <input type="number" class="form-control" min="0">
+                            <input id="days-without-repair" type="number" class="form-control" min="0" onchange="fillPoints()">
                         </div>
                     </div>
                 </div>
@@ -104,111 +104,213 @@
                 <div class="container">
                     <div class="row">
                         <div class="col-7">
-                            <label class="col-form-label">Дней без выполнения:</label>
+                            <label class="col-form-label" for="days-without-execution-tasks">Дней без выполнения:</label>
                         </div>
                         <div class="col-5">
-                            <input type="number" class="form-control" min="0">
+                            <input id="days-without-execution-tasks" type="number" class="form-control" min="0" onchange="fillPoints()">
                         </div>
                     </div>
                 </div>
 
                 <h5 class="mt-3">Данные точки:</h5>
                 <div class="my-3">
-                    <label class="form-check-label" for="pd1">
+                    <label class="form-check-label" for="deactivated-points">
                         Включить деактивированные точки
                     </label>
-                    <input id="pd1" class="form-check-input ms-2" type="checkbox">
+                    <input id="deactivated-points" class="form-check-input ms-2" type="checkbox" onchange="fillPoints()">
+                </div>
+                <div class="my-3">
+                    <label class="form-check-label" for="deactivated-points-only">
+                        Включить только деактивированные точки
+                    </label>
+                    <input id="deactivated-points-only" class="form-check-input ms-2" type="checkbox" onchange="fillPoints()">
                 </div>
                 <div class="container">
                     <div class="row">
-                        <div class="col-7">
-                            <label class="col-form-label">Количество дуг:</label>
+                        <div class="col-4">
+                            <label class="col-form-label">Кол-во дуг:</label>
                         </div>
-                        <div class="col-5">
-                            <input type="number" class="form-control" min="0">
+                        <div class="col-1 d-flex align-items-center">
+                            <label class="form-check-label" for="num-arc-from">от:</label>
+                        </div>
+                        <div class="col-3">
+                            <input id="num-arc-from" type="number" class="form-control" min="0" onchange="fillPoints()">
+                        </div>
+                        <div class="col-1 d-flex align-items-center">
+                            <label class="form-check-label" for="num-arc-to">до:</label>
+                        </div>
+                        <div class="col-3">
+                            <input id="num-arc-to" type="number" class="form-control" min="0" onchange="fillPoints()">
                         </div>
                     </div>
                 </div>
-                <input id="pd3" type="checkbox" class="btn-check" autocomplete="off">
-                <label class="btn" for="pd3">Алюминиевая</label>
-                <input id="pd4" type="checkbox" class="btn-check" autocomplete="off">
-                <label class="btn" for="pd4">Металическая</label>
-                <input id="pd5" type="checkbox" class="btn-check" autocomplete="off">
-                <label class="btn" for="pd5">Асфальт</label>
-                <input id="pd6" type="checkbox" class="btn-check" autocomplete="off">
-                <label class="btn" for="pd6">Плитка</label>
+                <h6 class="mt-3">Тип дуги:</h6>
+                <input id="at1" type="checkbox" class="btn-check" onchange="fillPoints()">
+                <label id="l-at1" class="btn" for="at1">Металлическая</label>
+                <input id="at2" type="checkbox" class="btn-check" onchange="fillPoints()">
+                <label id="l-at2" class="btn" for="at2">Алюминиевая</label>
+                <input id="at3" type="checkbox" class="btn-check" onchange="fillPoints()">
+                <label id="l-at3" class="btn" for="at3">Другое</label>
+                <input id="at4" type="checkbox" class="btn-check" onchange="fillPoints()">
+                <label id="l-at4" class="btn" for="at4">Не указано</label>
+
+                <h6 class="mt-3">Покрытие:</h6>
+                <input id="cr1" type="checkbox" class="btn-check" onchange="fillPoints()">
+                <label id="l-cr1" class="btn" for="cr1">Асфальт</label>
+                <input id="cr2" type="checkbox" class="btn-check" onchange="fillPoints()">
+                <label id="l-cr2" class="btn" for="cr2">Плитка</label>
+                <input id="cr3" type="checkbox" class="btn-check" onchange="fillPoints()">
+                <label id="l-cr3" class="btn" for="cr3">Не указано</label>
+
+                <h6 class="mt-3">Владелец:</h6>
+                <input id="ow1" type="checkbox" class="btn-check" onchange="fillPoints()">
+                <label id="l-ow1" class="btn" for="ow1">yandex</label>
+                <input id="ow2" type="checkbox" class="btn-check" onchange="fillPoints()">
+                <label id="l-ow2" class="btn" for="ow2">whoosh</label>
+
+                <h6 class="mt-3">Оператор:</h6>
+                <input id="op1" type="checkbox" class="btn-check" onchange="fillPoints()">
+                <label id="l-op1" class="btn" for="op1">ultradop</label>
+
+                <h5 class="mt-3">В работе:</h5>
+                <input id="ap1" type="checkbox" class="btn-check" onchange="fillPoints()">
+                <label id="l-ap1" class="btn" for="ap1">Инспекция</label>
+                <input id="ap2" type="checkbox" class="btn-check" onchange="fillPoints()">
+                <label id="l-ap2" class="btn" for="ap2">Сервис</label>
+                <input id="ap3" type="checkbox" class="btn-check" onchange="fillPoints()">
+                <label id="l-ap3" class="btn" for="ap3">Без назначений</label>
+
+                <h5 class="mt-3">Разметка:</h5>
+                <div class="mt-3 mb-1">
+                    <label class="form-check-label" for="marking-only">
+                        Есть разметка
+                    </label>
+                    <input id="marking-only" class="form-check-input ms-2" type="checkbox" onchange="fillPoints()">
+                </div>
+                <div class="mb-1 mt-2">
+                    <label class="form-check-label" for="active-markings">
+                        Только активные разметки
+                    </label>
+                    <input id="active-markings" class="form-check-input ms-2" type="checkbox" onchange="fillPoints()">
+                </div>
+                <input id="ma1" type="checkbox" class="btn-check" onchange="fillPoints()">
+                <label id="l-ma1" class="btn" for="ma1">Дорожная краска</label>
+                <input id="ma2" type="checkbox" class="btn-check" onchange="fillPoints()">
+                <label id="l-ma2" class="btn" for="ma2">Термопластик</label>
+                <input id="ma3" type="checkbox" class="btn-check" onchange="fillPoints()">
+                <label id="l-ma3" class="btn" for="ma3">Болончик</label>
+
+                <h5 class="mt-3">Выполнить работы:</h5>
+                <div class="form-check form-switch form-check-reverse">
+                    <input id="wr-boolean" class="form-check-input" type="checkbox" role="switch" onchange="fillPoints()">
+                    <label class="form-check-label" for="wr-boolean">Логическая операция фильтрации или/и</label>
+                </div>
+                <input id="wr1" type="checkbox" class="btn-check" onchange="fillPoints()">
+                <label id="l-wr1" class="btn" for="wr1">Демонтаж-монтаж</label>
+                <input id="wr2" type="checkbox" class="btn-check" onchange="fillPoints()">
+                <label id="l-wr2" class="btn" for="wr2">Монтаж</label>
+                <input id="wr3" type="checkbox" class="btn-check" onchange="fillPoints()">
+                <label id="l-wr3" class="btn" for="wr3">Покраска</label>
+                <input id="wr4" type="checkbox" class="btn-check" onchange="fillPoints()">
+                <label id="l-wr4" class="btn" for="wr4">Частичное нанесение</label>
+                <input id="wr5" type="checkbox" class="btn-check" onchange="fillPoints()">
+                <label id="l-wr5" class="btn" for="wr5">Работа не требуется</label>
+                <input id="wr6" type="checkbox" class="btn-check" onchange="fillPoints()">
+                <label id="l-wr6" class="btn" for="wr6">Неизвестно</label>
 
                 <h5 class="mt-3">Статусы точек:</h5>
-                <input id="st1" type="checkbox" class="btn-check" autocomplete="off">
-                <label class="btn" for="st1">Точка доступна</label>
-                <input id="st2" type="checkbox" class="btn-check" autocomplete="off">
-                <label class="btn" for="st2">Временно невозможно проверить точку</label>
-                <input id="st3" type="checkbox" class="btn-check" autocomplete="off">
-                <label class="btn" for="st3">Идет благоустройство</label>
-                <input id="st4" type="checkbox" class="btn-check" autocomplete="off">
-                <label class="btn text-start" for="st4">
-                    Идет благоустройство - требуется забрать дуги
-                </label>
-                <input id="st5" type="checkbox" class="btn-check" autocomplete="off">
-                <label class="btn text-start" for="st5">
-                    Идет благоустройство - требуется демонтировать и забрать дуги
-                </label>
-                <input id="st6" type="checkbox" class="btn-check" autocomplete="off">
-                <label class="btn" for="st6">Точка является дублем</label>
-                <input id="st7" type="checkbox" class="btn-check" autocomplete="off">
-                <label class="btn text-start" for="st7">
-                    Невозможно установить дуги, необходимо деактивировать
-                </label>
-                <input id="st8" type="checkbox" class="btn-check" autocomplete="off">
-                <label class="btn" for="st8">Временно демонтирована</label>
+                <input id="st1" type="checkbox" class="btn-check" onchange="fillPoints()">
+                <label id="l-st1" class="btn" for="st1">Точка доступна</label>
+                <input id="st2" type="checkbox" class="btn-check" onchange="fillPoints()">
+                <label id="l-st2" class="btn" for="st2">Идет благоустройство</label>
+                <input id="st3" type="checkbox" class="btn-check" onchange="fillPoints()">
+                <label id="l-st3" class="btn" for="st3">Точка недоступна</label>
+                <input id="st4" type="checkbox" class="btn-check" onchange="fillPoints()">
+                <label id="l-st4" class="btn" for="st4">Временно сняты дуги</label>
+                <input id="st5" type="checkbox" class="btn-check" onchange="fillPoints()">
+                <label id="l-st5" class="btn" for="st5">Временно невозможно проверить точку</label>
+                <input id="st6" type="checkbox" class="btn-check" onchange="fillPoints()">
+                <label id="l-st6" class="btn text-start" for="st6">Идет благоустройство - требуется забрать дуги</label>
+                <input id="st7" type="checkbox" class="btn-check" onchange="fillPoints()">
+                <label id="l-st7" class="btn text-start" for="st7">Идет благоустройство - требуется демонтировать и забрать дуги</label>
+                <input id="st8" type="checkbox" class="btn-check" onchange="fillPoints()">
+                <label id="l-st8" class="btn text-start" for="st8">Статус неизвестен</label>
 
-                <h5 class="mt-3">Виды задач:</h5>
-                <input id="ex1" type="checkbox" class="btn-check" autocomplete="off">
-                <label class="btn text-start" for="ex1">Временный демонтаж по разным причинам</label>
-                <input id="ex2" type="checkbox" class="btn-check" autocomplete="off">
-                <label class="btn" for="ex2">Благоустройство - Временный демонтаж</label>
-                <input id="ex3" type="checkbox" class="btn-check" autocomplete="off">
-                <label class="btn" for="ex3">Заделать отверстия</label>
+                <h5 class="mt-3">Заказчик задачи:</h5>
+                <input id="cu1" type="checkbox" class="btn-check" onchange="fillPoints()">
+                <label id="l-cu1" class="btn text-start" for="cu1">Яндекс</label>
+                <input id="cu2" type="checkbox" class="btn-check" onchange="fillPoints()">
+                <label id="l-cu2" class="btn" for="cu2">Whoosh</label>
+                <input id="cu3" type="checkbox" class="btn-check" onchange="fillPoints()">
+                <label id="l-cu3" class="btn" for="cu3">Ultradop</label>
+                <input id="cu4" type="checkbox" class="btn-check" onchange="fillPoints()">
+                <label id="l-cu4" class="btn" for="cu4">Другое</label>
+                <div class="my-3">
+                    <label class="form-check-label" for="deadline-only">
+                        Только задачи с дедлайном
+                    </label>
+                    <input id="deadline-only" class="form-check-input ms-2" type="checkbox" onchange="fillPoints()">
+                </div>
                 
-                <input id="ex4" type="checkbox" class="btn-check" autocomplete="off">
-                <label class="btn" for="ex4">Снятие дуг в конце сезона</label>
-                <input id="ex5" type="checkbox" class="btn-check" autocomplete="off">
-                <label class="btn" for="ex5">Поставить дуги в начале сезона</label>
-                <input id="ex6" type="checkbox" class="btn-check" autocomplete="off">
-                <label class="btn" for="ex6">Частичный демонтаж</label>
+                <h5 class="mt-3">Виды задач:</h5>
+                <div class="form-check form-switch form-check-reverse" style="text-align: left;">
+                    <input id="ex-boolean" class="form-check-input" type="checkbox" role="switch" onchange="fillPoints()">
+                    <label class="form-check-label" for="ex-boolean">Логическая операция фильтрации или/и</label>
+                </div>
+                <input id="ex1" type="checkbox" class="btn-check" onchange="fillPoints()">
+                <label id="l-ex1" class="btn text-start" for="ex1">Временный демонтаж по разным причинам</label>
+                <input id="ex2" type="checkbox" class="btn-check" onchange="fillPoints()">
+                <label id="l-ex2" class="btn" for="ex2">Благоустройство - Временный демонтаж</label>
+                <input id="ex3" type="checkbox" class="btn-check" onchange="fillPoints()">
+                <label id="l-ex3" class="btn" for="ex3">Заделать отверстия</label>
+                
+                <input id="ex4" type="checkbox" class="btn-check" onchange="fillPoints()">
+                <label id="l-ex4" class="btn" for="ex4">Снятие дуг в конце сезона</label>
+                <input id="ex5" type="checkbox" class="btn-check" onchange="fillPoints()">
+                <label id="l-ex5" class="btn" for="ex5">Поставить дуги в начале сезона</label>
+                <input id="ex6" type="checkbox" class="btn-check" onchange="fillPoints()">
+                <label id="l-ex6" class="btn" for="ex6">Частичный демонтаж</label>
 
+                <input id="ex7" type="checkbox" class="btn-check" onchange="fillPoints()">
+                <label id="l-ex7" class="btn" for="ex7">Добавить дугу</label>
+                <input id="ex8" type="checkbox" class="btn-check" onchange="fillPoints()">
+                <label id="l-ex8" class="btn" for="ex8">Убрать дугу</label>
+                <input id="ex9" type="checkbox" class="btn-check" onchange="fillPoints()">
+                <label id="l-ex9" class="btn" for="ex9">Монтаж новой точки</label>
+                <input id="ex10" type="checkbox" class="btn-check" onchange="fillPoints()">
+                <label id="l-ex10" class="btn" for="ex10">Монтаж старой точки</label>
+                <input id="ex11" type="checkbox" class="btn-check" onchange="fillPoints()">
+                <label id="l-ex11" class="btn" for="ex11">Перенос точки</label>
 
-                <input id="ex7" type="checkbox" class="btn-check" autocomplete="off">
-                <label class="btn" for="ex7">Деактивация дуги</label>
-                <input id="ex8" type="checkbox" class="btn-check" autocomplete="off">
-                <label class="btn" for="ex8">Монтаж новой точки</label>
-                <input id="ex9" type="checkbox" class="btn-check" autocomplete="off">
-                <label class="btn" for="ex9">Монтаж старой точки</label>
-                <input id="ex10" type="checkbox" class="btn-check" autocomplete="off">
-                <label class="btn" for="ex10">Добавить дугу</label>
-                <input id="ex11" type="checkbox" class="btn-check" autocomplete="off">
-                <label class="btn" for="ex11">Убрать дугу</label>
-                <input id="ex12" type="checkbox" class="btn-check" autocomplete="off">
-                <label class="btn" for="ex12">Перенос точки</label>
+                <input id="ex12" type="checkbox" class="btn-check" onchange="fillPoints()">
+                <label id="l-ex12" class="btn" for="ex12">Нанести разметку - Дорожная краска</label>
+                <input id="ex13" type="checkbox" class="btn-check" onchange="fillPoints()">
+                <label id="l-ex13" class="btn" for="ex13">Нанести разметку - Термопластик</label>
+                <input id="ex14" type="checkbox" class="btn-check" onchange="fillPoints()">
+                <label id="l-ex14" class="btn" for="ex14">Нанести разметку - Болончик</label>
+                <input id="ex15" type="checkbox" class="btn-check" onchange="fillPoints()">
+                <label id="l-ex15" class="btn" for="ex15">Демаркировка</label>
+                <input id="ex16" type="checkbox" class="btn-check" onchange="fillPoints()">
+                <label id="l-ex16" class="btn" for="ex16">Частичное нанесение</label>
 
-                <input id="ex13" type="checkbox" class="btn-check" autocomplete="off">
-                <label class="btn" for="ex13">Проинспектировать</label>
-                <input id="ex14" type="checkbox" class="btn-check" autocomplete="off">
-                <label class="btn" for="ex14">Произвести сервис</label>
+                <input id="ex17" type="checkbox" class="btn-check" onchange="fillPoints()">
+                <label id="l-ex17" class="btn" for="ex17">Полная деактивация точки</label>
+                <input id="ex18" type="checkbox" class="btn-check" onchange="fillPoints()">
+                <label id="l-ex18" class="btn" for="ex18">Снятие всех дуг</label>
+                <input id="ex19" type="checkbox" class="btn-check" onchange="fillPoints()">
+                <label id="l-ex19" class="btn" for="ex19">Демаркировка всех разметок</label>
 
-                <input id="ex15" type="checkbox" class="btn-check" autocomplete="off">
-                <label class="btn" for="ex15">Нанести разметку - Дорожная краска</label>
-                <input id="ex16" type="checkbox" class="btn-check" autocomplete="off">
-                <label class="btn" for="ex16">Нанести разметку - Термопластик</label>
-                <input id="ex17" type="checkbox" class="btn-check" autocomplete="off">
-                <label class="btn" for="ex17">Нанести разметку - Болончик</label>
-                <input id="ex18" type="checkbox" class="btn-check" autocomplete="off">
-                <label class="btn" for="ex18">Демаркировка</label>
+                <input id="ex20" type="checkbox" class="btn-check" onchange="fillPoints()">
+                <label id="l-ex20" class="btn" for="ex20">Проинспектировать</label>
+                <input id="ex21" type="checkbox" class="btn-check" onchange="fillPoints()">
+                <label id="l-ex21" class="btn" for="ex21">Произвести сервис</label>
 
-                <input id="ex19" type="checkbox" class="btn-check" autocomplete="off">
-                <label class="btn" for="ex19">Замена дуги на алюминиевую</label>
-                <input id="ex20" type="checkbox" class="btn-check" autocomplete="off">
-                <label class="btn" for="ex20">Сделать не свою дугу</label>
+                <input id="ex22" type="checkbox" class="btn-check" onchange="fillPoints()">
+                <label id="l-ex22" class="btn" for="ex22">Замена дуги на алюминиевую</label>
+                <input id="ex23" type="checkbox" class="btn-check" onchange="fillPoints()">
+                <label id="l-ex23" class="btn" for="ex23">Сделать не свою дугу</label>
+                <input id="ex24" type="checkbox" class="btn-check" onchange="fillPoints()">
+                <label id="l-ex24" class="btn" for="ex24">Нет задач</label>
             </div>
         </div>
         <div id="tasks-bar" class="offcanvas offcanvas-end"
