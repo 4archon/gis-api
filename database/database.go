@@ -24,6 +24,7 @@ type DB interface {
 	NewTaskToPoints(data business.ApplyTask) (error)
 	AppointPointsToUsers(data business.Appoint) (error)
 	ChangePoint(data business.ChangePoint) (error)
+	DeletePointTask(data business.Task) (error)
 	
 	GetPointHistory(id int) (business.History, error)
 	GetPointMedia(id int) (business.PointMedias, error)

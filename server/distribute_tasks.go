@@ -145,3 +145,35 @@ func (s Server) postPointEdit(response http.ResponseWriter, req *http.Request) {
 
 	response.WriteHeader(http.StatusOK)
 }
+
+func (s Server) postDeletePointTask(response http.ResponseWriter, req *http.Request) {
+	_, role, err := s.checkUser(response, req)
+	if err != nil {
+		return
+	}
+
+	if role != "admin" {
+		http.Redirect(response, req, "/main", http.StatusFound)
+	}
+
+	defer req.Body.Close()
+	body, err := io.ReadAll(req.Body)
+	if err != nil {
+		log.Println(err);
+		return
+	}
+
+	var task business.Task
+	err = json.Unmarshal(body, &task)
+	if err != nil {
+		log.Println(err);
+		return
+	}
+
+	err = s.DB.DeletePointTask(task)
+	if err != nil {
+		return
+	}
+
+	response.WriteHeader(http.StatusOK)
+}

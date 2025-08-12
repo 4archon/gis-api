@@ -175,25 +175,43 @@ async function render_profile_tasks(id) {
                 `
                 <div class="card mt-1">
                     <div class="card-body">
-                        <h5>
-                            ${el.type}
-                        </h5>
-                        <h5>
-                            <span class="badge text-bg-danger">
-                                ${el.deadline === null ? "Без дедлайна":
-                                    new Date(el.deadline).toLocaleDateString()}
-                            </span>
-                            <span class="badge text-bg-secondary">
-                                ${el.customer === null ? "Заказчик не указан":
-                                    el.customer}
-                            </span>
-                            <span class="badge text-bg-secondary">
-                                ${el.entryDate === null ? "Дата назначения неизвестна":
-                                    new Date(el.entryDate).toLocaleDateString()}
-                            </span>
-                        </h5>
-                        ${el.comment === null || el.comment == "" ? "":
-                            `<p class="card-text">Комментарий: ${el.comment}</p>`}
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-10">
+                                    <h5>${el.type}</h5>
+                                    <h5>
+                                        <span class="badge text-bg-danger">
+                                            ${el.deadline === null ? "Без дедлайна":
+                                                new Date(el.deadline).toLocaleDateString()}
+                                        </span>
+                                        <span class="badge text-bg-secondary">
+                                            ${el.customer === null ? "Заказчик не указан":
+                                                el.customer}
+                                        </span>
+                                        <span class="badge text-bg-secondary">
+                                            ${el.entryDate === null ? "Дата назначения неизвестна":
+                                                new Date(el.entryDate).toLocaleDateString()}
+                                        </span>
+                                    </h5>
+                                </div>
+                                <div class="col-2 d-flex justify-content-end align-items-center">
+                                    <button data-id="${el.id}" type="button"
+                                    class="btn btn-outline-danger btn-sm" 
+                                    onclick="deleteTaskFromPoint(event)">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
+                                            <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z"/>
+                                            <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z"/>
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-12">
+                                    ${el.comment === null || el.comment == "" ? "":
+                                    `<p class="card-text">Комментарий: ${el.comment}</p>`}
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 `

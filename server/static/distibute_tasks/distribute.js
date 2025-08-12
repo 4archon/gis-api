@@ -3,6 +3,7 @@ let gisKey;
 let map = null;
 let cluster = null;
 let filteredPoints;
+let currentDataJson = null;
 
 
 async function getPoinst() {
@@ -15,9 +16,7 @@ async function getPoinst() {
     res = await response.json();
     data = res.points;
     gisKey = res.gisKey;
-    // console.log(data);
-    // console.log(data.filter((el) => el.works !== null).map((el) => filterWorks(el.works))
-    // .filter((el) => el[0].work != "Работа не требуется"));
+    currentDataJson = JSON.stringify(res);
     createMap();
 }
 
@@ -58,3 +57,4 @@ function fillPoints() {
 }
 
 getPoinst();
+reloadData();

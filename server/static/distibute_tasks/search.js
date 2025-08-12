@@ -4,20 +4,21 @@ function search(event) {
     let val = event.currentTarget.value;
     const reCoordinates = /-?\d+\.?\d+/g;
     res = val.match(reCoordinates);
-    if (res.length == 2 && res.every((el) => el <= 180 && el >=-180)) {
+    console.log(res);
+    if (res !== null && res.length == 2 && res.every((el) => el <= 180 && el >=-180)) {
         showSearchedCoordinates(res);
         event.currentTarget.classList.remove("is-invalid");
     } else {
         const reID = /[yw]?\d+/;
         res = val.match(reID);
-        if (res.length == 1 && res.every((el) => el.length > 1 &&
+        if (res !== null && res.length == 1 && res.every((el) => el.length > 1 &&
         (el[0] == "w" || el[0] == "y"))) {
             found = findPointByExternalID(res[0]);
             event.currentTarget.classList.remove("is-invalid");
             if (!found) {
                 event.currentTarget.classList.add("is-invalid");
             }
-        } else if (res.length == 1) {
+        } else if (res !== null && res.length == 1) {
             found = findPointByID(res[0]);
             event.currentTarget.classList.remove("is-invalid");
             if (!found) {

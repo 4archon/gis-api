@@ -290,3 +290,30 @@ func (p *PostgresDB) ChangePoint(data business.ChangePoint) (error) {
 
 	return nil
 }
+
+func (p *PostgresDB) DeletePointTask(data business.Task) (error) {
+	tx, err := p.db.Begin()
+	if err != nil {
+		log.Println(err)
+		return err
+	}
+
+	_, err = tx.Exec(`delete from tasks where id = $1`, data.ID)
+	if err != nil {
+		err2 := tx.Rollback()
+		if err2 != nil {
+			log.Println(err2)
+			return err2
+		}
+		log.Println(err)
+		return err
+	}
+
+	err = tx.Commit()
+	if err != nil {
+		log.Println(err)
+		return err
+	}
+
+	return nil
+}
