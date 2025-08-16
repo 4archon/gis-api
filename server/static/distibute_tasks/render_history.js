@@ -108,17 +108,30 @@ function render_history_body(data) {
                 `<h5 class="card-title">Результат:</h5>`}
                 <ul class="list-group list-group-flush">
                     ${element.works === null ? "":
-                        !element.works.every((el) => el.work != "Работа не требуется") ?
+                        element.works.filter((el) => el.type == "required")
+                        .every((el) => el.work == "Работа не требуется") ?
                         `<li class="list-group-item">Работа не требуется</li>`:
-                        element.works.reduce((acc, el) => {
-                        return acc +=
-                        `
-                        <li class="list-group-item">
-                        ${el.type == "done" ? "Выполнено: ": "Требуется выполнить: "}    
-                        ${el.work}, количество дуг: ${el.arc} 
-                        </li>
-                        `
-                    }, "")}
+                        element.works.filter((el) => el.type == "required").reduce((acc, el) => {
+                            return acc +=
+                            `
+                            <li class="list-group-item">
+                            ${el.type == "done" ? "Выполнено: ": "Требуется выполнить: "}    
+                            ${el.work}, количество дуг: ${el.arc} 
+                            </li>
+                            `
+                        }, "")
+                    }
+                    ${element.works === null ? "":
+                        element.works.filter((el) => el.type == "done").reduce((acc, el) => {
+                            return acc +=
+                            `
+                            <li class="list-group-item">
+                            ${el.type == "done" ? "Выполнено: ": "Требуется выполнить: "}    
+                            ${el.work}, количество дуг: ${el.arc} 
+                            </li>
+                            `
+                        }, "")
+                    }
                 </ul>
                 <h5 class="card-title">Материалы:</h5>
                 <div class="row">

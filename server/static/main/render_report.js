@@ -1358,10 +1358,18 @@ function render_different_media_sets() {
     if (reportData.type == "decline") {
         switch(reportData.reason) {
         case "Идет благоустройство - требуется забрать дуги":
-            render_set_service_media();
+            if (reportData.yourself) {
+                render_set_service_media();
+            } else {
+                render_set_inspection_media();
+            }
             break;
         case "Идет благоустройство - требуется демонтировать и забрать дуги":
-            render_set_service_media();
+            if (reportData.yourself) {
+                render_set_service_media();
+            } else {
+                render_set_inspection_media();
+            }
             break;
         case "Точка является дублем":
             document.getElementById("media-tittle").remove();
