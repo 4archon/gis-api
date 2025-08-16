@@ -132,7 +132,9 @@ async function sendInspection() {
     reportResponseHandler(res);
 }
 
-function sendReport() {
+function sendReport(event) {
+    event.currentTarget.disabled = true;
+    pointReport.hide();
     if (reportData.type == "decline") {
         sendDecline();
     } else if (reportData.type == "service") {
@@ -162,7 +164,6 @@ function newNotification(success) {
     }
     let container = document.getElementById("notification-bar");
     container.appendChild(alertContainer);
-    pointReport.hide();
     getPoinst();
 
     setTimeout(() => {

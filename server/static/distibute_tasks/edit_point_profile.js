@@ -230,7 +230,7 @@ function render_point_edit_body(point) {
                     <div class="col-md-5">
                         <label for="inputPointEdit-Mark-Type${el.id}" class="form-label">Тип дуги</label>
                         <select id="inputPointEdit-Mark-Type${el.id}" class="form-select">
-                            ${["Дорожная краска", "Термопластик", "Болончик"].reduce((acc2, el2) => {
+                            ${["Дорожная краска", "Термопластик", "Баллончик"].reduce((acc2, el2) => {
                                 return acc2 +
                                 `
                                 <option value="${el2}" ${el.type == el2 ? "selected":""}>${el2}</option>

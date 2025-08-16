@@ -200,7 +200,9 @@ function filteringAppoint(previous) {
             return el;
         }
     });
-    if (filterOptions.appointTo.length > 0) {
+    if (filterOptions.appointTo.length > 0 && filterOptions.appointOperationAnd) {
+        
+    } else if (filterOptions.appointTo.length > 0) {
         previous = previous.filter((el) => {
             if (el.appoint === null) {
                 if (noAppoint) {
@@ -388,6 +390,7 @@ function getFilterOptions() {
         carpets: [],
         owners: [],
         operators: [],
+        appointOperationAnd: null,
         appointTo: [],
         markingOnly: null,
         activeMarkings: null,
@@ -422,7 +425,7 @@ function getFilterOptions() {
     filterOptions.numArcTo = document.getElementById("num-arc-to").value == "" ? null :
     Number(document.getElementById("num-arc-to").value);
 
-    for (let i = 1; i <= 4; i++) {
+    for (let i = 1; i <= 5; i++) {
         if (document.getElementById(`at${i}`).checked) {
             filterOptions.arcTypes.push(document.getElementById(`l-at${i}`).innerHTML)
         }
@@ -445,6 +448,8 @@ function getFilterOptions() {
             filterOptions.operators.push(document.getElementById(`l-op${i}`).innerHTML)
         }
     }
+
+    filterOptions.appointOperationAnd = document.getElementById("ap-boolean").checked;
 
     for (let i = 1; i <= 3; i++) {
         if (document.getElementById(`ap${i}`).checked) {
