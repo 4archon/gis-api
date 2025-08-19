@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"strconv"
 	"errors"
+	"slices"
 )
 
 
@@ -35,7 +36,6 @@ func (s Server) postPointRecentMedia(response http.ResponseWriter, req *http.Req
 		return
 	}
 
-	// data.Medias = data.Medias[0:3]
 	data.Medias = recentMedia(data.Medias)
 
 	resutl, err := json.Marshal(data)
@@ -51,9 +51,37 @@ func (s Server) postPointRecentMedia(response http.ResponseWriter, req *http.Req
 
 
 func recentMediaByName(data []business.Media, name string) (business.Media, error) {
-	for _, i := range data {
-		if i.MediaName == name {
-			return i, nil
+	switch (name) {
+	case "left":
+		targetValue := []string{"Фото слева(старое место)", "Фото слева(новое место)",
+		"Фото слева", "Фото слева после покраски", "Фото разметки слева"}
+		for _, i := range data {
+			if slices.Contains(targetValue, i.MediaName) {
+				return i, nil
+			}
+		}
+	case "front":
+		targetValue := []string{"Фото спереди(старое место)", "Фото спереди(новое место)",
+		"Фото спереди", "Фото спереди после покраски", "Фото разметки спереди"}
+		for _, i := range data {
+			if slices.Contains(targetValue, i.MediaName) {
+				return i, nil
+			}
+		}
+	case "right":
+		targetValue := []string{"Фото справа(старое место)", "Фото справа(новое место)",
+		"Фото справа", "Фото справа после покраски", "Фото разметки справа"}
+		for _, i := range data {
+			if slices.Contains(targetValue, i.MediaName) {
+				return i, nil
+			}
+		}
+	case "video":
+		targetValue := []string{"Видео", "Видео после покраски", "Видео разметки"}
+		for _, i := range data {
+			if slices.Contains(targetValue, i.MediaName) {
+				return i, nil
+			}
 		}
 	}
 
@@ -63,16 +91,16 @@ func recentMediaByName(data []business.Media, name string) (business.Media, erro
 func recentMedia(data []business.Media) []business.Media {
 	var medias []business.Media
 
-	if media, err := recentMediaByName(data, "Фото слева"); err == nil {
+	if media, err := recentMediaByName(data, "left"); err == nil {
 		medias = append(medias, media)
 	}
-	if media, err := recentMediaByName(data, "Фото спереди"); err == nil {
+	if media, err := recentMediaByName(data, "front"); err == nil {
 		medias = append(medias, media)
 	}
-	if media, err := recentMediaByName(data, "Фото справа"); err == nil {
+	if media, err := recentMediaByName(data, "right"); err == nil {
 		medias = append(medias, media)
 	}
-	if media, err := recentMediaByName(data, "Видео"); err == nil {
+	if media, err := recentMediaByName(data, "video"); err == nil {
 		medias = append(medias, media)
 	}
 	
