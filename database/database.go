@@ -39,4 +39,6 @@ type DB interface {
 	NewServiceReport(userID int, report business.ServiceReport) (int, error)
 
 	NewMedia(media business.Media) (int, error)
+
+	GetAllData() (business.AllData, error)
 }

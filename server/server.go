@@ -76,6 +76,7 @@ func (s Server) Run() {
 	router.HandleFunc("/analytics", s.getAnalytics).Methods("GET")
 	router.HandleFunc("/analytics", s.postAnalytics).Methods("POST")
 
+	router.HandleFunc("/all_data_download", s.allDataDownload).Methods("POST")
 
 	fmt.Println("Server is running")
 	http.ListenAndServe(fmt.Sprintf("%s:%s", s.Host, s.Port), router)
