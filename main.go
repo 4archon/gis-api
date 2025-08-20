@@ -30,6 +30,7 @@ func main() {
 	serv.GisApi = conf.GisApi
 	serv.DB = db
 	serv.Auth = auth
+	serv.AllDataSecretKey = conf.AllDataSecretKey
 
 	serv.Run()
 

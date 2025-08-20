@@ -9,8 +9,6 @@ import (
 
 
 func (s Server) allDataDownload(response http.ResponseWriter, req *http.Request) {
-	secretKey := "Dr3BYHUW28y69NP4YzznGYPbpLFLePrX"
-
 	defer req.Body.Close()
 	body, err := io.ReadAll(req.Body)
 	if err != nil {
@@ -19,7 +17,7 @@ func (s Server) allDataDownload(response http.ResponseWriter, req *http.Request)
 	}
 
 	userSecret := string(body)
-	if secretKey != userSecret {
+	if s.AllDataSecretKey != userSecret {
 		response.WriteHeader(http.StatusBadRequest)
 		return
 	}

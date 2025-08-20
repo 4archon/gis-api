@@ -14,6 +14,7 @@ type Config struct {
 	PostgresSSL				string	`json:"postgresSSL"`
 	PostgresIsolationLevel	string	`json:"postgresIsolationLevel"`
 	JwtSecretKey			[]byte	`json:"jwtSecretKey"`
+	AllDataSecretKey		string	`json:"AllDataSecretKey"`
 }
 
 func (c *Config) Init() {

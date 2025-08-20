@@ -9,11 +9,12 @@ import (
 )
 
 type Server struct {
-	Host string
-	Port string
-	GisApi string
-	DB database.DB
-	Auth authentication.Auth
+	Host				string
+	Port				string
+	GisApi				string
+	DB					database.DB
+	Auth				authentication.Auth
+	AllDataSecretKey	string
 }
 
 func (s Server) blockFileServer(next http.Handler) http.Handler {
