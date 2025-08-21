@@ -41,6 +41,7 @@ func (s Server) allDataDownload(response http.ResponseWriter, req *http.Request)
 	gz.Close()
 
 	response.Header().Set("Content-Type", "applicaton/json")
+	response.Header().Set("Content-Encoding", "gzip")
 	response.WriteHeader(http.StatusOK)
 	response.Write(buf.Bytes())
 }
