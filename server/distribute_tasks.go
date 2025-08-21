@@ -39,7 +39,7 @@ func (s Server) postDistributeTasks(response http.ResponseWriter, req *http.Requ
 		return
 	}
 
-	resutl, err := json.Marshal(data)
+	result, err := json.Marshal(data)
 	if err != nil {
 		log.Println(err)
 		return
@@ -47,7 +47,7 @@ func (s Server) postDistributeTasks(response http.ResponseWriter, req *http.Requ
 
 	response.Header().Set("Content-Type", "applicaton/json")
 	response.WriteHeader(http.StatusOK)
-	response.Write(resutl)
+	response.Write(result)
 }
 
 func (s Server) postApplyTaskToPoints(response http.ResponseWriter, req *http.Request) {

@@ -38,7 +38,7 @@ func (s Server) postReportDecline(response http.ResponseWriter, req *http.Reques
 
 	var data business.ServiceID
 	data.ID = serviceID
-	resutl, err := json.Marshal(data)
+	result, err := json.Marshal(data)
 	if err != nil {
 		log.Println(err)
 		return
@@ -46,7 +46,7 @@ func (s Server) postReportDecline(response http.ResponseWriter, req *http.Reques
 
 	response.Header().Set("Content-Type", "applicaton/json")
 	response.WriteHeader(http.StatusOK)
-	response.Write(resutl)
+	response.Write(result)
 }
 
 func (s Server) postReportService(response http.ResponseWriter, req *http.Request) {
@@ -77,7 +77,7 @@ func (s Server) postReportService(response http.ResponseWriter, req *http.Reques
 
 	var data business.ServiceID
 	data.ID = serviceID
-	resutl, err := json.Marshal(data)
+	result, err := json.Marshal(data)
 	if err != nil {
 		log.Println(err)
 		return
@@ -85,7 +85,7 @@ func (s Server) postReportService(response http.ResponseWriter, req *http.Reques
 
 	response.Header().Set("Content-Type", "applicaton/json")
 	response.WriteHeader(http.StatusOK)
-	response.Write(resutl)
+	response.Write(result)
 }
 
 func (s Server) postReportInspection(response http.ResponseWriter, req *http.Request) {
@@ -115,7 +115,7 @@ func (s Server) postReportInspection(response http.ResponseWriter, req *http.Req
 
 	var data business.ServiceID
 	data.ID = serviceID
-	resutl, err := json.Marshal(data)
+	result, err := json.Marshal(data)
 	if err != nil {
 		log.Println(err)
 		return
@@ -123,7 +123,7 @@ func (s Server) postReportInspection(response http.ResponseWriter, req *http.Req
 
 	response.Header().Set("Content-Type", "applicaton/json")
 	response.WriteHeader(http.StatusOK)
-	response.Write(resutl)
+	response.Write(result)
 }
 
 func (s Server) postReportMedia(response http.ResponseWriter, req *http.Request) {

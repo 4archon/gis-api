@@ -38,7 +38,7 @@ func (s Server) postPointRecentMedia(response http.ResponseWriter, req *http.Req
 
 	data.Medias = recentMedia(data.Medias)
 
-	resutl, err := json.Marshal(data)
+	result, err := json.Marshal(data)
 	if err != nil {
 		log.Println(err)
 		return
@@ -46,7 +46,7 @@ func (s Server) postPointRecentMedia(response http.ResponseWriter, req *http.Req
 
 	response.Header().Set("Content-Type", "applicaton/json")
 	response.WriteHeader(http.StatusOK)
-	response.Write(resutl)
+	response.Write(result)
 }
 
 

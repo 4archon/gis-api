@@ -1,6 +1,8 @@
 package server
 
 import (
+	"bytes"
+	"compress/gzip"
 	"encoding/json"
 	"io"
 	"log"
@@ -27,14 +29,18 @@ func (s Server) allDataDownload(response http.ResponseWriter, req *http.Request)
 		return
 	}
 
-
-	resutl, err := json.Marshal(data)
+	result, err := json.Marshal(data)
 	if err != nil {
 		log.Println(err)
 		return
 	}
 
+	var buf bytes.Buffer
+	gz := gzip.NewWriter(&buf)
+	gz.Write(result)
+	gz.Close()
+
 	response.Header().Set("Content-Type", "applicaton/json")
 	response.WriteHeader(http.StatusOK)
-	response.Write(resutl)
+	response.Write(buf.Bytes())
 }

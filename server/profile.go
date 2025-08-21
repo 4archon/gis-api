@@ -70,7 +70,7 @@ func (s Server) postPointCurrentTasks(response http.ResponseWriter, req *http.Re
 		return
 	}
 
-	resutl, err := json.Marshal(data)
+	result, err := json.Marshal(data)
 	if err != nil {
 		log.Println(err)
 		return
@@ -78,5 +78,5 @@ func (s Server) postPointCurrentTasks(response http.ResponseWriter, req *http.Re
 
 	response.Header().Set("Content-Type", "applicaton/json")
 	response.WriteHeader(http.StatusOK)
-	response.Write(resutl)
+	response.Write(result)
 }
