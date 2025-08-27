@@ -15,7 +15,8 @@ function render_users_filter() {
         `
         <li class="list-group-item">
             <input id="filter-worker${el.id}" data-id="${el.id}" type="checkbox"
-            class="form-check-label" onchange="fillPoints()">
+            ${filterOptions.appointUsersID.includes(el.id) ? "checked" : ""}
+            class="form-check-label" onchange="fillPoints()" />
             <label class="mx-1" for="filter-worker${el.id}">
                 <span class="badge text-bg-primary">${el.id}</span>
                 <span class="badge text-bg-dark">
