@@ -185,6 +185,17 @@
                 <label id="l-ap2" class="btn" for="ap2">Сервис</label>
                 <input id="ap3" type="checkbox" class="btn-check" onchange="fillPoints()">
                 <label id="l-ap3" class="btn" for="ap3">Без назначений</label>
+                <div class="card mt-2">
+                    <div class="card-header">
+                        <div class="form-check form-switch form-check-reverse">
+                            <input id="filter-workers-boolean" class="form-check-input"type="checkbox" role="switch" onchange="fillPoints()">
+                            <label class="form-check-label" for="filter-workers-boolean">Точки выданы/не выданы испол-лям</label>
+                        </div>
+                    </div>
+                    <ul id="filter-workers" class="list-group list-group-flush"
+                    style="min-height: 200px; max-height: 200px; overflow-y: auto;">
+                    </ul>
+                </div>
 
                 <h5 class="mt-3">Разметка:</h5>
                 <div class="mt-3 mb-1">

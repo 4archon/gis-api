@@ -4,7 +4,28 @@ let filterOptions = null;
 document.getElementById("filter-button").onclick = showFilter;
 
 function showFilter() {
+    render_users_filter();
     filterBar.toggle();
+}
+
+function render_users_filter() {
+    let container = document.getElementById("filter-workers");
+    container.innerHTML = users.reduce((acc, el) => {
+        return acc +
+        `
+        <li class="list-group-item">
+            <input id="filter-worker${el.id}" data-id="${el.id}" type="checkbox"
+            class="form-check-label" onchange="fillPoints()">
+            <label class="mx-1" for="filter-worker${el.id}">
+                <span class="badge text-bg-primary">${el.id}</span>
+                <span class="badge text-bg-dark">
+                    ${el.subgroup === null ? "н" : el.subgroup === "service" ? "с" : "и"}
+                </span>
+                ${el.login === null ? "Логин не указан" : el.login}
+            </label>
+        </li>
+        `
+    }, "");
 }
 
 function filterPoints() {
@@ -16,6 +37,7 @@ function filterPoints() {
     result = filteringDaysWithout(result);
     result = filteringPointsInfo(result);
     result = filteringAppoint(result);
+    result = filteringUserAppoint(result);
     result = filteringMarkings(result);
     result = filteringWorks(result);
     result = filteringStatuses(result);
@@ -201,7 +223,26 @@ function filteringAppoint(previous) {
         }
     });
     if (filterOptions.appointTo.length > 0 && filterOptions.appointOperationAnd) {
-        
+        if (noAppoint) {
+            if (filterOptions.appointTo.length > 1) {
+                return []
+            } else {
+                previous = previous.filter((el) => {
+                    if (el.appoint === null) {
+                        return true;
+                    }
+                })
+            }
+        } else {
+            let userGroupsSet = new Set(targetUserGroups);
+            previous = previous.filter((el) => {
+                let pointSet = new Set(el.appoint === null ? null : 
+                    el.appoint.map((element) => element.subgroup));
+                if (userGroupsSet.isSubsetOf(pointSet)) {
+                    return true;
+                }
+            });
+        }
     } else if (filterOptions.appointTo.length > 0) {
         previous = previous.filter((el) => {
             if (el.appoint === null) {
@@ -212,6 +253,37 @@ function filteringAppoint(previous) {
                 }
             }
             return el.appoint.some((element) => targetUserGroups.includes(element.subgroup));
+        });
+    }
+
+    return previous;
+}
+
+function filteringUserAppoint(previous) {
+    if (filterOptions.appointUsersID.length == 0) {
+        return previous;
+    }
+    if (filterOptions.appointUsersOperationNot) {
+        previous = previous.filter((el) => {
+            if (el.appoint === null) {
+                return true;
+            } else {
+                if (el.appoint.some((element) =>
+                    filterOptions.appointUsersID.includes(element.id))) {
+                    return false;
+                } else {
+                    return true;
+                }
+            }
+        });
+    } else {
+        previous = previous.filter((el) => {
+            if (el.appoint !== null) {
+                if (el.appoint.some((element) => 
+                    filterOptions.appointUsersID.includes(element.id))) {
+                    return true;
+                }
+            }
         });
     }
 
@@ -392,6 +464,8 @@ function getFilterOptions() {
         operators: [],
         appointOperationAnd: null,
         appointTo: [],
+        appointUsersOperationNot: null,
+        appointUsersID: [],
         markingOnly: null,
         activeMarkings: null,
         markingTypes: [],
@@ -454,6 +528,14 @@ function getFilterOptions() {
     for (let i = 1; i <= 3; i++) {
         if (document.getElementById(`ap${i}`).checked) {
             filterOptions.appointTo.push(document.getElementById(`l-ap${i}`).innerHTML)
+        }
+    }
+
+    filterOptions.appointUsersOperationNot = document.getElementById("filter-workers-boolean").checked;
+
+    for (const el of document.getElementById("filter-workers").getElementsByTagName("input")) {
+        if (el.checked) {
+            filterOptions.appointUsersID.push(Number(el.getAttribute("data-id")));
         }
     }
 

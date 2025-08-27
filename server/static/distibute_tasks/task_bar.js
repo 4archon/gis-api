@@ -18,6 +18,7 @@ async function getUsers() {
         credentials: "same-origin"
     })
     users = (await response.json()).users;
+    users.sort((a, b) => a.id - b.id);
 }
 
 getUsers();

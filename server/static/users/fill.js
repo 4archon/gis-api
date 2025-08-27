@@ -20,6 +20,7 @@ async function getUsers() {
     })
     res = await response.json();
     data = res.users;
+    data.sort((a, b) => a.id - b.id);
     renderCards(data);
 }
 
