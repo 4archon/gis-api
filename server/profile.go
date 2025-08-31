@@ -20,12 +20,8 @@ func (s Server) getProfile(response http.ResponseWriter, req *http.Request) {
 
 
 func (s Server) postProfile(response http.ResponseWriter, req *http.Request) {
-	id, role, err := s.checkUser(response, req)
+	id, _, err := s.checkUser(response, req)
 	if err != nil {
-		return
-	}
-	if role == "worker" {
-		http.Redirect(response, req, "main", http.StatusFound)
 		return
 	}
 	
