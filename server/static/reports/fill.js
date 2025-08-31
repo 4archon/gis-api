@@ -145,6 +145,7 @@ function render_card(element) {
             </ul>
             <h5 class="card-title">Данные точки
             <span class="badge text-bg-primary">${element.point.id}</span>
+            <span class="badge text-bg-danger">${element.point.externalID}</span>
             </h5>
             <ul class="list-group list-group-flush">
                 <li class="list-group-item">Координаты точки: ${element.point.lat}, ${element.point.long}</li>
