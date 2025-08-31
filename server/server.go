@@ -77,6 +77,10 @@ func (s Server) Run() {
 	router.HandleFunc("/analytics", s.getAnalytics).Methods("GET")
 	router.HandleFunc("/analytics", s.postAnalytics).Methods("POST")
 
+	router.HandleFunc("/reports", s.getReports).Methods("GET")
+	router.HandleFunc("/reports/{page:[0-9]+}", s.getReportsPage).Methods("GET")
+	router.HandleFunc("/reports/{page:[0-9]+}", s.postReportsPage).Methods("POST")
+
 	router.HandleFunc("/all_data_info", s.allDataInfo).Methods("POST")
 	router.HandleFunc("/all_data_download/{id:[0-9]+}", s.allDataDownload).Methods("POST")
 

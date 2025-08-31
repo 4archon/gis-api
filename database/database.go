@@ -29,6 +29,7 @@ type DB interface {
 	GetPointHistory(id int) (business.History, error)
 	GetPointMedia(id int) (business.PointMedias, error)
 	GetPointCurrentTasks(id int) (business.TasksAndWorks, error)
+	GetAllServices(numRows int, offset int) (business.AllServices, error)
 
 	CreateNewUser(user business.User) (int, error)
 	ChangeUser(user business.User) error

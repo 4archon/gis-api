@@ -1,20 +1,24 @@
 function activePage() {
     let path = window.location.pathname.substring(1, window.location.pathname.length);
+    path = path.split("/")[0]
     switch(path) {
         case "employees":
-            document.getElementById(path).classList.add("active");
+            document.getElementById("header-" + path).classList.add("active");
             return
         case "main":
-            document.getElementById(path).classList.add("active");
+            document.getElementById("header-" + path).classList.add("active");
             return
         case "analytics":
-            document.getElementById(path).classList.add("active");
+            document.getElementById("header-" + path).classList.add("active");
             return
         case "distribute_tasks":
-            document.getElementById(path).classList.add("active");
+            document.getElementById("header-" + path).classList.add("active");
             return
         case "tasks":
-            document.getElementById(path).classList.add("active");
+            document.getElementById("header-" + path).classList.add("active");
+            return
+        case "reports":
+            document.getElementById("header-" + path).classList.add("active");
             return
     }
 }
