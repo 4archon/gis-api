@@ -381,7 +381,6 @@ function validateForm() {
                 && !reportData.notRequire) {
                 if (reportData.carry) {
                     if(reportData.newLocation !== null && reportData.newCarpet !== null &&
-                        reportData.data.some((el) => el.type == "Демонтаж") &&
                         reportData.data.some((el) => el.type == "Монтаж")) {
                         if (reportData.left === false) {
                             return true
