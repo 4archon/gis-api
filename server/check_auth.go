@@ -5,6 +5,7 @@ import (
 	"html/template"
 	"log"
 	"net/http"
+	"time"
 )
 
 type badLoginPass struct {
@@ -43,7 +44,7 @@ func (s Server) authentication(response http.ResponseWriter, req *http.Request) 
 			http.ServeFile(response, req, "server/templates/auth/auth.html")
 			return
 		}
-		cookie := http.Cookie{Name: "AuthToken", Value: token}
+		cookie := http.Cookie{Name: "AuthToken", Value: token, Expires: time.Now().Add(30 * 24 * time.Hour)}
 		http.SetCookie(response, &cookie)
 		http.Redirect(response, req, "main", http.StatusFound)
 		return
