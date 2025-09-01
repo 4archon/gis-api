@@ -123,7 +123,7 @@ function render_card(element) {
                     <span class="badge text-bg-primary">
                         ${element.sentBy.subgroup === null ? "не указано" : element.sentBy.subgroup}
                     </span>
-                    ${element.sentBy.login !== null ? el.sentBy.login : ""}
+                    ${element.sentBy.login !== null ? element.sentBy.login : ""}
                 </li>
                 <li class="list-group-item">Дата исполнения:
                 ${element.execution === null ? "Не указано":
