@@ -13,12 +13,12 @@ let data;
 
 async function getUsers() {
     let url = "/employees"
-    response = await fetch(url, {
+    let response = await fetch(url, {
         method: "POST",
         cache: "no-cache",
         credentials: "same-origin"
     })
-    res = await response.json();
+    let res = await response.json();
     data = res.users;
     data.sort((a, b) => a.id - b.id);
     renderCards(data);
@@ -30,20 +30,23 @@ const dialog = new bootstrap.Modal(document.getElementById("dialog"), null);
 
 function changeUser(event) {
     let id = event.target.getAttribute("data-id");
-    element = data.find(element => element.id == id);
+    let element = data.find(element => element.id == id);
     document.getElementById("dialog-title").innerHTML = "Изменить данные пользователя id: " + id;
-    body = document.getElementById("dialog-body");
+    
+    let body = document.getElementById("dialog-body");
     body.innerHTML = render_edit(element);
-    save = document.getElementById("dialog-save");
+
+    let save = document.getElementById("dialog-save");
     save.setAttribute("data-id", id);
-    document.getElementById("dialog-save").onclick = changeUserData;
-    document.getElementById("dialog-save").innerHTML = "Сохранить изменения";
+    save.onclick = changeUserData;
+    save.innerHTML = "Сохранить изменения";
+    
     dialog.show();
 }
 
 function changeUserData(event) {
     let id = event.target.getAttribute("data-id");
-    element = data.find(element => element.id == id);
+    let element = data.find(element => element.id == id);
     element.login = document.getElementById("inputLogin").value
     element.role = document.getElementById("inputRole").value;
     element.active = document.getElementById("inputActive").value == "true" ? true : false;
@@ -67,7 +70,7 @@ function changeUserData(event) {
 
 async function changeUserBackend(element) {
     let url = "/change_user"
-    response = await fetch(url, {
+    let response = await fetch(url, {
         method: "POST",
         cache: "no-cache",
         credentials: "same-origin",
@@ -76,11 +79,11 @@ async function changeUserBackend(element) {
         },
         body: JSON.stringify(element)
     })
-    res = await response;
+    let res = await response;
 }
 
 function newUser() {
-    body = document.getElementById("dialog-body");
+    let body = document.getElementById("dialog-body");
     body.innerHTML = render_new_edit();
     document.getElementById("dialog-title").innerHTML = "Создать нового пользователя";
     document.getElementById("dialog-save").onclick = createNewUser;
@@ -102,7 +105,7 @@ function createNewUser() {
         trust: document.getElementById("inputTrust").value == "true" ? true : false
     }
     createNewUserBackend(element).then(() => {
-        data.unshift(element);
+        data.push(element);
         renderCards(data);
         dialog.hide();
     });
@@ -112,7 +115,7 @@ function createNewUser() {
 
 async function createNewUserBackend(element) {
     let url = "/create_new_user"
-    response = await fetch(url, {
+    let response = await fetch(url, {
         method: "POST",
         cache: "no-cache",
         credentials: "same-origin",
@@ -121,7 +124,7 @@ async function createNewUserBackend(element) {
         },
         body: JSON.stringify(element)
     })
-    res = await response.text();
+    let res = await response.text();
     element["id"] = Number(res);
 }
 

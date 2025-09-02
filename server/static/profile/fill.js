@@ -1,13 +1,13 @@
 let data;
 
 async function getProfile() {
-    url = "/profile"
-    response = await fetch(url, {
+    let url = "/profile"
+    let response = await fetch(url, {
         method: "POST",
         cache: "no-cache",
         credentials: "same-origin"
     })
-    res = await response.json();
+    let res = await response.json();
     data = res;
     renderProfile(data);
 }
@@ -28,7 +28,7 @@ getProfile();
 document.getElementById("cancel").onclick = () => {window.history.back();}
 
 function changeProfile() {
-    element = {
+    let element = {
         name: document.getElementById("inputName").value,
         surname: document.getElementById("inputSurname").value,
         patronymic: document.getElementById("inputPatronymic").value,
@@ -43,8 +43,8 @@ function changeProfile() {
 }
 
 async function changeProfileBackend(element) {
-    url = "/change_user_profile"
-    response = await fetch(url, {
+    let url = "/change_user_profile"
+    let response = await fetch(url, {
         method: "POST",
         cache: "no-cache",
         credentials: "same-origin",
@@ -53,7 +53,7 @@ async function changeProfileBackend(element) {
         },
         body: JSON.stringify(element)
     })
-    res = await response;
+    let res = await response;
 }
 
 document.getElementById("save").onclick = changeProfile;

@@ -41,14 +41,14 @@ function render_edit(element) {
                 <div class="row g-3">
                     <div class="col-md-6">
                         <label for="inputLogin" class="form-label">Логин</label>
-                        <input id="inputLogin" 
+                        <input id="inputLogin"
                         value="${element.login === null ? "": element.login}" 
                         class="form-control"  placeholder="Введите логин">
                     </div>
                     <div class="col-md-6">
                         <label for="inputPassword" class="form-label">Пароль</label>
-                        <input id="inputPassword" class="form-control" 
-                        type="password" placeholder="Пароль останется прежним">
+                        <input id="inputPassword" class="form-control"
+                        placeholder="Пароль останется прежним">
                     </div>
                     <div class="col-md-6">
                         <label for="inputRole" class="form-label">Роль</label>
@@ -129,14 +129,14 @@ function render_new_edit() {
                 <div class="row g-3">
                     <div class="col-md-6">
                         <label for="inputLogin" class="form-label">Логин</label>
-                        <input id="inputLogin" 
+                        <input id="inputLogin"
                         value="" 
                         class="form-control"  placeholder="Введите логин">
                     </div>
                     <div class="col-md-6">
                         <label for="inputPassword" class="form-label">Пароль</label>
                         <input id="inputPassword" class="form-control" 
-                        type="password" placeholder="Пароль останется прежним">
+                        placeholder="Пароль останется прежним">
                     </div>
                     <div class="col-md-6">
                         <label for="inputRole" class="form-label">Роль</label>
