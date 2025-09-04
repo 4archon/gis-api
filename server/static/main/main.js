@@ -37,6 +37,18 @@ function fillPoints() {
             key: gisKey,
             style: "c080bb6a-8134-4993-93a1-5b4d8c36a59b"
         });
+
+        let container = document.getElementById("map");
+        let canvas = container.getElementsByTagName("canvas")[0];
+
+        canvas.addEventListener("webglcontextlost",
+            (event) => {event.preventDefault();}, false);
+        
+        canvas.addEventListener("webglcontextrestored", () => {
+            map.destroy();
+            map = null;
+            getPoinst();
+        }, false);
     }
 
     fillAppointedPoints();
