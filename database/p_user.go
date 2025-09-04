@@ -7,13 +7,16 @@ import (
 
 func (p *PostgresDB) GetUserLogin(id int) string {
 	res := p.db.QueryRow(`select login from users where id = $1;`, id)
-	var email string
+	var email *string
 	err := res.Scan(&email)
 	if err != nil {
 		log.Println(err)
 		return ""
 	}
-	return email
+	if email == nil {
+		return ""
+	}
+	return *email
 }
 
 func (p *PostgresDB) ChangeUserPassword(id int, password string) error {

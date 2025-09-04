@@ -1338,7 +1338,7 @@ function changeYourselfCounter(event) {
     render_data_to_form();
 }
 
-let mediaCounter;
+let mediaCounter = 0;
 
 function render_load_media() {
     let container = document.getElementById("report-data");

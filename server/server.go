@@ -69,10 +69,7 @@ func (s Server) Run() {
 	router.HandleFunc("/point_edit", s.postPointEdit).Methods("POST")
 	router.HandleFunc("/delete_task", s.postDeletePointTask).Methods("POST")
 
-	router.HandleFunc("/report/decline", s.postReportDecline).Methods("POST")
-	router.HandleFunc("/report/service", s.postReportService).Methods("POST")
-	router.HandleFunc("/report/inspection", s.postReportInspection).Methods("POST")
-	router.HandleFunc("/report/media", s.postReportMedia).Methods("POST")
+	router.HandleFunc("/report", s.postReport).Methods("POST")
 	
 	router.HandleFunc("/analytics", s.getAnalytics).Methods("GET")
 	router.HandleFunc("/analytics", s.postAnalytics).Methods("POST")

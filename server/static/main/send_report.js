@@ -26,7 +26,7 @@ function extractStatusFromGroup(group) {
     }
 }
 
-async function sendDecline() {
+function getDeclineReportJson() {
     let report = {
         appoint: appoint,
         pointID: Number(reportPointID),
@@ -46,23 +46,10 @@ async function sendDecline() {
         })
     }
     console.log(report);
-
-    let url = "/report/decline"
-    response = await fetch(url, {
-        method: "POST",
-        cache: "no-cache",
-        credentials: "same-origin",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(report)
-    })
-    let res = await response;
-    console.log(res.ok);
-    reportResponseHandler(res);
+    return JSON.stringify(report);
 }
 
-async function sendService() {
+function getServiceReportJson() {
     let report = {
         appoint: appoint,
         pointID: Number(reportPointID),
@@ -81,25 +68,11 @@ async function sendService() {
         status: extractStatusFromGroup(reportGroup),
         comment: reportData.comment
     }
-
     console.log(report);
-
-    let url = "/report/service"
-    response = await fetch(url, {
-        method: "POST",
-        cache: "no-cache",
-        credentials: "same-origin",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(report)
-    })
-    let res = await response;
-    console.log(res.ok);
-    reportResponseHandler(res);
+    return JSON.stringify(report);
 }
 
-async function sendInspection() {
+function getInspectionReportJson() {
     let report = {
         appoint: appoint,
         pointID: Number(reportPointID),
@@ -114,43 +87,57 @@ async function sendInspection() {
         paint: reportData.yourself ? reportData.paintCount : null,
         comment: reportData.comment
     }
-
     console.log(report);
-
-    let url = "/report/inspection"
-    response = await fetch(url, {
-        method: "POST",
-        cache: "no-cache",
-        credentials: "same-origin",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(report)
-    })
-    let res = await response;
-    console.log(res.ok);
-    reportResponseHandler(res);
+    return JSON.stringify(report);
 }
 
 function sendReport(event) {
     event.currentTarget.disabled = true;
     pointReport.hide();
+    let report = null;
     if (reportData.type == "decline") {
-        sendDecline();
+        report = getDeclineReportJson();
     } else if (reportData.type == "service") {
-        sendService();
+        report = getServiceReportJson();
     } else if (reportData.type == "inspection") {
-        sendInspection();
+        report = getInspectionReportJson();
+    }
+
+    if (report !== null && reportData.type) {
+        postReportBackend(report, reportData.type);
     }
 }
 
-async function reportResponseHandler(res) {
-    console.log(res.ok);
-    if (res.ok) {
-        sendMedia(res);
-    } else {
-        newNotification(false);
+async function postReportBackend(report, reportType) {
+    console.log(mediaCounter);
+    let formData = new FormData();
+    formData.append("report", report);
+    formData.append("reportType", reportType);
+    formData.append("count", mediaCounter);
+    for (let i = 0; i < mediaCounter; i++) {
+        let element = document.getElementById(`file${i}`);
+        
+        let name = element.getAttribute("data-name");
+        formData.append(`name${i}`, name);
+
+        let mediaType = element.files[0].type.split("/")[0];
+        if (mediaType == "image") mediaType = "jpeg";
+        if (mediaType == "video") mediaType = "mov";
+        formData.append(`type${i}`, mediaType);
+
+        formData.append(`file${i}`, element.files[0])
     }
+
+    let url = "/report"
+    let response = await fetch(url, {
+        method: "POST",
+        cache: "no-cache",
+        credentials: "same-origin",
+        body: formData
+    })
+    let resMedia = await response;
+    console.log(resMedia.ok);
+    newNotification(resMedia.ok);
 }
 
 function newNotification(success) {
@@ -169,37 +156,4 @@ function newNotification(success) {
     setTimeout(() => {
         alertContainer.remove();
     }, 10000);
-}
-
-async function sendMedia(res) {
-    let serviceID = (await res.json()).id;
-    console.log(serviceID);
-    console.log(mediaCounter);
-    let formData = new FormData();
-    formData.append("count", mediaCounter);
-    formData.append("id", serviceID);
-    for (let i = 0; i < mediaCounter; i++) {
-        let element = document.getElementById(`file${i}`);
-        
-        let name = element.getAttribute("data-name");
-        formData.append(`name${i}`, name);
-
-        let mediaType = element.files[0].type.split("/")[0];
-        if (mediaType == "image") mediaType = "jpeg";
-        if (mediaType == "video") mediaType = "mov";
-        formData.append(`type${i}`, mediaType);
-
-        formData.append(`file${i}`, element.files[0])
-    }
-
-    let url = "/report/media"
-    response = await fetch(url, {
-        method: "POST",
-        cache: "no-cache",
-        credentials: "same-origin",
-        body: formData
-    })
-    let resMedia = await response;
-    console.log(resMedia.ok);
-    newNotification(resMedia.ok);
 }
