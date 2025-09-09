@@ -19,6 +19,7 @@ func (s Server) getDistributeTasks(response http.ResponseWriter, req *http.Reque
 		http.Redirect(response, req, "/main", http.StatusFound)
 	}
 
+	response.Header().Set("Cache-Control", "no-cache, no-store, must-revalidate")
 	http.ServeFile(response, req, "server/static/distibute_tasks/distribute.html")
 }
 

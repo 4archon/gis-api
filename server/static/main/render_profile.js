@@ -17,7 +17,7 @@ function render_profile_info(profile) {
             ${profile.district === null || profile.district === "" ? 
                 "Не указано" : profile.district}</li>
             <li class="list-group-item">Координаты:
-            ${profile.coordinates}</li>
+            ${profile.coordinates.toReversed()}</li>
             <li class="list-group-item">Количество дуг:
             ${profile.numberArc === null ? "Не указано" : profile.numberArc}</li>
             <li class="list-group-item">Тип дуги:

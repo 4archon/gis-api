@@ -27,6 +27,13 @@ func (s Server) blockFileServer(next http.Handler) http.Handler {
 	})
 }
 
+func (s Server) blockFileServerCache(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(response http.ResponseWriter, req *http.Request) {
+		response.Header().Set("Cache-Control", "no-cache, no-store, must-revalidate")
+		next.ServeHTTP(response, req)
+	})
+}
+
 func (s Server) Run() {
 	router := mux.NewRouter()
 
@@ -37,7 +44,8 @@ func (s Server) Run() {
 	router.PathPrefix("/media/").Handler(http.StripPrefix("/media", fsMedia))
 
 	fs := http.FileServer(http.Dir("server/static/"))
-	router.PathPrefix("/static/").Handler(http.StripPrefix("/static", s.blockFileServer(fs)))
+	router.PathPrefix("/static/").Handler(http.StripPrefix("/static",
+	s.blockFileServerCache(s.blockFileServer(fs))))
 
 	router.HandleFunc("/", s.rootPage).Methods("GET")
 	router.HandleFunc("/main", s.getMain).Methods("GET")

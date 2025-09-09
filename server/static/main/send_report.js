@@ -125,7 +125,16 @@ async function postReportBackend(report, reportType) {
         if (mediaType == "video") mediaType = "mov";
         formData.append(`type${i}`, mediaType);
 
-        formData.append(`file${i}`, element.files[0])
+        try {
+            if (mediaType == "jpeg") {
+                formData.append(`file${i}`, await (compressImg(element.files[0])));
+            } else {
+                formData.append(`file${i}`, element.files[0]);
+            }
+        } catch (error) {
+            newNotification(false, error);
+            throw error;
+        }
     }
 
     let url = "/report"
@@ -134,20 +143,69 @@ async function postReportBackend(report, reportType) {
         cache: "no-cache",
         credentials: "same-origin",
         body: formData
-    })
-    let resMedia = await response;
-    console.log(resMedia.ok);
-    newNotification(resMedia.ok);
+    }).catch((error) => {
+        newNotification(false, error);
+    });
+
+    if (response.ok) {
+        newNotification(true);
+    }
 }
 
-function newNotification(success) {
+function compressImg(file, quality=1, maxWidth=1200, maxHeight=1200) {
+    return new Promise((resolve, reject) => {
+        let reader = new FileReader();
+        reader.onload = () => {
+            let img = new Image();
+            img.onload = () => {
+                let width = img.width;
+                let height = img.height;
+
+                if (height > maxHeight) {
+                    width = width * (maxHeight / height);
+                    height = maxHeight;
+                }
+                if (width > maxWidth) {
+                    height = height * (maxWidth / width);
+                    width = maxWidth;
+                }
+                
+                let canvas = document.createElement("canvas");
+                canvas.width = width;
+                canvas.height = height;
+                
+                let ctx = canvas.getContext("2d");
+                ctx.drawImage(img, 0, 0, width, height);
+
+                canvas.toBlob((blob) => {
+                    if (blob) {
+                        let compressedFile = new File([blob], file.name, {
+                            type: blob.type
+                        });
+
+                        resolve(compressedFile);
+                    } else {
+                        reject(new Error("File compression is failed"));
+                    }
+                }, "image/jpeg", quality);
+            };
+            img.onerror = () => reject(new Error("Creating img is failed"));
+            img.src = reader.result;
+        };
+        reader.onerror = () => reject(new Error("Reading failed"));
+        reader.readAsDataURL(file);
+    });
+}
+
+function newNotification(success, error=null) {
     let alertContainer = document.createElement("div");
     if (success) {
         alertContainer.className = "alert alert-success my-1";
         alertContainer.innerHTML = `<h6 class="m-0">Отчет успешно отправлен</h6>`;
     } else {
         alertContainer.className = "alert alert-danger my-1";
-        alertContainer.innerHTML = `<h6 class="m-0">Произошла ошибка сервера</h6>`;
+        alertContainer.innerHTML = `<h6 class="m-0">
+        ${error !== null ? error : "Произошла ошибка сервера"}</h6>`;
     }
     let container = document.getElementById("notification-bar");
     container.appendChild(alertContainer);
