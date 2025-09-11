@@ -52,6 +52,7 @@ function render_new_task_body_selected_points() {
                     <option value="Яндекс" selected>Яндекс</option>
                     <option value="Whoosh">Whoosh</option>
                     <option value="Ultradop">Ultradop</option>
+                    <option value="ЦОДД">ЦОДД</option>
                     <option value="Другое">Другое</option>
                 </select>
             </div>
