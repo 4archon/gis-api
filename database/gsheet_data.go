@@ -38,14 +38,14 @@ func (p *PostgresDB) GetGSheetDoneWorks(start time.Time, end time.Time) (busines
 	var result business.GSheetDoneWorks
 
 	rows, err := p.db.Query(`select u.login,
-	p.id, p.long, p.lat, p.address,
+	p.id, p.long, p.lat, p.address, p.owner,
 	s.id, user_id, execution_date, sent_by, without_task,
 	w.work, w.arc
 	from service s inner join service_works w on s.id = w.service_id
 	inner join points p on s.point_id = p.id
 	inner join users u on s.sent_by = u.id
 	where w.type = 'done' and work != 'Работа не требуется' and
-	execution_date >= $1 and execution_date <= $2
+	execution_date >= $1 and execution_date < $2
 	order by execution_date`, start, end)
 	if err != nil {
 		log.Println(err)
@@ -55,9 +55,9 @@ func (p *PostgresDB) GetGSheetDoneWorks(start time.Time, end time.Time) (busines
 	for rows.Next() {
 		var res business.GSheetWork
 		err := rows.Scan(&res.Login,
-			&res.PointID, &res.Long, &res.Lat, &res.Address,
+			&res.PointID, &res.Long, &res.Lat, &res.Address, &res.Owner,
 			&res.ServiceID, pq.Array(&res.UserID), &res.ExecutionDate,
-			&res.SentBy,&res.WithoutTask,
+			&res.SentBy, &res.WithoutTask,
 			&res.Work, &res.Arc)
 		if err != nil {
 			log.Println(err)
@@ -65,6 +65,40 @@ func (p *PostgresDB) GetGSheetDoneWorks(start time.Time, end time.Time) (busines
 		}
 
 		result.Works = append(result.Works, res)
+	}
+
+	return result, nil
+}
+
+func (p *PostgresDB) GetGSheetDoneVisits(start time.Time, end time.Time) (business.GSheetDoneVisits, error) {
+	var result business.GSheetDoneVisits
+
+	rows, err := p.db.Query(`select
+	distinct on(point_id, execution_date, s.comment, s.status, sent_by)
+	u.login,
+	p.id, p.long, p.lat, p.address, p.owner,
+	s.id, user_id, execution_date, sent_by, without_task
+	from service s inner join points p on s.point_id = p.id
+	inner join users u on s.sent_by = u.id
+	where execution_date >= $1 and execution_date < $2
+	order by execution_date`, start, end)
+	if err != nil {
+		log.Println(err)
+		return result, err
+	}
+	defer rows.Close()
+	for rows.Next() {
+		var res business.GSheetVisit
+		err := rows.Scan(&res.Login,
+			&res.PointID, &res.Long, &res.Lat, &res.Address, &res.Owner,
+			&res.ServiceID, pq.Array(&res.UserID), &res.ExecutionDate,
+			&res.SentBy, &res.WithoutTask)
+		if err != nil {
+			log.Println(err)
+			return result, err
+		}
+
+		result.Visits = append(result.Visits, res)
 	}
 
 	return result, nil
