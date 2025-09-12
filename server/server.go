@@ -89,6 +89,9 @@ func (s Server) Run() {
 	router.HandleFunc("/all_data_info", s.allDataInfo).Methods("POST")
 	router.HandleFunc("/all_data_download/{id:[0-9]+}", s.allDataDownload).Methods("POST")
 
+	router.HandleFunc("/gsheet_api/base", s.postGSheetBase).Methods("POST")
+	router.HandleFunc("/gsheet_api/done_works", s.postGSheetDoneWorks).Methods("POST")
+
 	fmt.Println("Server is running")
 	http.ListenAndServe(fmt.Sprintf("%s:%s", s.Host, s.Port), router)
 }

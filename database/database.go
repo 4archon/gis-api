@@ -2,6 +2,7 @@ package database
 
 import (
 	"map/business"
+	"time"
 )
 
 type DB interface {
@@ -42,4 +43,7 @@ type DB interface {
 	NewMedia(media business.Media) (int, error)
 
 	GetAllData() (business.AllData, error)
+
+	GetGSheetBase() (business.GSheetBase, error)
+	GetGSheetDoneWorks(start time.Time, end time.Time) (business.GSheetDoneWorks, error)
 }
