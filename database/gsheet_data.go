@@ -80,11 +80,15 @@ func (p *PostgresDB) GetGSheetDoneVisits(start time.Time, end time.Time) (busine
 	s.id, user_id, execution_date, sent_by, without_task
 	from service s inner join points p on s.point_id = p.id
 	inner join users u on s.sent_by = u.id
-	left join (select service_id as "id" from service_works) as "wt"
-	on s.id = wt.id
+	left join (select service_id as "id" from tasks) as "ft"
+	on s.id = ft.id
+	left join (select service_id as "id" from service_works) as "fw"
+	on s.id = fw.id
+	left join (select service_id as "id" from media) as "fm"
+	on s.id = fm.id
 	where execution_date >= $1 and execution_date < $2
 	order by execution_date, point_id, sent_by, s.status, s.comment,
-	wt.id`, start, end)
+	ft.id, fw.id, fm.id`, start, end)
 	if err != nil {
 		log.Println(err)
 		return result, err
