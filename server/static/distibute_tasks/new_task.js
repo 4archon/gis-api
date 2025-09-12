@@ -52,7 +52,6 @@ function render_new_task_body_selected_points() {
                     <option value="Яндекс" selected>Яндекс</option>
                     <option value="Whoosh">Whoosh</option>
                     <option value="Ultradop">Ultradop</option>
-                    <option value="ЦОДД">ЦОДД</option>
                     <option value="Другое">Другое</option>
                 </select>
             </div>
@@ -87,6 +86,7 @@ function applyTaskToSelectedPoints() {
         comment: document.getElementById("inputTaskComment").value,
         points: selectedPoints.map((el) => el.id)
     }
+    data.deadline.setHours(data.deadline.getHours() - 3);
 
     applyTaskBackend(data);
 }

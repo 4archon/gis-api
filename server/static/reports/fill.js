@@ -16,7 +16,8 @@ async function getReports() {
         numeration: true,
         infinigall: true,
         share: true,
-        spinner: 'circle'
+        spinner: 'circle',
+        fitView: true
     });
 }
 
@@ -127,7 +128,7 @@ function render_card(element) {
                 </li>
                 <li class="list-group-item">Дата исполнения:
                 ${element.execution === null ? "Не указано":
-                new Date(element.execution).toLocaleDateString()}
+                new Date(element.execution).toLocaleString()}
                 </li>
                 <li class="list-group-item">Дата назначения:
                 ${element.appoint === null ? "Не указано":
