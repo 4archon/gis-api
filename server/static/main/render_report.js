@@ -1637,7 +1637,8 @@ function uploadMediaToForm(id, mediaURL, mediaType) {
         numeration: true,
         infinigall: true,
         share: true,
-        spinner: 'circle'
+        spinner: 'circle',
+        fitView: true
     });
     let valid = validateMedia();
     render_report_footer(valid);

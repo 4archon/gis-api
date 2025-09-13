@@ -171,6 +171,7 @@ function render_history_body(data) {
             numeration: true,
             infinigall: true,
             share: true,
-            spinner: 'circle'
+            spinner: 'circle',
+            fitView: true
         });
 }

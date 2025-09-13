@@ -278,7 +278,8 @@ function showPointProfile(pointID) {
             numeration: true,
             infinigall: true,
             share: true,
-            spinner: 'circle'
+            spinner: 'circle',
+            fitView: true
         });
     });
     pointProfile.show();
