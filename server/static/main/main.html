@@ -5,24 +5,41 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Service</title>
         <meta name="description" content="Test 2GIS Map API" />
-        <link rel="stylesheet" href="">
+        <link rel="stylesheet" href="/static/main/data_loading_animation.css">
         <link href="/bootstrap/css/bootstrap.css" rel="stylesheet">
         <link rel="stylesheet" href="/static/venobox/venobox.min.css" type="text/css" media="screen" />
     </head>
     <body>
         <script src="/bootstrap/js/bootstrap.js"></script>
         <script src="/static/header/render_header.js"></script>
-        <button id="show-hidden" class="btn z-1 position-absolute mt-2 mx-2" type="button">
-            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-clipboard2-x-fill" viewBox="0 0 16 16">
-                <path d="M10 .5a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5.5.5 0 0 1-.5.5.5.5 0 0 0-.5.5V2a.5.5 0 0 0 .5.5h5A.5.5 0 0 0 11 2v-.5a.5.5 0 0 0-.5-.5.5.5 0 0 1-.5-.5"/>
-                <path d="M4.085 1H3.5A1.5 1.5 0 0 0 2 2.5v12A1.5 1.5 0 0 0 3.5 16h9a1.5 1.5 0 0 0 1.5-1.5v-12A1.5 1.5 0 0 0 12.5 1h-.585q.084.236.085.5V2a1.5 1.5 0 0 1-1.5 1.5h-5A1.5 1.5 0 0 1 4 2v-.5q.001-.264.085-.5M8 8.293l1.146-1.147a.5.5 0 1 1 .708.708L8.707 9l1.147 1.146a.5.5 0 0 1-.708.708L8 9.707l-1.146 1.147a.5.5 0 0 1-.708-.708L7.293 9 6.146 7.854a.5.5 0 1 1 .708-.708z"/>
-            </svg>
-        </button>
+        <div class="z-1 position-absolute" style="display: contents;">
+            <div class="z-1 position-absolute m-2 container" style="width: 60px;">
+                <div class="row mt-2">
+                    <button id="show-hidden" class="btn col-auto" type="button">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-clipboard2-x-fill" viewBox="0 0 16 16">
+                            <path d="M10 .5a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5.5.5 0 0 1-.5.5.5.5 0 0 0-.5.5V2a.5.5 0 0 0 .5.5h5A.5.5 0 0 0 11 2v-.5a.5.5 0 0 0-.5-.5.5.5 0 0 1-.5-.5"/>
+                            <path d="M4.085 1H3.5A1.5 1.5 0 0 0 2 2.5v12A1.5 1.5 0 0 0 3.5 16h9a1.5 1.5 0 0 0 1.5-1.5v-12A1.5 1.5 0 0 0 12.5 1h-.585q.084.236.085.5V2a1.5 1.5 0 0 1-1.5 1.5h-5A1.5 1.5 0 0 1 4 2v-.5q.001-.264.085-.5M8 8.293l1.146-1.147a.5.5 0 1 1 .708.708L8.707 9l1.147 1.146a.5.5 0 0 1-.708.708L8 9.707l-1.146 1.147a.5.5 0 0 1-.708-.708L7.293 9 6.146 7.854a.5.5 0 1 1 .708-.708z"/>
+                        </svg>
+                    </button>
+                </div>
+                <div class="row mt-2">
+                    <button id="navigation-button" class="btn col-auto" type="button">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-cursor-fill" viewBox="0 0 16 16">
+                          <path d="M14.082 2.182a.5.5 0 0 1 .103.557L8.528 15.467a.5.5 0 0 1-.917-.007L5.57 10.694.803 8.652a.5.5 0 0 1-.006-.916l12.728-5.657a.5.5 0 0 1 .556.103z"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
         <div class="z-1 position-absolute" style="display: contents;">
             <div id="notification-bar" class="z-1 position-absolute m-2" style="bottom: 0px;">
             </div>
         </div>
-        <div id="map" class="mt-1" style="overflow: hidden;"></div>
+        <div id="map" class="mt-1" style="overflow: hidden;">
+            <div id="data-loading-animation-container" class="h-100 d-flex justify-content-center align-items-center">
+                <div class="data-loading-animation"></div>
+            </div>
+        </div>
         <script src="/static/main/set_map_size.js"></script>
         <script src="/static/gis/map.js"></script>
         <script src="/static/gis/clus.js"></script>
@@ -96,6 +113,7 @@
         <script src="/static/main/render_change_location.js"></script>
         <script src="/static/main/send_report.js"></script>
         <script src="/static/main/reload_data.js"></script>
+        <script src="/static/main/geolocation.js"></script>
         <script src="/static/main/main.js"></script>
     </body>
 </html>

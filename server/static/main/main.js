@@ -13,24 +13,34 @@ let currentDataJson = null;
 
 async function getPoinst() {
     url = "/main"
-    response = await fetch(url, {
+    let response = await fetch(url, {
         method: "POST",
         cache: "no-cache",
         credentials: "same-origin"
     })
-    res = await response.json();
-    data = res.points;
-    gisKey = res.gisKey;
-    userSubgroup = res.subgroup;
-    userTrust = res.trust;
-    currentDataJson = JSON.stringify(res);
-    // console.log(data);
-    
-    fillPoints();
+    if (response.ok) {
+        try {
+            let res = await response.json();
+            data = res.points;
+            gisKey = res.gisKey;
+            userSubgroup = res.subgroup;
+            userTrust = res.trust;
+            currentDataJson = JSON.stringify(res);
+        } catch (error) {
+            newNotification(false, error);
+        }
+        fillPoints();
+    } else {
+        newNotification(false, `${response.status} ${response.statusText}`);
+    }
 }
 
 function fillPoints() {
     if (map === null) {
+        let animation = document.getElementById("data-loading-animation-container");
+        if (animation !== null) {
+            animation.remove();
+        }
         map = new mapgl.Map("map", {
             center: [37.6156, 55.7522],
             zoom: 10,

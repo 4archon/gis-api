@@ -149,6 +149,7 @@ async function postReportBackend(report, reportType) {
 
     if (response.ok) {
         newNotification(true);
+        getPoinst();
     }
 }
 
@@ -209,7 +210,6 @@ function newNotification(success, error=null) {
     }
     let container = document.getElementById("notification-bar");
     container.appendChild(alertContainer);
-    getPoinst();
 
     setTimeout(() => {
         alertContainer.remove();
