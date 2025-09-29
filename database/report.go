@@ -195,7 +195,7 @@ func (p *PostgresDB) NewDeclineReport(userID int, report business.DeclineReport)
 	if report.Reason == "Идет благоустройство - требуется забрать дуги" ||
 	report.Reason == "Идет благоустройство - требуется демонтировать и забрать дуги"{
 		_, err = tx.Exec(`insert into tasks values(default, $1, $2, $3,
-		$4, $5, $6, $7, $8)`, report.PointID, "Благоустройство - временный демонтаж", nil,
+		$4, $5, $6, $7, $8)`, report.PointID, "Благоустройство - Временный демонтаж", nil,
 		nil, "Ultradop", reportTimeNow, nil, false)
 		if err != nil {
 			err2 := tx.Rollback()
