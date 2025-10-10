@@ -38,8 +38,11 @@ function showSearchedCoordinates(coordinates) {
     userMarker = new mapgl.Marker(map, {
         coordinates: coordinates,
         icon: `/static/svg/secondary.svg`,
-        anchor: [15, 46]
+        anchor: [15, 46],
+        userData: [...coordinates]
     });
+    userMarker.on("click", newPointMenu);
+    
     map.setCenter(coordinates);
     map.setZoom(13);
 }

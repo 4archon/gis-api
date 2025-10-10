@@ -178,3 +178,35 @@ func (s Server) postDeletePointTask(response http.ResponseWriter, req *http.Requ
 
 	response.WriteHeader(http.StatusOK)
 }
+
+func (s Server) postNewPoints(response http.ResponseWriter, req *http.Request) {
+	_, role, err := s.checkUser(response, req)
+	if err != nil {
+		return
+	}
+
+	if role != "admin" {
+		return
+	}
+
+	defer req.Body.Close()
+	body, err := io.ReadAll(req.Body)
+	if err != nil {
+		log.Println(err);
+		return
+	}
+
+	var newPoints business.NewPoints
+	err = json.Unmarshal(body, &newPoints)
+	if err != nil {
+		log.Println(err);
+		return
+	}
+
+	err = s.DB.NewPoints(newPoints)
+	if err != nil {
+		return
+	}
+
+	response.WriteHeader(http.StatusOK)
+}

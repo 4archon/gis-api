@@ -71,3 +71,22 @@ type ChangePoint struct {
 	Comment		*string			`json:"comment"`
 	Marks		[]Mark			`json:"marks"`
 }
+
+type NewPoint struct {
+	Long		*float64		`json:"long"`
+	Lat			*float64		`json:"lat"`
+	Address		*string			`json:"address"`
+	District	*string			`json:"district"`
+	ExternalID	*string			`json:"externalID"`
+	Carpet		*string			`json:"carpet"`
+	NumberArc	*int			`json:"numberArc"`
+	ArcType		*string			`json:"arcType"`
+	Owner		*string			`json:"owner"`
+	Operator	*string			`json:"operator"`
+	Customer	*string			`json:"customer"`
+	Comment		*string			`json:"comment"`
+}
+
+type NewPoints struct {
+	NewPoints	[]NewPoint		`json:"newPoints"`
+}

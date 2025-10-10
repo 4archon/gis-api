@@ -317,3 +317,56 @@ func (p *PostgresDB) DeletePointTask(data business.Task) (error) {
 
 	return nil
 }
+
+
+func (p *PostgresDB) NewPoints(data business.NewPoints) (error) {
+	tx, err := p.db.Begin()
+	if err != nil {
+		log.Println(err)
+		return err
+	}
+
+	for _, i := range data.NewPoints {
+		row := tx.QueryRow(`insert into points values(default,
+		$1, $2, $3, $4, $5,
+		$6, $7, $8, $9,
+		$10, $11, $12, $13, $14) returning id`,
+		false, i.Long, i.Lat, i.Address, i.District,
+		i.NumberArc, i.ArcType, i.Carpet, time.Now(),
+		nil, "Новая точка", i.Owner, i.Operator, i.ExternalID)
+
+		var pointID int
+		err := row.Scan(&pointID)
+		if err != nil {
+			err2 := tx.Rollback()
+			if err2 != nil {
+				log.Println(err2)
+				return err2
+			}
+			log.Println(err)
+			return err
+		}
+
+		_, err = tx.Exec(`insert into tasks(point_id, type,
+		comment, customer, done, entry_date) values($1, $2, $3, $4, $5, $6)`,
+		pointID, "Монтаж новой точки",
+		i.Comment, i.Customer, false, time.Now())
+		if err != nil {
+			err2 := tx.Rollback()
+			if err2 != nil {
+				log.Println(err2)
+				return err2
+			}
+			log.Println(err)
+			return err
+		}
+	}
+
+	err = tx.Commit()
+	if err != nil {
+		log.Println(err)
+		return err
+	}
+
+	return nil
+}

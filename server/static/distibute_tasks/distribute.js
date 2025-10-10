@@ -30,9 +30,7 @@ function createMap() {
             style: "c080bb6a-8134-4993-93a1-5b4d8c36a59b"
         });
         
-        map.on("click", (event) => {
-            console.log(event.lngLat);
-        });
+        map.on("click", newUserMarker);
     }
 
     fillPoints()

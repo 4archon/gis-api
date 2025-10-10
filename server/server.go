@@ -76,6 +76,7 @@ func (s Server) Run() {
 	router.HandleFunc("/appoint", s.postAppointUsersToPoints).Methods("POST")
 	router.HandleFunc("/point_edit", s.postPointEdit).Methods("POST")
 	router.HandleFunc("/delete_task", s.postDeletePointTask).Methods("POST")
+	router.HandleFunc("/new_points", s.postNewPoints).Methods("POST")
 
 	router.HandleFunc("/report", s.postReport).Methods("POST")
 	

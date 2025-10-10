@@ -147,7 +147,8 @@ function render_point_edit_body(point) {
                     ${["Временно сняты дуги", "Точка доступна", "Точка недоступна",
                         "Временно невозможно проверить точку", "Идет благоустройство",
                         "Идет благоустройство - требуется забрать дуги",
-                        "Идет благоустройство - требуется демонтировать и забрать дуги"
+                        "Идет благоустройство - требуется демонтировать и забрать дуги",
+                        "Новая точка"
                     ].reduce((acc, el) => {
                         return acc +
                         `
@@ -182,7 +183,7 @@ function render_point_edit_body(point) {
             <div class="col-md-6">
                 <label for="inputPointEdit-ArcType" class="form-label">Тип дуги</label>
                 <select id="inputPointEdit-ArcType" class="form-select">
-                    ${["Алюминиевая", "Металлическая", "Другое"].reduce((acc, el) => {
+                    ${["Алюминиевая", "Металлическая", "Разметка", "Другое"].reduce((acc, el) => {
                         return acc +
                         `
                         <option value="${el}" ${point.arcType == el ? "selected":""}>${el}</option>

@@ -728,7 +728,7 @@ function render_service_to_form() {
                                     </button>
                                     <select id="marking-type-selector${index}"
                                     class="form-select">
-                                        <option value="Термполастик" selected>Термполастик</option>
+                                        <option value="Термопластик" selected>Термопластик</option>
                                         <option value="Дорожная краска">Дорожная краска</option>
                                         <option value="Баллончик">Баллончик</option>
                                     </select>
