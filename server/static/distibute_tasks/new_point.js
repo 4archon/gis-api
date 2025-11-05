@@ -142,7 +142,7 @@ function render_new_point_body(long, lat) {
             <div class="col-md-6">
                 <label for="inputNewPoint-Owner" class="form-label">Владелец</label>
                 <select id="inputNewPoint-Owner" class="form-select">
-                    ${["whoosh", "yandex"].reduce((acc, el) => {
+                    ${[ "yandex", "whoosh", "yabike"].reduce((acc, el) => {
                         return acc +
                         `
                         <option value="${el}" ${"yandex" == el ? "selected":""}>${el}</option>
@@ -164,7 +164,7 @@ function render_new_point_body(long, lat) {
             <div class="col-md-6">
                 <label for="inputNewPoint-Customer" class="form-label">Заказчик задачи</label>
                 <select id="inputNewPoint-Customer" class="form-select">
-                    ${["Яндекс", "Whoosh", "Ultradop", "Другое"].reduce((acc, el) => {
+                    ${["Яндекс", "Whoosh", "Ultradop", "Яндекс Байк", "Другое"].reduce((acc, el) => {
                         return acc +
                         `
                         <option value="${el}">${el}</option>

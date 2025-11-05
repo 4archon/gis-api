@@ -512,7 +512,7 @@ function getFilterOptions() {
         }
     }
 
-    for (let i = 1; i <= 2; i++) {
+    for (let i = 1; i <= 3; i++) {
         if (document.getElementById(`ow${i}`).checked) {
             filterOptions.owners.push(document.getElementById(`l-ow${i}`).innerHTML)
         }
@@ -565,7 +565,7 @@ function getFilterOptions() {
 
     filterOptions.deadlineOnly = document.getElementById("deadline-only").checked;
 
-    for (let i = 1; i <= 4; i++) {
+    for (let i = 1; i <= 5; i++) {
         if (document.getElementById(`cu${i}`).checked) {
             filterOptions.customers.push(document.getElementById(`l-cu${i}`).innerHTML)
         }

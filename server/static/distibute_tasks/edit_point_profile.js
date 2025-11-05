@@ -194,7 +194,7 @@ function render_point_edit_body(point) {
             <div class="col-md-6">
                 <label for="inputPointEdit-Owner" class="form-label">Владелец</label>
                 <select id="inputPointEdit-Owner" class="form-select">
-                    ${["whoosh", "yandex"].reduce((acc, el) => {
+                    ${["yandex", "whoosh", "yabike"].reduce((acc, el) => {
                         return acc +
                         `
                         <option value="${el}" ${point.owner == el ? "selected":""}>${el}</option>

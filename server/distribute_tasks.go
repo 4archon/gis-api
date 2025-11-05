@@ -1,11 +1,14 @@
 package server
 
 import (
+	"encoding/csv"
 	"encoding/json"
+	"io"
 	"log"
 	"map/business"
+	"mime/multipart"
 	"net/http"
-	"io"
+	"strconv"
 )
 
 
@@ -209,4 +212,78 @@ func (s Server) postNewPoints(response http.ResponseWriter, req *http.Request) {
 	}
 
 	response.WriteHeader(http.StatusOK)
+}
+
+func (s Server) postNewPointsByFile(response http.ResponseWriter, req *http.Request) {
+	_, role, err := s.checkUser(response, req)
+	if err != nil {
+		return
+	}
+
+	if role != "admin" {
+		return
+	}
+
+	defer req.Body.Close()
+	file, _, err := req.FormFile("file")
+	if err != nil {
+		log.Println(err)
+		return
+	}
+
+	defer file.Close()
+	newPoints, err := newPointsFromCsv(file)
+	if err != nil {
+		log.Println(err)
+		return
+	}
+	
+	err = s.DB.NewPoints(newPoints)
+	if err != nil {
+		return
+	}
+
+	response.WriteHeader(http.StatusOK)
+}
+
+func newPointsFromCsv(file multipart.File) (business.NewPoints, error) {
+	var result business.NewPoints
+	reader := csv.NewReader(file)
+	records, err := reader.ReadAll()
+	if err != nil {
+		return result, err
+	}
+	records = records[1:]
+
+	for _, record := range(records) {
+		var newPoint business.NewPoint
+		lat, err := strconv.ParseFloat(record[0], 64)
+		if err != nil {
+			return result, err
+		}
+		newPoint.Lat = &lat
+		long, err := strconv.ParseFloat(record[1], 64)
+		if err != nil {
+			return result, err
+		}
+		newPoint.Long = &long
+		newPoint.Address = &record[2]
+		newPoint.District = &record[3]
+		newPoint.ExternalID = &record[4]
+		newPoint.Carpet = &record[5]
+		numArc, err := strconv.Atoi(record[6])
+		if err != nil {
+			return result, err
+		}
+		newPoint.NumberArc = &numArc
+		newPoint.ArcType = &record[7]
+		newPoint.Owner = &record[8]
+		newPoint.Operator = &record[9]
+		newPoint.Customer = &record[10]
+		newPoint.Comment = &record[11]
+
+		result.NewPoints = append(result.NewPoints, newPoint)
+	}
+
+	return result, nil
 }
