@@ -27,11 +27,13 @@ type DB interface {
 	ChangePoint(data business.ChangePoint) (error)
 	DeletePointTask(data business.Task) (error)
 	NewPoints(data business.NewPoints) (error)
+	DeletePointAppoint(id int) (error)
 	
 	GetPointHistory(id int) (business.History, error)
 	GetPointMedia(id int) (business.PointMedias, error)
 	GetPointCurrentTasks(id int) (business.TasksAndWorks, error)
 	GetAllServices(numRows int, offset int) (business.AllServices, error)
+	GetPointCurrentAppoint(id int) (business.PointAppoints, error)
 
 	CreateNewUser(user business.User) (int, error)
 	ChangeUser(user business.User) error

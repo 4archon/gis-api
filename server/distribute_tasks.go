@@ -287,3 +287,35 @@ func newPointsFromCsv(file multipart.File) (business.NewPoints, error) {
 
 	return result, nil
 }
+
+
+func (s Server) postDeletePointAppoint(response http.ResponseWriter, req *http.Request) {
+	_, role, err := s.checkUser(response, req)
+	if err != nil {
+		return
+	}
+
+	if role != "admin" {
+		http.Redirect(response, req, "/main", http.StatusFound)
+	}
+
+	defer req.Body.Close()
+	body, err := io.ReadAll(req.Body)
+	if err != nil {
+		log.Println(err);
+		return
+	}
+
+	appoint, err := strconv.Atoi(string(body))
+	if err != nil {
+		log.Println(err);
+		return
+	}
+
+	err = s.DB.DeletePointAppoint(appoint)
+	if err != nil {
+		return
+	}
+
+	response.WriteHeader(http.StatusOK)
+}

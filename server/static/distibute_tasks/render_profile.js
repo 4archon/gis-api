@@ -263,12 +263,98 @@ function render_profile_marking(data) {
     }
 }
 
+async function getCurrentAppoint(id) {
+    let url = "/current_appoint"
+    let response = await fetch(url, {
+        method: "POST",
+        cache: "no-cache",
+        credentials: "same-origin",
+        headers: {
+            "Content-Type": "text/plain"
+        },
+        body: id
+    })
+    let res = await response.json();
+    return res;
+}
+
+async function render_profile_appoint(id) {
+    let appoint = await getCurrentAppoint(id);
+    let result = appoint.appoints === null ? "":
+    `
+    <h5 class="mt-2">Назначения:</h5>
+    <div class="card mx-2" style="min-height: 150px; max-height: 150px; overflow-y: auto;">
+        <table class="table">
+            <thead>
+                <th scope="col">id</th>
+                <th scope="col">Дата</th>
+                <th scope="col">Исполнители</th>
+                <th scope="col"></th>
+            </thead>
+            <tbody>
+                ${appoint.appoints.reduce((acc, el) => {
+                    return acc +=
+                    `
+                    <tr>
+                        <td scope="row">${el.id}</td>
+                        <td scope="row">${new Date(el.date).toLocaleDateString()}</td>
+                        <td scope="row">${el.users.reduce((acc, el) => {
+                            return acc += 
+                            `
+                            <span class="badge text-bg-primary">${el.id}</span> ${el.login === null ? "Логин не указан": el.login}
+                            `
+                        }, "")}</td>
+                        <td scope="row">
+                            <button type="button" data-id="${el.id}" onclick="deleteAppointFromPoint(event)"
+                            class="btn btn-outline-danger btn-sm float-end">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
+                                    <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z"/>
+                                    <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z"/>
+                                </svg>
+                            </button>
+                        </td>
+                    </tr>
+                    `
+                }, "")}
+            </tbody>
+        </table>
+    </div>
+    `
+
+    let body = document.getElementById("point-profile-body");
+    let cont = document.createElement("div");
+    cont.innerHTML = result;
+    body.prepend(cont);
+}
+
+function deleteAppointFromPoint(event) {
+    let id = event.currentTarget.getAttribute("data-id");
+    let parent = event.currentTarget.parentElement.parentElement;
+    parent.remove();
+
+    postDeleteAppointFromPoint(id);
+}
+
+async function postDeleteAppointFromPoint(id) {
+    let url = "/delete_appoint";
+    let response = await fetch(url, {
+        method: "POST",
+        cache: "no-cache",
+        credentials: "same-origin",
+        headers: {
+            "Content-Type": "text/plain"
+        },
+        body: id
+    })
+}
+
 function showPointProfile(pointID) {
     let point = data.find((el) => el.id == pointID);
     render_profile_header(point);
     render_profile_info(point);
     render_profile_marking(point);
     let body = document.getElementById("point-profile-body");
+    render_profile_appoint(point.id);
     render_profile_tasks(point.id);
     render_profile_media(point.id).then((element) => {
         body.append(element);

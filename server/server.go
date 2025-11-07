@@ -69,6 +69,7 @@ func (s Server) Run() {
 	router.HandleFunc("/history", s.history).Methods("POST")
 	router.HandleFunc("/recent_media", s.postPointRecentMedia).Methods("POST")
 	router.HandleFunc("/current_tasks", s.postPointCurrentTasks).Methods("POST")
+	router.HandleFunc("/current_appoint", s.postPointCurrentAppoint).Methods("POST")
 
 	router.HandleFunc("/distribute_tasks", s.getDistributeTasks).Methods("GET")
 	router.HandleFunc("/distribute_tasks", s.postDistributeTasks).Methods("POST")
@@ -78,6 +79,7 @@ func (s Server) Run() {
 	router.HandleFunc("/delete_task", s.postDeletePointTask).Methods("POST")
 	router.HandleFunc("/new_points", s.postNewPoints).Methods("POST")
 	router.HandleFunc("/new_points_by_file", s.postNewPointsByFile).Methods("POST")
+	router.HandleFunc("/delete_appoint", s.postDeletePointAppoint).Methods("POST")
 
 	router.HandleFunc("/report", s.postReport).Methods("POST")
 	
