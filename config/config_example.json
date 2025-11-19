@@ -1,5 +1,4 @@
 {
-    "GisApiKey": "",
     "postgresUser": "",
     "postgresPassword": "a1",
     "postgresDbName": "maps",

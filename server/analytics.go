@@ -32,7 +32,7 @@ func (s Server) postAnalytics(response http.ResponseWriter, req *http.Request) {
 	}
 
 	var analytics business.Analytics
-	analytics.GisKey = s.GisApi
+	analytics.GisKey = *s.GisApi
 	analytics.Points, err = s.DB.GetPointsForAnalytics()
 	if err != nil {
 		return

@@ -27,7 +27,7 @@ func (s Server) postMain(response http.ResponseWriter, req *http.Request) {
 	}
 
 	var data business.Main
-	data.GisKey = s.GisApi
+	data.GisKey = *s.GisApi
 	data.Points, err = s.DB.GetDataForMain(id)
 	if err != nil {
 		return

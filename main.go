@@ -27,7 +27,7 @@ func main() {
 	var serv server.Server;
 	serv.Host = "127.0.0.1"
 	serv.Port = "56001"
-	serv.GisApi = conf.GisApi
+	serv.GisApi = &conf.GisApi
 	serv.DB = db
 	serv.Auth = auth
 	serv.AllDataSecretKey = conf.AllDataSecretKey

@@ -11,7 +11,7 @@ import (
 type Server struct {
 	Host				string
 	Port				string
-	GisApi				string
+	GisApi				*string
 	DB					database.DB
 	Auth				authentication.Auth
 	AllDataSecretKey	string
@@ -96,6 +96,9 @@ func (s Server) Run() {
 	router.HandleFunc("/gsheet_api/base", s.postGSheetBase).Methods("POST")
 	router.HandleFunc("/gsheet_api/done_works", s.postGSheetDoneWorks).Methods("POST")
 	router.HandleFunc("/gsheet_api/done_visits", s.postGSheetDoneVisits).Methods("POST")
+
+	router.HandleFunc("/2gis", s.getChangeGisKey).Methods("GET")
+	router.HandleFunc("/2gis", s.postChangeGisKey).Methods("POST")
 
 	fmt.Println("Server is running")
 	http.ListenAndServe(fmt.Sprintf("%s:%s", s.Host, s.Port), router)

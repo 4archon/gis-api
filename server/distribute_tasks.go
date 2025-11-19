@@ -37,7 +37,7 @@ func (s Server) postDistributeTasks(response http.ResponseWriter, req *http.Requ
 	}
 
 	var data business.Distibute
-	data.GisKey = s.GisApi
+	data.GisKey = *s.GisApi
 	data.Points, err = s.DB.GetDataForDistribute()
 	if err != nil {
 		return

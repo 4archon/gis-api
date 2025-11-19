@@ -7,7 +7,7 @@ import (
 )
 
 type Config struct {
-	GisApi					string	`json:"GisApiKey"`
+	GisApi					string
 	PostgresUser			string	`json:"postgresUser"`
 	PostgresPassword		string	`json:"postgresPassword"`
 	PostgresDbName			string	`json:"postgresDbName"`
@@ -28,4 +28,12 @@ func (c *Config) Init() {
 		log.Println(err.Error())
 		return
 	}
+	
+	gisKey, err := os.ReadFile("config/2gis.key")
+	if err != nil {
+		log.Println(err)
+		return
+	}
+
+	c.GisApi = string(gisKey)
 }
