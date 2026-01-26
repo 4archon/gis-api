@@ -73,7 +73,8 @@ create table service (
     status              varchar(100),
     sent                boolean,
     sent_by             integer,
-    without_task        boolean           
+    without_task        boolean,
+    invisible           boolean
 );
 
 create table service_works (

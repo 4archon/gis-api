@@ -16,6 +16,7 @@ type StoryPoint struct {
 	Works		[]Work			`json:"works"`
 	Tasks		[]Task			`json:"tasks"`
 	Medias		[]Media			`json:"medias"`
+	Invisible	*bool			`json:"invisible"`
 }
 
 type History struct {

@@ -38,7 +38,8 @@ function render_history_header(data) {
 function render_history_body(data) {
     let header = document.getElementById("point-history-body");
     header.innerHTML = "";
-    data.storyPoints.filter((el) => el.sent).forEach((element) => {
+    data.storyPoints.filter((el) => el.sent).filter((el) => !el.invisible)
+    .forEach((element) => {
         header.innerHTML += `
         <div class="card">
             <div class="card-header">

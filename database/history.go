@@ -37,7 +37,7 @@ func (p *PostgresDB) GetPointHistory(id int) (business.History, error) {
 	}
 
 	rows, err := p.db.Query(`select id, user_id, execution_date,
-	comment, status, sent 
+	comment, status, sent, invisible
 	from service where point_id = $1 order by execution_date desc`, id)
 	if err != nil {
 		log.Println(err)
@@ -48,7 +48,7 @@ func (p *PostgresDB) GetPointHistory(id int) (business.History, error) {
 		var res business.StoryPoint
 		var storyID int
 		err := rows.Scan(&storyID, pq.Array(&res.UserIDs), &res.Execution,
-			&res.Comment, &res.Status, &res.Sent)
+			&res.Comment, &res.Status, &res.Sent, &res.Invisible)
 		if err != nil {
 			log.Println(err)
 			return result, err
@@ -292,4 +292,28 @@ func (p *PostgresDB) GetAllServices(numRows int, offset int) (business.AllServic
 	}
 
 	return result, nil
+}
+
+func (p *PostgresDB) ChangeServiceInvisible(id int, value bool) error {
+	tx, err := p.db.Begin()
+	if err != nil {
+		log.Println(err)
+		return err
+	}
+	_, err = tx.Exec(`update service set invisible = $1 where id = $2`, value, id)
+	if err != nil {
+		log.Println(err)
+		err = tx.Rollback()
+		if err != nil {
+			log.Println(err)
+			return err
+		}
+		return err
+	}
+	err = tx.Commit()
+	if err != nil {
+		log.Println(err)
+		return err
+	}
+	return nil
 }

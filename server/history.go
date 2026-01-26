@@ -116,3 +116,32 @@ func (s Server) postPointCurrentAppoint(response http.ResponseWriter, req *http.
 	response.WriteHeader(http.StatusOK)
 	response.Write(result)
 }
+
+
+func (s Server) postChangeServiceInvisible(response http.ResponseWriter, req *http.Request) {
+	_, role, err := s.checkUser(response, req)
+	if err != nil {
+		return
+	}
+
+	if role != "admin" {
+		response.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	serviceID, err := strconv.Atoi(req.FormValue("id"))
+	if err != nil {
+		return
+	}
+	value, err := strconv.ParseBool(req.FormValue("value"))
+	if err != nil {
+		return
+	}
+
+	err = s.DB.ChangeServiceInvisible(serviceID, value)
+	if err != nil {
+		return
+	}
+
+	response.WriteHeader(http.StatusOK)
+}

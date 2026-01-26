@@ -70,6 +70,7 @@ func (s Server) Run() {
 	router.HandleFunc("/recent_media", s.postPointRecentMedia).Methods("POST")
 	router.HandleFunc("/current_tasks", s.postPointCurrentTasks).Methods("POST")
 	router.HandleFunc("/current_appoint", s.postPointCurrentAppoint).Methods("POST")
+	router.HandleFunc("/change_service_invisible", s.postChangeServiceInvisible).Methods("POST")
 
 	router.HandleFunc("/distribute_tasks", s.getDistributeTasks).Methods("GET")
 	router.HandleFunc("/distribute_tasks", s.postDistributeTasks).Methods("POST")

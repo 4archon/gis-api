@@ -34,6 +34,7 @@ type DB interface {
 	GetPointCurrentTasks(id int) (business.TasksAndWorks, error)
 	GetAllServices(numRows int, offset int) (business.AllServices, error)
 	GetPointCurrentAppoint(id int) (business.PointAppoints, error)
+	ChangeServiceInvisible(id int, value bool) error
 
 	CreateNewUser(user business.User) (int, error)
 	ChangeUser(user business.User) error
