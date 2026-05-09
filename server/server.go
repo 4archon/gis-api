@@ -97,6 +97,7 @@ func (s Server) Run() {
 	router.HandleFunc("/gsheet_api/base", s.postGSheetBase).Methods("POST")
 	router.HandleFunc("/gsheet_api/done_works", s.postGSheetDoneWorks).Methods("POST")
 	router.HandleFunc("/gsheet_api/done_visits", s.postGSheetDoneVisits).Methods("POST")
+	router.HandleFunc("/gsheet_api/media_files", s.postGSheetMedias).Methods("POST")
 
 	router.HandleFunc("/2gis", s.getChangeGisKey).Methods("GET")
 	router.HandleFunc("/2gis", s.postChangeGisKey).Methods("POST")

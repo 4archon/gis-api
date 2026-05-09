@@ -46,3 +46,13 @@ type GSheetVisit struct {
 	SentBy				*int			`json:"sentBy"`
 	WithoutTask			*bool			`json:"withoutTask"`
 }
+
+type GSheetMedias struct {
+	Medias			[]GSheetMedia		`json:"mediaFiles"`
+}
+
+type GSheetMedia struct {
+	ServiceID			int				`json:"serviceID"`
+	MediaType			string			`json:"mediaType"`
+	MediaName			string			`json:"mediaName"`
+}

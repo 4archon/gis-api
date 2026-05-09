@@ -110,3 +110,28 @@ func (p *PostgresDB) GetGSheetDoneVisits(start time.Time, end time.Time) (busine
 
 	return result, nil
 }
+
+func (p *PostgresDB) GetGSheetMedias(start time.Time, end time.Time) (business.GSheetMedias, error) {
+	var result business.GSheetMedias
+
+	rows, err := p.db.Query(`select m.service_id, media_type, media_name
+	from service s inner join media m on s.id = m.service_id
+	where execution_date >= $1 and execution_date < $2`, start, end)
+	if err != nil {
+		log.Println(err)
+		return result, err
+	}
+	defer rows.Close()
+	for rows.Next() {
+		var res business.GSheetMedia
+		err := rows.Scan(&res.ServiceID, &res.MediaType, &res.MediaName)
+		if err != nil {
+			log.Println(err)
+			return result, err
+		}
+
+		result.Medias = append(result.Medias, res)
+	}
+
+	return result, nil
+}

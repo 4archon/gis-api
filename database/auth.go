@@ -19,5 +19,8 @@ func (p *PostgresDB) CheckActiveAuth(id int, role string) bool {
 	and active = 't';`, id, role)
 	var count int
 	err := res.Scan(&count)
-	return err == nil
+	if err != nil {
+		return false
+	}
+	return count == 1
 }

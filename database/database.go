@@ -51,4 +51,5 @@ type DB interface {
 	GetGSheetBase() (business.GSheetBase, error)
 	GetGSheetDoneWorks(start time.Time, end time.Time) (business.GSheetDoneWorks, error)
 	GetGSheetDoneVisits(start time.Time, end time.Time) (business.GSheetDoneVisits, error)
+	GetGSheetMedias(start time.Time, end time.Time) (business.GSheetMedias, error)
 }
