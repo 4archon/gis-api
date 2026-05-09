@@ -52,6 +52,7 @@ type GSheetMedias struct {
 }
 
 type GSheetMedia struct {
+	MediaID				int				`json:"mediaID"`
 	ServiceID			int				`json:"serviceID"`
 	MediaType			string			`json:"mediaType"`
 	MediaName			string			`json:"mediaName"`
